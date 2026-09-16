@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>https://YOUR-DOMAIN.com/</loc>
+    </url>
+
+    <url>
+        <loc>https://YOUR-DOMAIN.com/products.html</loc>
+    </url>
+
+    <url>
+        <loc>https://YOUR-DOMAIN.com/mixer.html</loc>
+    </url>
+
+    <url>
+        <loc>https://YOUR-DOMAIN.com/oven.html</loc>
+    </url>
+
+    <url>
+        <loc>https://YOUR-DOMAIN.com/services.html</loc>
+    </url>
+
+    <url>
+        <loc>https://YOUR-DOMAIN.com/contact.html</loc>
+    </url>
+
+</urlset>
