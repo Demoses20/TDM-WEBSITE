@@ -555,9 +555,14 @@
 </footer>
   <script>
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("service-worker.js");
-}
-  </script>
+    navigator.serviceWorker.register("service-worker.js")
+        .then(function(registration) {
+            console.log("TDM service worker registered:", registration.scope);
+        })
+        .catch(function(error) {
+            console.log("TDM service worker registration failed:", error);
+        });
+</script>
 
 </body>
 </html>
