@@ -578,6 +578,37 @@ if ("serviceWorker" in navigator) {
         });
 }
   </script>
+  <script>
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", function(event) {
+    event.preventDefault();
+    deferredPrompt = event;
+
+    const installButton = document.getElementById("installTDM");
+    installButton.style.display = "block";
+
+    installButton.addEventListener("click", async function() {
+        deferredPrompt.prompt();
+
+        const result = await deferredPrompt.userChoice;
+
+        if (result.outcome === "accepted") {
+            installButton.style.display = "none";
+        }
+
+        deferredPrompt = null;
+    });
+});
+
+window.addEventListener("appinstalled", function() {
+    const installButton = document.getElementById("installTDM");
+
+    if (installButton) {
+        installButton.style.display = "none";
+    }
+});
+          </script>
 
 </body>
 </html>
