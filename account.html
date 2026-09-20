@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TDM Customer Account</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .account-box {
+      max-width: 400px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    #message {
+      margin-top: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="account-box">
+  <h1>TDM Customer Account</h1>
+
+  <input type="text" id="fullName" placeholder="Full name">
+
+  <input type="email" id="email" placeholder="Email address">
+
+  <input type="tel" id="phone" placeholder="Phone number">
+
+  <input type="password" id="password" placeholder="Password">
+
+  <button onclick="signUp()">Create Account</button>
+
+  <button onclick="logIn()">Log In</button>
+
+  <p id="message"></p>
+</div>
+
+<script>
+const SUPABASE_URL = "https://ctdmpigyhinaqpicbycq.supabase.co/rest/v1/";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YNun4pQIhl7S6OJ1SBnYqg_NATcZhsm";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+async function signUp() {
+  const fullName = document.getElementById("fullName").value;
+  const email = document.getElementById("email").value;
+  const phone = document.getElementById("phone").value;
+  const password = document.getElementById("password").value;
+
+  const { data, error } = await supabaseClient.auth.signUp({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    document.getElementById("message").textContent = error.message;
+    return;
+  }
+
+  document.getElementById("message").textContent =
+    "Account created. Please check your email to confirm your account.";
+}
+
+async function logIn() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    document.getElementById("message").textContent = error.message;
+    return;
+  }
+
+  document.getElementById("message").textContent =
+    "Login successful.";
+}
+</script>
+
+</body>
+</html>
