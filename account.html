@@ -85,9 +85,12 @@ async function signUp() {
   const password = document.getElementById("password").value;
 
   const { data, error } = await supabaseClient.auth.signUp({
-    email: email,
-    password: password
-  });
+  email: email,
+  password: password,
+  options: {
+    emailRedirectTo: "https://demoses20.github.io/TDM-WEBSITE/account.html"
+  }
+});
 
   if (error) {
     document.getElementById("message").textContent = error.message;
