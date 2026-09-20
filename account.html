@@ -81,21 +81,48 @@ const supabaseClient = window.supabase.createClient(
 );
 
 async function signUp() {
-  const fullName = document.getElementById("fullName").value;
-  const email = document.getElementById("email").value;
-  const phone = document.getElementById("phone").value;
+  const fullName = document.getElementById("fullName").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
   const password = document.getElementById("password").value;
 
-  const { data, error } = await supabaseClient.auth.signUp({
-  email: email,
-  password: password,
-  options: {
-    emailRedirectTo: "https://demoses20.github.io/TDM-WEBSITE/account.html"
+  if (!fullName || !email || !phone || !password) {
+    document.getElementById("message").textContent =
+      "Please fill in all fields.";
+    return;
   }
-});
+
+  const { data, error } = await supabaseClient.auth.signUp({
+    email: email,
+    password: password,
+    options: {
+      emailRedirectTo: "https://demoses20.github.io/TDM-WEBSITE/account.html"
+    }
+  });
 
   if (error) {
     document.getElementById("message").textContent = error.message;
+    return;
+  }
+
+  if (!data.user) {
+    document.getElementById("message").textContent =
+      "Account could not be created.";
+    return;
+  }
+
+  const { error: customerError } = await supabaseClient
+    .from("customers")
+    .insert({
+      id: data.user.id,
+      full_name: fullName,
+      phone: phone,
+      email: email
+    });
+
+  if (customerError) {
+    document.getElementById("message").textContent =
+      customerError.message;
     return;
   }
 
