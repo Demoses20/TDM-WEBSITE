@@ -112,19 +112,19 @@ async function signUp() {
   }
 
   const { error: customerError } = await supabaseClient
-    .from("Customers")
-    .insert({
-      id: data.user.id,
-      full_name: fullName,
-      phone: phone,
-      email: email
-    });
+  .from("Customers")
+  .insert({
+    id: data.user.id,
+    full_name: fullName,
+    phone: phone,
+    email: email
+  });
 
-  if (customerError) {
-    document.getElementById("message").textContent =
-      customerError.message;
-    return;
-  }
+if (customerError) {
+  document.getElementById("message").textContent =
+    customerError.message;
+  return;
+}
 
   document.getElementById("message").textContent =
     "Account created. Please check your email to confirm your account.";
