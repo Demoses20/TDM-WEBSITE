@@ -102,7 +102,7 @@
 const SUPABASE_URL = "https://ctdmpigyhinaqpicbycq.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_YNun4pQIhl7S6OJ1SBnYqg_NATcZhsm";
+  "sb_publishable_YUn4pQIhl7S6OJ1SBnYqg_NATcZhsm";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
@@ -183,43 +183,74 @@ async function logIn() {
     return;
   }
 
-  const user = data.user;
+  await loadCustomerAccount();
 
-  const fullName =
-    user.user_metadata?.full_name || "";
+  document.getElementById("message").textContent =
+    "Login successful.";
+}
 
-  const phone =
-    user.user_metadata?.phone || "";
 
-  const { error: customerError } =
-    await supabaseClient
-      .from("Customers")
-      .upsert({
-        id: user.id,
-        full_name: fullName,
-        phone: phone,
-        email: user.email
-      });
+// ===============================
+// LOAD CUSTOMER ACCOUNT
+// ===============================
+async function loadCustomerAccount() {
 
-  if (customerError) {
-    document.getElementById("message").textContent =
-      customerError.message;
+  const {
+    data: { user },
+    error: userError
+  } = await supabaseClient.auth.getUser();
+
+  if (userError || !user) {
+
+    document.getElementById("loginSection").style.display =
+      "block";
+
+    document.getElementById("dashboardSection").style.display =
+      "none";
+
     return;
   }
 
-  // Show customer information
+
+  // Get customer information from Customers table
+  const { data: customer, error } =
+    await supabaseClient
+      .from("Customers")
+      .select("full_name, email, phone")
+      .eq("id", user.id)
+      .single();
+
+
+  if (error) {
+
+    console.error("Customer loading error:", error);
+
+    document.getElementById("message").textContent =
+      error.message;
+
+    return;
+  }
+
+
+  // Show customer name
   document.getElementById("welcomeName").textContent =
-    "Welcome, " + fullName + " 👋";
+    "Welcome, " + (customer.full_name || "Customer") + " 👋";
 
+
+  // Show email
   document.getElementById("customerEmail").textContent =
-    user.email;
+    customer.email || user.email || "";
 
+
+  // Show phone
   document.getElementById("customerPhone").textContent =
-    phone;
+    customer.phone || "";
 
-  // Hide login form
+
+  // Hide login section
   document.getElementById("loginSection").style.display =
     "none";
+
 
   // Show dashboard
   document.getElementById("dashboardSection").style.display =
@@ -249,75 +280,6 @@ async function logOut() {
   document.getElementById("message").textContent =
     "You have been logged out.";
 }
-      </script>
-  <script>
-const SUPABASE_URL = "https://ctdmpigyhinaqpicbycq.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_YNun4pQIhl7S6OJ1SBnYqg_NATcZhsm";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
-
-
-// ===============================
-// LOAD CUSTOMER ACCOUNT
-// ===============================
-async function loadCustomerAccount() {
-
-  const {
-    data: { user },
-    error: userError
-  } = await supabaseClient.auth.getUser();
-
-  if (userError || !user) {
-    document.getElementById("loginSection").style.display = "block";
-    document.getElementById("dashboardSection").style.display = "none";
-    return;
-  }
-
-  const { data: customer, error } = await supabaseClient
-    .from("Customers")
-    .select("full_name, email, phone")
-    .eq("id", user.id)
-    .single();
-
-  if (error) {
-    console.error(error);
-    return;
-  }
-
-  document.getElementById("welcomeName").textContent =
-    "Welcome, " + (customer.full_name || "") + " 👋";
-
-  document.getElementById("customerEmail").textContent =
-    customer.email || user.email || "";
-
-  document.getElementById("customerPhone").textContent =
-    customer.phone || "";
-
-  document.getElementById("loginSection").style.display = "none";
-  document.getElementById("dashboardSection").style.display = "block";
-}
-
-
-// ===============================
-// LOG OUT
-// ===============================
-async function logOut() {
-
-  const { error } = await supabaseClient.auth.signOut();
-
-  if (error) {
-    alert(error.message);
-    return;
-  }
-
-  document.getElementById("dashboardSection").style.display = "none";
-  document.getElementById("loginSection").style.display = "block";
-}
 
 
 // ===============================
@@ -325,7 +287,10 @@ async function logOut() {
 // ===============================
 loadCustomerAccount();
 
-  </script>
+</script>
+
+</body>
+</html>
 
 </body>
 </html>
