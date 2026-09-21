@@ -98,6 +98,158 @@
   </div>
 
 </div>
+  <script>
+const SUPABASE_URL = "https://ctdmpigyhinaqpicbycq.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "PASTE_YOUR_CURRENT_PUBLISHABLE_KEY_HERE";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+
+// ===============================
+// CREATE ACCOUNT
+// ===============================
+async function signUp() {
+
+  const fullName =
+    document.getElementById("fullName").value.trim();
+
+  const phone =
+    document.getElementById("phone").value.trim();
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+  if (!fullName || !phone || !email || !password) {
+    document.getElementById("message").textContent =
+      "Please fill in all fields.";
+    return;
+  }
+
+  const { data, error } =
+    await supabaseClient.auth.signUp({
+      email: email,
+      password: password,
+
+      options: {
+        emailRedirectTo:
+          "https://demoses20.github.io/TDM-WEBSITE/account.html",
+
+        data: {
+          full_name: fullName,
+          phone: phone
+        }
+      }
+    });
+
+  if (error) {
+    document.getElementById("message").textContent =
+      error.message;
+    return;
+  }
+
+  document.getElementById("message").textContent =
+    "Account created. Please check your email and click the confirmation link.";
+}
+
+
+// ===============================
+// LOGIN
+// ===============================
+async function logIn() {
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+  const { data, error } =
+    await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+  if (error) {
+    document.getElementById("message").textContent =
+      error.message;
+    return;
+  }
+
+  const user = data.user;
+
+  const fullName =
+    user.user_metadata?.full_name || "";
+
+  const phone =
+    user.user_metadata?.phone || "";
+
+  const { error: customerError } =
+    await supabaseClient
+      .from("Customers")
+      .upsert({
+        id: user.id,
+        full_name: fullName,
+        phone: phone,
+        email: user.email
+      });
+
+  if (customerError) {
+    document.getElementById("message").textContent =
+      customerError.message;
+    return;
+  }
+
+  // Show customer information
+  document.getElementById("welcomeName").textContent =
+    "Welcome, " + fullName + " 👋";
+
+  document.getElementById("customerEmail").textContent =
+    user.email;
+
+  document.getElementById("customerPhone").textContent =
+    phone;
+
+  // Hide login form
+  document.getElementById("loginSection").style.display =
+    "none";
+
+  // Show dashboard
+  document.getElementById("dashboardSection").style.display =
+    "block";
+}
+
+
+// ===============================
+// LOG OUT
+// ===============================
+async function logOut() {
+
+  const { error } =
+    await supabaseClient.auth.signOut();
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  document.getElementById("dashboardSection").style.display =
+    "none";
+
+  document.getElementById("loginSection").style.display =
+    "block";
+
+  document.getElementById("message").textContent =
+    "You have been logged out.";
+}
+      </script>
 
 </body>
 </html>
