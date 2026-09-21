@@ -230,6 +230,78 @@ async function showCustomerAccount(user) {
   document.getElementById("dashboardSection").style.display =
     "block";
 }
+    // ===============================
+// LOAD CUSTOMER ORDERS
+// ===============================
+async function loadMyOrders() {
+
+  const {
+    data: { user },
+    error: authError
+  } = await supabaseClient.auth.getUser();
+
+  if (authError || !user) {
+    document.getElementById("ordersList").textContent =
+      "Please log in to view your orders.";
+    return;
+  }
+
+  const { data: orders, error } =
+    await supabaseClient
+      .from("Orders")
+      .select("product_name, quantity, total_amount, status, created_at")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    document.getElementById("ordersList").textContent =
+      "Unable to load your orders.";
+    return;
+  }
+
+  if (!orders || orders.length === 0) {
+    document.getElementById("ordersList").textContent =
+      "You have no orders yet.";
+    return;
+  }
+
+  let html = "";
+
+  orders.forEach(order => {
+
+    html += `
+      <div class="order-card">
+
+        <h3>${order.product_name}</h3>
+
+        <p>
+          <strong>Quantity:</strong>
+          ${order.quantity}
+        </p>
+
+        <p>
+          <strong>Amount:</strong>
+          ₦${Number(order.total_amount).toLocaleString()}
+        </p>
+
+        <p>
+          <strong>Status:</strong>
+          ${order.status}
+        </p>
+
+        <p>
+          <strong>Order Date:</strong>
+          ${new Date(order.created_at).toLocaleDateString()}
+        </p>
+
+      </div>
+    `;
+
+  });
+
+  document.getElementById("ordersList").innerHTML = html;
+}
 
 
 // ===============================
