@@ -250,6 +250,82 @@ async function logOut() {
     "You have been logged out.";
 }
       </script>
+  <script>
+const SUPABASE_URL = "https://ctdmpigyhinaqpicbycq.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_YNun4pQIhl7S6OJ1SBnYqg_NATcZhsm";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+
+// ===============================
+// LOAD CUSTOMER ACCOUNT
+// ===============================
+async function loadCustomerAccount() {
+
+  const {
+    data: { user },
+    error: userError
+  } = await supabaseClient.auth.getUser();
+
+  if (userError || !user) {
+    document.getElementById("loginSection").style.display = "block";
+    document.getElementById("dashboardSection").style.display = "none";
+    return;
+  }
+
+  const { data: customer, error } = await supabaseClient
+    .from("Customers")
+    .select("full_name, email, phone")
+    .eq("id", user.id)
+    .single();
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  document.getElementById("welcomeName").textContent =
+    "Welcome, " + (customer.full_name || "") + " 👋";
+
+  document.getElementById("customerEmail").textContent =
+    customer.email || user.email || "";
+
+  document.getElementById("customerPhone").textContent =
+    customer.phone || "";
+
+  document.getElementById("loginSection").style.display = "none";
+  document.getElementById("dashboardSection").style.display = "block";
+}
+
+
+// ===============================
+// LOG OUT
+// ===============================
+async function logOut() {
+
+  const { error } = await supabaseClient.auth.signOut();
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  document.getElementById("dashboardSection").style.display = "none";
+  document.getElementById("loginSection").style.display = "block";
+}
+
+
+// ===============================
+// CHECK LOGIN WHEN PAGE OPENS
+// ===============================
+loadCustomerAccount();
+
+  </script>
 
 </body>
 </html>
