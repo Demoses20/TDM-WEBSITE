@@ -337,6 +337,85 @@ nav a:hover {
     <p>Precision Engineering & Fabricated Equipment</p>
 
 </footer>
+  <!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "YOUR_SUPABASE_URL";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
+
+document.getElementById("orderBtn").addEventListener("click", async function () {
+
+    try {
+
+        // Check if customer is logged in
+        const {
+            data: { user },
+            error: authError
+        } = await supabaseClient.auth.getUser();
+
+        if (authError || !user) {
+            alert("Please log in to your TDM account before placing an order.");
+            window.location.href = "login.html";
+            return;
+        }
+
+        // Get customer's information
+        const { data: customer, error: customerError } =
+            await supabaseClient
+                .from("Customers")
+                .select("id, email")
+                .eq("email", user.email)
+                .single();
+
+        if (customerError || !customer) {
+            alert("Customer account not found. Please complete your customer profile first.");
+            return;
+        }
+
+        // Product information
+        const productName = "TDM 5 kg Spiral Mixer";
+        const quantity = 1;
+        const totalAmount = 500000;
+        const status = "Pending";
+
+        // Create order
+        const { data: order, error: orderError } =
+            await supabaseClient
+                .from("Orders")
+                .insert([
+                    {
+                        product_name: productName,
+                        quantity: quantity,
+                        total_amount: totalAmount,
+                        status: status,
+                        customer_id: customer.id,
+                        user_id: user.id
+                    }
+                ])
+                .select()
+                .single();
+
+        if (orderError) {
+            console.error(orderError);
+            alert("Unable to place order: " + orderError.message);
+            return;
+        }
+
+        alert("Order placed successfully! Your order has been received.");
+
+    } catch (error) {
+        console.error(error);
+        alert("Something went wrong. Please try again.");
+    }
+
+});
+  </script>
 
 </body>
 </html>
