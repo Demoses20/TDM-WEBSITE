@@ -119,7 +119,9 @@
 
 </div>
   <script>
-const SUPABASE_URL = "https://ctdmpigyhinaqpicbycq.supabase.co";
+
+const SUPABASE_URL =
+  "https://ctdmpigyhinaqpicbycq.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_YNun4pQIhl7S6OJ1SBnYqg_NATcZhsm";
@@ -153,12 +155,15 @@ async function signUp() {
     return;
   }
 
-  const { error } =
+  const { data, error } =
     await supabaseClient.auth.signUp({
+
       email: email,
+
       password: password,
 
       options: {
+
         emailRedirectTo:
           "https://demoses20.github.io/TDM-WEBSITE/account.html",
 
@@ -170,8 +175,10 @@ async function signUp() {
     });
 
   if (error) {
+
     document.getElementById("message").textContent =
       error.message;
+
     return;
   }
 
@@ -193,17 +200,23 @@ async function logIn() {
 
   const { data, error } =
     await supabaseClient.auth.signInWithPassword({
+
       email: email,
+
       password: password
+
     });
 
   if (error) {
+
     document.getElementById("message").textContent =
       error.message;
+
     return;
   }
 
-    await showCustomerAccount(data.user);
+  await showCustomerAccount(data.user);
+
   await loadMyOrders();
 }
 
@@ -211,14 +224,8 @@ async function logIn() {
 // ===============================
 // SHOW CUSTOMER ACCOUNT
 // ===============================
-
-
-// ===============================
-// SHOW CUSTOMER ACCOUNT
-// ===============================
 async function showCustomerAccount(user) {
 
-  // Get the existing customer information
   const { data: customer, error } =
     await supabaseClient
       .from("Customers")
@@ -227,15 +234,19 @@ async function showCustomerAccount(user) {
       .single();
 
   if (error) {
+
     console.error(error);
+
     document.getElementById("message").textContent =
-      error.message;
+      "Customer information could not be loaded.";
+
     return;
   }
 
-  // Display the information already saved in Customers
   document.getElementById("welcomeName").textContent =
-    "Welcome, " + (customer.full_name || "Customer") + " 👋";
+    "Welcome, " +
+    (customer.full_name || "Customer") +
+    " 👋";
 
   document.getElementById("customerEmail").textContent =
     customer.email || user.email || "";
@@ -243,15 +254,19 @@ async function showCustomerAccount(user) {
   document.getElementById("customerPhone").textContent =
     customer.phone || "Not provided";
 
+
   // Hide login form
   document.getElementById("loginSection").style.display =
     "none";
+
 
   // Show dashboard
   document.getElementById("dashboardSection").style.display =
     "block";
 }
-    // ===============================
+
+
+// ===============================
 // LOAD CUSTOMER ORDERS
 // ===============================
 async function loadMyOrders() {
@@ -261,33 +276,50 @@ async function loadMyOrders() {
     error: authError
   } = await supabaseClient.auth.getUser();
 
+
   if (authError || !user) {
+
     document.getElementById("ordersList").textContent =
       "Please log in to view your orders.";
+
     return;
   }
+
 
   const { data: orders, error } =
     await supabaseClient
       .from("Orders")
-      .select("product_name, quantity, total_amount, status, created_at")
+      .select(
+        "product_name, quantity, total_amount, status, created_at"
+      )
       .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
+      .order("created_at", {
+        ascending: false
+      });
+
 
   if (error) {
+
     console.error(error);
+
     document.getElementById("ordersList").textContent =
       "Unable to load your orders.";
+
     return;
   }
+
 
   if (!orders || orders.length === 0) {
+
     document.getElementById("ordersList").textContent =
       "You have no orders yet.";
+
     return;
   }
 
+
   let html = "";
+
 
   orders.forEach(order => {
 
@@ -321,7 +353,9 @@ async function loadMyOrders() {
 
   });
 
-  document.getElementById("ordersList").innerHTML = html;
+
+  document.getElementById("ordersList").innerHTML =
+    html;
 }
 
 
@@ -334,7 +368,9 @@ async function loadCustomerAccount() {
     data: { user }
   } = await supabaseClient.auth.getUser();
 
+
   if (!user) {
+
     document.getElementById("loginSection").style.display =
       "block";
 
@@ -344,8 +380,10 @@ async function loadCustomerAccount() {
     return;
   }
 
+
   await showCustomerAccount(user);
-await loadMyOrders();
+
+  await loadMyOrders();
 }
 
 
@@ -357,10 +395,14 @@ async function logOut() {
   const { error } =
     await supabaseClient.auth.signOut();
 
+
   if (error) {
+
     alert(error.message);
+
     return;
   }
+
 
   document.getElementById("dashboardSection").style.display =
     "none";
@@ -373,7 +415,9 @@ async function logOut() {
 }
 
 
-// Start
+// ===============================
+// START
+// ===============================
 loadCustomerAccount();
 
 </script>
