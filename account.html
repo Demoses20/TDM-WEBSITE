@@ -50,124 +50,54 @@
     }
   </style>
 </head>
-
 <body>
 
 <div class="account-box">
-  <h1>TDM Customer Account</h1>
 
-  <input type="text" id="fullName" placeholder="Full name">
+  <!-- LOGIN / SIGN UP FORM -->
+  <div id="loginSection">
 
-  <input type="email" id="email" placeholder="Email address">
+    <h1>TDM Customer Account</h1>
 
-  <input type="tel" id="phone" placeholder="Phone number">
+    <input type="text" id="fullName" placeholder="Full name">
 
-  <input type="password" id="password" placeholder="Password">
+    <input type="email" id="email" placeholder="Email address">
 
-  <button onclick="signUp()">Create Account</button>
+    <input type="tel" id="phone" placeholder="Phone number">
 
-  <button onclick="logIn()">Log In</button>
+    <input type="password" id="password" placeholder="Password">
 
-  <p id="message"></p>
+    <button onclick="signUp()">Create Account</button>
+
+    <button onclick="logIn()">Log In</button>
+
+    <p id="message"></p>
+
+  </div>
+
+
+  <!-- CUSTOMER DASHBOARD -->
+  <div id="dashboardSection" style="display:none;">
+
+    <h1>My TDM Account</h1>
+
+    <h2 id="welcomeName"></h2>
+
+    <p>
+      <strong>Email:</strong>
+      <span id="customerEmail"></span>
+    </p>
+
+    <p>
+      <strong>Phone:</strong>
+      <span id="customerPhone"></span>
+    </p>
+
+    <button onclick="logOut()">Log Out</button>
+
+  </div>
+
 </div>
-
-<script>
-const SUPABASE_URL = "https://ctdmpigyhinaqpicbycq.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_YNun4pQIhl7S6OJ1SBnYqg_NATcZhsm";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
-
-
-// ===============================
-// CREATE ACCOUNT
-// ===============================
-async function signUp() {
-
-  const fullName = document.getElementById("fullName").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-
-  if (!fullName || !phone || !email || !password) {
-    document.getElementById("message").textContent =
-      "Please fill in all fields.";
-    return;
-  }
-
-  const { data, error } = await supabaseClient.auth.signUp({
-    email: email,
-    password: password,
-
-    options: {
-      emailRedirectTo:
-        "https://demoses20.github.io/TDM-WEBSITE/account.html",
-
-      data: {
-        full_name: fullName,
-        phone: phone
-      }
-    }
-  });
-
-  if (error) {
-    document.getElementById("message").textContent =
-      error.message;
-    return;
-  }
-
-  document.getElementById("message").textContent =
-    "Account created. Please check your email and click the confirmation link.";
-}
-
-
-// ===============================
-// LOGIN
-// ===============================
-async function logIn() {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-
-  const { data, error } =
-    await supabaseClient.auth.signInWithPassword({
-      email: email,
-      password: password
-    });
-
-  if (error) {
-    document.getElementById("message").textContent = error.message;
-    return;
-  }
-
-  const user = data.user;
-
-  const fullName = user.user_metadata?.full_name || "";
-  const phone = user.user_metadata?.phone || "";
-
-  const { error: customerError } = await supabaseClient
-    .from("Customers")
-    .upsert({
-      id: user.id,
-      full_name: fullName,
-      phone: phone,
-      email: user.email
-    });
-
-  if (customerError) {
-    document.getElementById("message").textContent =
-      customerError.message;
-    return;
-  }
-
-  document.getElementById("message").textContent =
-    "Login successful. Customer account saved.";
-}
-
-</script>
 
 </body>
 </html>
