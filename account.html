@@ -129,7 +129,6 @@ async function signUp() {
 // LOGIN
 // ===============================
 async function logIn() {
-
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
 
@@ -140,27 +139,16 @@ async function logIn() {
     });
 
   if (error) {
-    document.getElementById("message").textContent =
-      error.message;
+    document.getElementById("message").textContent = error.message;
     return;
   }
 
-  await saveCustomer(data.user);
-}
+  const user = data.user;
 
+  const fullName = user.user_metadata?.full_name || "";
+  const phone = user.user_metadata?.phone || "";
 
-// ===============================
-// SAVE CUSTOMER
-// ===============================
-async function saveCustomer(user) {
-
-  const fullName =
-    user.user_metadata?.full_name || "";
-
-  const phone =
-    user.user_metadata?.phone || "";
-
-  const { error } = await supabaseClient
+  const { error: customerError } = await supabaseClient
     .from("Customers")
     .upsert({
       id: user.id,
@@ -169,61 +157,15 @@ async function saveCustomer(user) {
       email: user.email
     });
 
-  if (error) {
+  if (customerError) {
     document.getElementById("message").textContent =
-      "Login successful, but customer data could not be saved: " +
-      error.message;
+      customerError.message;
     return;
   }
 
   document.getElementById("message").textContent =
-    "Account verified and customer account saved successfully.";
+    "Login successful. Customer account saved.";
 }
-
-
-// ===============================
-// CHECK SESSION AFTER EMAIL
-// ===============================
-async function checkSession() {
-
-  const { data, error } =
-    await supabaseClient.auth.getSession();
-
-  if (error) {
-    document.getElementById("message").textContent =
-      error.message;
-    return;
-  }
-
-  if (data.session) {
-
-    await saveCustomer(data.session.user);
-
-  } else {
-
-    console.log("No active session yet.");
-  }
-}
-
-
-// ===============================
-// LISTEN FOR AUTH CHANGES
-// ===============================
-supabaseClient.auth.onAuthStateChange(
-  async (event, session) => {
-
-    console.log("Auth event:", event);
-
-    if (event === "SIGNED_IN" && session) {
-      await saveCustomer(session.user);
-    }
-
-  }
-);
-
-
-// Run when account.html opens
-checkSession();
 
 </script>
 
