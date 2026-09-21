@@ -192,42 +192,36 @@ async function logIn() {
 // ===============================
 async function showCustomerAccount(user) {
 
-  const fullName =
-    user.user_metadata?.full_name || "";
-
-  const phone =
-    user.user_metadata?.phone || "";
-
-  // Save/update customer information
-  const { error: customerError } =
+  // Get the existing customer information
+  const { data: customer, error } =
     await supabaseClient
       .from("Customers")
-      .upsert({
-        id: user.id,
-        full_name: fullName,
-        phone: phone,
-        email: user.email
-      });
+      .select("full_name, email, phone")
+      .eq("id", user.id)
+      .single();
 
-  if (customerError) {
-    console.error(customerError);
+  if (error) {
+    console.error(error);
     document.getElementById("message").textContent =
-      customerError.message;
+      error.message;
     return;
   }
 
+  // Display the information already saved in Customers
   document.getElementById("welcomeName").textContent =
-    "Welcome, " + (fullName || "Customer") + " 👋";
+    "Welcome, " + (customer.full_name || "Customer") + " 👋";
 
   document.getElementById("customerEmail").textContent =
-    user.email || "";
+    customer.email || user.email || "";
 
   document.getElementById("customerPhone").textContent =
-    phone || "Not provided";
+    customer.phone || "Not provided";
 
+  // Hide login form
   document.getElementById("loginSection").style.display =
     "none";
 
+  // Show dashboard
   document.getElementById("dashboardSection").style.display =
     "block";
 }
