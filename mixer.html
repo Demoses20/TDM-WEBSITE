@@ -416,6 +416,69 @@ document.getElementById("orderBtn").addEventListener("click", async function () 
 
 });
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://ctdmpigyhinaqpicbycq.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_YNun4pQIhl7S6OJ1SBnYqg_NATcZhsm";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+document.getElementById("orderBtn").addEventListener("click", async function () {
+
+  // Check if customer is logged in
+  const {
+    data: { user },
+    error: authError
+  } = await supabaseClient.auth.getUser();
+
+  if (authError || !user) {
+    alert("Please log in to your TDM account first.");
+    window.location.href = "account.html";
+    return;
+  }
+
+  // Find the customer's record
+  const { data: customer, error: customerError } =
+    await supabaseClient
+      .from("Customers")
+      .select("id")
+      .eq("id", user.id)
+      .single();
+
+  if (customerError || !customer) {
+    alert("Customer account not found.");
+    return;
+  }
+
+  // Create the order
+  const { error: orderError } =
+    await supabaseClient
+      .from("Orders")
+      .insert({
+        product_name: "TDM 5 kg Spiral Mixer",
+        quantity: 1,
+        total_amount: 500000,
+        status: "Pending",
+        customer_id: customer.id,
+        user_id: user.id
+      });
+
+  if (orderError) {
+    console.error(orderError);
+    alert("Order failed: " + orderError.message);
+    return;
+  }
+
+  alert("Order placed successfully! 🎉");
+
+});
+</script>
 
 </body>
 </html>
