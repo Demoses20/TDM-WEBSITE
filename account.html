@@ -129,8 +129,28 @@ async function logIn() {
     return;
   }
 
+  const user = data.user;
+
+  const fullName = user.user_metadata?.full_name || "";
+  const phone = user.user_metadata?.phone || "";
+
+  const { error: customerError } = await supabaseClient
+    .from("Customers")
+    .upsert({
+      id: user.id,
+      full_name: fullName,
+      phone: phone,
+      email: user.email
+    });
+
+  if (customerError) {
+    document.getElementById("message").textContent =
+      customerError.message;
+    return;
+  }
+
   document.getElementById("message").textContent =
-    "Login successful.";
+    "Login successful. Customer account saved.";
 }
 </script>
 
