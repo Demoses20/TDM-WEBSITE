@@ -639,11 +639,122 @@ function filterOrders() {
 // CONTACT CUSTOMER ON WHATSAPP
 // =====================================
 
+// =====================================
+// CONTACT CUSTOMER ON WHATSAPP
+// =====================================
+
 function contactCustomer(
   phone,
   productName,
   status
 ) {
+
+  if (!phone) {
+
+    alert(
+      "Customer phone number is not available."
+    );
+
+    return;
+  }
+
+
+  let cleanPhone =
+    String(phone).replace(/\D/g, "");
+
+
+  // Convert Nigerian 080... number
+  // to international 23480... format
+
+  if (cleanPhone.startsWith("0")) {
+
+    cleanPhone =
+      "234" +
+      cleanPhone.substring(1);
+
+  }
+
+
+  let message = "";
+
+
+  if (status === "Confirmed") {
+
+    message =
+      `Hello, this is TDM Manufacturing.\n\n` +
+      `Your order for the ${productName} has been confirmed.\n\n` +
+      `Thank you for choosing TDM Manufacturing.`;
+
+  }
+
+
+  else if (status === "Processing") {
+
+    message =
+      `Hello, this is TDM Manufacturing.\n\n` +
+      `Your order for the ${productName} is currently being processed.\n\n` +
+      `We will keep you updated on the progress of your order.\n\n` +
+      `Thank you for choosing TDM Manufacturing.`;
+
+  }
+
+
+  else if (status === "Ready") {
+
+    message =
+      `Hello, this is TDM Manufacturing.\n\n` +
+      `Your order for the ${productName} is now ready.\n\n` +
+      `Please contact us for pickup or delivery arrangements.\n\n` +
+      `Thank you for choosing TDM Manufacturing.`;
+
+  }
+
+
+  else if (status === "Shipped") {
+
+    message =
+      `Hello, this is TDM Manufacturing.\n\n` +
+      `Your order for the ${productName} has been shipped.\n\n` +
+      `We will keep you updated on the delivery.\n\n` +
+      `Thank you for choosing TDM Manufacturing.`;
+
+  }
+
+
+  else if (status === "Delivered") {
+
+    message =
+      `Hello, this is TDM Manufacturing.\n\n` +
+      `Your order for the ${productName} has been delivered.\n\n` +
+      `Thank you for choosing TDM Manufacturing. We appreciate your business.`;
+
+  }
+
+
+  else {
+
+    message =
+      `Hello, this is TDM Manufacturing.\n\n` +
+      `Regarding your order for the ${productName}.\n\n` +
+      `Current order status: ${status}.\n\n` +
+      `Thank you for choosing TDM Manufacturing.`;
+
+  }
+
+
+  const whatsappUrl =
+    "https://wa.me/" +
+    cleanPhone +
+    "?text=" +
+    encodeURIComponent(message);
+
+
+  window.open(
+    whatsappUrl,
+    "_blank"
+  );
+
+}
 
   if (!phone) {
 
