@@ -219,6 +219,40 @@ async function logIn() {
 
   await loadMyOrders();
 }
+    // ===============================
+// REALTIME ORDER UPDATES
+// ===============================
+function subscribeToMyOrders() {
+
+  supabaseClient.auth.getUser().then(({ data: { user } }) => {
+
+    if (!user) return;
+
+    supabaseClient
+      .channel("my-orders-" + user.id)
+
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "Orders",
+          filter: "user_id=eq." + user.id
+        },
+        (payload) => {
+
+          console.log("Order updated:", payload);
+
+          loadMyOrders();
+
+        }
+      )
+
+      .subscribe();
+
+  });
+
+}
 
 
 // ===============================
