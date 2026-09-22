@@ -672,59 +672,23 @@ async function adminLogout() {
   document.getElementById("loginMessage")
     .textContent =
       "You have been logged out.";
+}
+
+
+// =====================================
+// SEARCH ORDERS
+// =====================================
 
 function searchOrders() {
   filterOrders();
 }
-    // =====================================
-// FILTER ORDERS BY STATUS
+
+
+// =====================================
+// FILTER ORDERS
 // =====================================
 
 function filterOrders() {
-  // =====================================
-// CONTACT CUSTOMER ON WHATSAPP
-// =====================================
-
-function contactCustomer(phone, productName, status) {
-
-  if (!phone) {
-
-    alert("Customer phone number is not available.");
-
-    return;
-  }
-
-
-  let cleanPhone =
-    phone.replace(/\D/g, "");
-
-
-  // Convert Nigerian 080... number to 23480...
-  if (cleanPhone.startsWith("0")) {
-
-    cleanPhone =
-      "234" + cleanPhone.substring(1);
-
-  }
-
-
-  const message =
-    `Hello, this is TDM Manufacturing.%0A%0A` +
-    `Regarding your order for ${productName}.%0A` +
-    `Current order status: ${status}.%0A%0A` +
-    `Thank you for choosing TDM Manufacturing.`;
-
-
-  const whatsappUrl =
-    `https://wa.me/${cleanPhone}?text=${message}`;
-
-
-  window.open(
-    whatsappUrl,
-    "_blank"
-  );
-
-}
 
   const status =
     document.getElementById("statusFilter")
@@ -745,7 +709,10 @@ function contactCustomer(phone, productName, status) {
   const customerMap = {};
 
   customers.forEach(customer => {
-    customerMap[customer.id] = customer;
+
+    customerMap[customer.id] =
+      customer;
+
   });
 
 
@@ -754,6 +721,7 @@ function contactCustomer(phone, productName, status) {
 
       const customer =
         customerMap[order.user_id] || {};
+
 
       const matchesStatus =
         status === "All" ||
@@ -796,65 +764,77 @@ function contactCustomer(phone, productName, status) {
 
 }
 
-  const search =
-    document.getElementById("orderSearch")
-      .value
-      .trim()
-      .toLowerCase();
 
-  if (!search) {
-    loadAllOrders();
+// =====================================
+// CONTACT CUSTOMER ON WHATSAPP
+// =====================================
+
+function contactCustomer(
+  phone,
+  productName,
+  status
+) {
+
+  if (!phone) {
+
+    alert(
+      "Customer phone number is not available."
+    );
+
     return;
   }
 
-  const orders = window.allOrders || [];
-  const customers = window.allCustomers || [];
 
-  const customerMap = {};
+  let cleanPhone =
+    String(phone).replace(/\D/g, "");
 
-  customers.forEach(customer => {
-    customerMap[customer.id] = customer;
-  });
 
-  const filteredOrders = orders.filter(order => {
+  // Convert Nigerian 080... number
+  // to international 23480... format
 
-    const customer =
-      customerMap[order.user_id] || {};
+  if (cleanPhone.startsWith("0")) {
 
-    return (
-      (order.product_name || "")
-        .toLowerCase()
-        .includes(search) ||
+    cleanPhone =
+      "234" +
+      cleanPhone.substring(1);
 
-      (order.id || "")
-        .toLowerCase()
-        .includes(search) ||
-
-      (customer.full_name || "")
-        .toLowerCase()
-        .includes(search) ||
-
-      (customer.email || "")
-        .toLowerCase()
-        .includes(search) ||
-
-      (customer.phone || "")
-        .toLowerCase()
-        .includes(search)
-    );
-
-  });
-
-  displayOrders(filteredOrders, customerMap);
   }
-  // =====================================
+
+
+  const message =
+    `Hello, this is TDM Manufacturing.\n\n` +
+    `Regarding your order for ${productName}.\n` +
+    `Current order status: ${status}.\n\n` +
+    `Thank you for choosing TDM Manufacturing.`;
+
+
+  const whatsappUrl =
+    "https://wa.me/" +
+    cleanPhone +
+    "?text=" +
+    encodeURIComponent(message);
+
+
+  window.open(
+    whatsappUrl,
+    "_blank"
+  );
+
+}
+
+
+// =====================================
 // DISPLAY ORDERS
 // =====================================
 
-function displayOrders(orders, customerMap) {
+function displayOrders(
+  orders,
+  customerMap
+) {
 
   const ordersList =
     document.getElementById("ordersList");
+
 
   if (!orders || orders.length === 0) {
 
@@ -882,35 +862,47 @@ function displayOrders(orders, customerMap) {
           ${order.product_name}
         </h2>
 
+
         <p>
           <strong>Customer Name:</strong>
           ${customer.full_name || "Not available"}
         </p>
+
 
         <p>
           <strong>Email:</strong>
           ${customer.email || "Not available"}
         </p>
 
+
         <p>
           <strong>Phone:</strong>
           ${customer.phone || "Not available"}
         </p>
+
+
         <button
-  onclick="contactCustomer('${customer.phone || ""}', '${order.product_name}', '${order.status}')"
->
-  Contact Customer on WhatsApp
-</button>
+          onclick="contactCustomer(
+            '${customer.phone || ""}',
+            '${order.product_name}',
+            '${order.status}'
+          )"
+        >
+          Contact Customer on WhatsApp
+        </button>
+
 
         <p>
           <strong>Order ID:</strong>
           ${order.id}
         </p>
 
+
         <p>
           <strong>Quantity:</strong>
           ${order.quantity}
         </p>
+
 
         <p>
           <strong>Amount:</strong>
@@ -919,6 +911,7 @@ function displayOrders(orders, customerMap) {
           ).toLocaleString()}
         </p>
 
+
         <p>
           <strong>Order Date:</strong>
           ${new Date(
@@ -926,14 +919,17 @@ function displayOrders(orders, customerMap) {
           ).toLocaleString()}
         </p>
 
+
         <p>
           <strong>Current Status:</strong>
           ${order.status}
         </p>
 
+
         <label>
           <strong>Change Order Status</strong>
         </label>
+
 
         <select
           onchange="
@@ -951,12 +947,14 @@ function displayOrders(orders, customerMap) {
             Confirmed
           </option>
 
+
           <option value="Processing"
             ${order.status === "Processing"
               ? "selected"
               : ""}>
             Processing
           </option>
+
 
           <option value="Ready"
             ${order.status === "Ready"
@@ -965,12 +963,14 @@ function displayOrders(orders, customerMap) {
             Ready
           </option>
 
+
           <option value="Shipped"
             ${order.status === "Shipped"
               ? "selected"
               : ""}>
             Shipped
           </option>
+
 
           <option value="Delivered"
             ${order.status === "Delivered"
