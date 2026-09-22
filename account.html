@@ -63,6 +63,61 @@
 .order-card p {
   margin: 7px 0;
 }
+    .order-status {
+  margin-top: 15px;
+}
+
+.status-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-top: 20px;
+}
+
+.status-step {
+  text-align: center;
+  font-size: 11px;
+  flex: 1;
+  color: #999;
+  position: relative;
+}
+
+.status-dot {
+  width: 16px;
+  height: 16px;
+  background: #ddd;
+  border-radius: 50%;
+  margin: 0 auto 6px;
+  position: relative;
+  z-index: 2;
+}
+
+.status-step.active {
+  color: #008000;
+  font-weight: bold;
+}
+
+.status-step.active .status-dot {
+  background: #008000;
+}
+
+.status-step.completed {
+  color: #008000;
+}
+
+.status-step.completed .status-dot {
+  background: #008000;
+}
+
+.status-line {
+  position: absolute;
+  top: 8px;
+  left: 10%;
+  right: 10%;
+  height: 3px;
+  background: #ddd;
+  z-index: 1;
+}
   </style>
 </head>
 <body>
