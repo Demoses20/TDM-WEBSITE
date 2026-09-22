@@ -398,6 +398,58 @@ async function loadAllOrders() {
 
   message.textContent =
     orders.length + " order(s)";
+  // =====================================
+// UPDATE ORDER SUMMARY
+// =====================================
+
+const totalOrders = orders.length;
+
+const processingOrders =
+  orders.filter(order =>
+    order.status === "Processing"
+  ).length;
+
+const readyOrders =
+  orders.filter(order =>
+    order.status === "Ready"
+  ).length;
+
+const shippedOrders =
+  orders.filter(order =>
+    order.status === "Shipped"
+  ).length;
+
+const deliveredOrders =
+  orders.filter(order =>
+    order.status === "Delivered"
+  ).length;
+
+const totalSales =
+  orders.reduce(
+    (total, order) =>
+      total + Number(order.total_amount || 0),
+    0
+  );
+
+
+document.getElementById("totalOrders")
+  .textContent = totalOrders;
+
+document.getElementById("processingOrders")
+  .textContent = processingOrders;
+
+document.getElementById("readyOrders")
+  .textContent = readyOrders;
+
+document.getElementById("shippedOrders")
+  .textContent = shippedOrders;
+
+document.getElementById("deliveredOrders")
+  .textContent = deliveredOrders;
+
+document.getElementById("totalSales")
+  .textContent =
+    "₦" + totalSales.toLocaleString();
 
 
   let html = "";
