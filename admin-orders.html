@@ -664,6 +664,59 @@ async function adminLogout() {
       "You have been logged out.";
 
 }
+  function searchOrders() {
+
+  const search =
+    document.getElementById("orderSearch")
+      .value
+      .trim()
+      .toLowerCase();
+
+  if (!search) {
+    loadAllOrders();
+    return;
+  }
+
+  const orders = window.allOrders || [];
+  const customers = window.allCustomers || [];
+
+  const customerMap = {};
+
+  customers.forEach(customer => {
+    customerMap[customer.id] = customer;
+  });
+
+  const filteredOrders = orders.filter(order => {
+
+    const customer =
+      customerMap[order.user_id] || {};
+
+    return (
+      (order.product_name || "")
+        .toLowerCase()
+        .includes(search) ||
+
+      (order.id || "")
+        .toLowerCase()
+        .includes(search) ||
+
+      (customer.full_name || "")
+        .toLowerCase()
+        .includes(search) ||
+
+      (customer.email || "")
+        .toLowerCase()
+        .includes(search) ||
+
+      (customer.phone || "")
+        .toLowerCase()
+        .includes(search)
+    );
+
+  });
+
+  displayOrders(filteredOrders, customerMap);
+  }
 
 </script>
 
