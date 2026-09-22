@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,20 +19,49 @@
     }
 
     .container {
+      width: 100%;
       max-width: 700px;
       margin: 30px auto;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
 
     h1 {
       text-align: center;
     }
 
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 13px;
+      margin: 8px 0;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 13px;
+      margin-top: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #message {
+      text-align: center;
+      margin: 15px 0;
+    }
+
     .order-card {
-      background: white;
+      background: #f8f8f8;
+      border: 1px solid #ddd;
       border-radius: 12px;
       padding: 20px;
       margin: 20px 0;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
 
     .order-card h2 {
@@ -49,16 +79,8 @@
       font-size: 16px;
     }
 
-    button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-
-    #message {
-      text-align: center;
-      margin: 15px 0;
+    #adminSection {
+      display: none;
     }
 
   </style>
@@ -68,11 +90,50 @@
 
 <div class="container">
 
-  <h1>TDM Admin Orders</h1>
+  <!-- ADMIN LOGIN -->
 
-  <p id="message">Loading orders...</p>
+  <div class="box" id="loginSection">
 
-  <div id="ordersList"></div>
+    <h1>TDM Admin Login</h1>
+
+    <input
+      type="email"
+      id="adminEmail"
+      placeholder="Admin email"
+    >
+
+    <input
+      type="password"
+      id="adminPassword"
+      placeholder="Password"
+    >
+
+    <button onclick="adminLogin()">
+      Log In
+    </button>
+
+    <p id="loginMessage"></p>
+
+  </div>
+
+
+  <!-- ADMIN ORDERS -->
+
+  <div class="box" id="adminSection">
+
+    <h1>TDM Admin Orders</h1>
+
+    <p id="message">
+      Loading orders...
+    </p>
+
+    <div id="ordersList"></div>
+
+    <button onclick="adminLogout()">
+      Log Out
+    </button>
+
+  </div>
 
 </div>
 
@@ -92,6 +153,95 @@ const supabaseClient =
   );
 
 
+const ADMIN_EMAIL =
+  "technicaldemoses@gmail.com";
+
+
+// =====================================
+// ADMIN LOGIN
+// =====================================
+
+async function adminLogin() {
+
+  const email =
+    document.getElementById("adminEmail")
+      .value
+      .trim()
+      .toLowerCase();
+
+  const password =
+    document.getElementById("adminPassword")
+      .value;
+
+  const message =
+    document.getElementById("loginMessage");
+
+
+  if (!email || !password) {
+
+    message.textContent =
+      "Enter your admin email and password.";
+
+    return;
+  }
+
+
+  if (email !== ADMIN_EMAIL) {
+
+    message.textContent =
+      "This account is not authorized as TDM Admin.";
+
+    return;
+  }
+
+
+  message.textContent =
+    "Logging in...";
+
+
+  const { data, error } =
+    await supabaseClient.auth
+      .signInWithPassword({
+
+        email: email,
+
+        password: password
+
+      });
+
+
+  if (error) {
+
+    console.error(error);
+
+    message.textContent =
+      "Login failed: " + error.message;
+
+    return;
+  }
+
+
+  if (!data.user) {
+
+    message.textContent =
+      "Login failed.";
+
+    return;
+  }
+
+
+  document.getElementById("loginSection")
+    .style.display = "none";
+
+  document.getElementById("adminSection")
+    .style.display = "block";
+
+
+  await loadAllOrders();
+
+}
+
+
 // =====================================
 // LOAD ALL ORDERS
 // =====================================
@@ -103,6 +253,10 @@ async function loadAllOrders() {
 
   const ordersList =
     document.getElementById("ordersList");
+
+
+  message.textContent =
+    "Loading orders...";
 
 
   const { data: orders, error } =
@@ -124,12 +278,16 @@ async function loadAllOrders() {
 
   if (error) {
 
-  console.error("Admin orders error:", error);
+    console.error(
+      "Admin orders error:",
+      error
+    );
 
-  message.textContent =
-    "Unable to load orders: " + error.message;
+    message.textContent =
+      "Unable to load orders: " +
+      error.message;
 
-  return;
+    return;
   }
 
 
@@ -201,34 +359,46 @@ async function loadAllOrders() {
         </label>
 
         <select
-          onchange="updateOrderStatus(
-            '${order.id}',
-            this.value
-          )"
+          onchange="
+            updateOrderStatus(
+              '${order.id}',
+              this.value
+            )
+          "
         >
 
           <option value="Confirmed"
-            ${order.status === "Confirmed" ? "selected" : ""}>
+            ${order.status === "Confirmed"
+              ? "selected"
+              : ""}>
             Confirmed
           </option>
 
           <option value="Processing"
-            ${order.status === "Processing" ? "selected" : ""}>
+            ${order.status === "Processing"
+              ? "selected"
+              : ""}>
             Processing
           </option>
 
           <option value="Ready"
-            ${order.status === "Ready" ? "selected" : ""}>
+            ${order.status === "Ready"
+              ? "selected"
+              : ""}>
             Ready
           </option>
 
           <option value="Shipped"
-            ${order.status === "Shipped" ? "selected" : ""}>
+            ${order.status === "Shipped"
+              ? "selected"
+              : ""}>
             Shipped
           </option>
 
           <option value="Delivered"
-            ${order.status === "Delivered" ? "selected" : ""}>
+            ${order.status === "Delivered"
+              ? "selected"
+              : ""}>
             Delivered
           </option>
 
@@ -241,7 +411,8 @@ async function loadAllOrders() {
   });
 
 
-  ordersList.innerHTML = html;
+  ordersList.innerHTML =
+    html;
 
 }
 
@@ -266,19 +437,15 @@ async function updateOrderStatus(
 
   if (error) {
 
-  console.error("Admin orders error:", error);
+    console.error(error);
 
-  message.textContent =
-    "Unable to load orders: " + error.message;
+    alert(
+      "Unable to update order: " +
+      error.message
+    );
 
-  return;
+    return;
   }
-
-
-  alert(
-    "Order status updated to " +
-    newStatus
-  );
 
 
   await loadAllOrders();
@@ -287,10 +454,24 @@ async function updateOrderStatus(
 
 
 // =====================================
-// START
+// ADMIN LOGOUT
 // =====================================
 
-loadAllOrders();
+async function adminLogout() {
+
+  await supabaseClient.auth.signOut();
+
+  document.getElementById("adminSection")
+    .style.display = "none";
+
+  document.getElementById("loginSection")
+    .style.display = "block";
+
+  document.getElementById("loginMessage")
+    .textContent =
+      "You have been logged out.";
+
+}
 
 </script>
 
