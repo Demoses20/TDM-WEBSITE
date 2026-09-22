@@ -124,12 +124,12 @@ async function loadAllOrders() {
 
   if (error) {
 
-    console.error(error);
+  console.error("Admin orders error:", error);
 
-    message.textContent =
-      "Unable to load orders.";
+  message.textContent =
+    "Unable to load orders: " + error.message;
 
-    return;
+  return;
   }
 
 
