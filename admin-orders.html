@@ -266,14 +266,12 @@ async function updateOrderStatus(
 
   if (error) {
 
-    console.error(error);
+  console.error("Admin orders error:", error);
 
-    alert(
-      "Unable to update order: " +
-      error.message
-    );
+  message.textContent =
+    "Unable to load orders: " + error.message;
 
-    return;
+  return;
   }
 
 
