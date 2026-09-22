@@ -681,6 +681,50 @@ function searchOrders() {
 // =====================================
 
 function filterOrders() {
+  // =====================================
+// CONTACT CUSTOMER ON WHATSAPP
+// =====================================
+
+function contactCustomer(phone, productName, status) {
+
+  if (!phone) {
+
+    alert("Customer phone number is not available.");
+
+    return;
+  }
+
+
+  let cleanPhone =
+    phone.replace(/\D/g, "");
+
+
+  // Convert Nigerian 080... number to 23480...
+  if (cleanPhone.startsWith("0")) {
+
+    cleanPhone =
+      "234" + cleanPhone.substring(1);
+
+  }
+
+
+  const message =
+    `Hello, this is TDM Manufacturing.%0A%0A` +
+    `Regarding your order for ${productName}.%0A` +
+    `Current order status: ${status}.%0A%0A` +
+    `Thank you for choosing TDM Manufacturing.`;
+
+
+  const whatsappUrl =
+    `https://wa.me/${cleanPhone}?text=${message}`;
+
+
+  window.open(
+    whatsappUrl,
+    "_blank"
+  );
+
+}
 
   const status =
     document.getElementById("statusFilter")
