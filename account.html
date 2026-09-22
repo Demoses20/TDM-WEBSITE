@@ -247,34 +247,60 @@ async function signUp() {
 // ===============================
 async function logIn() {
 
+  const message = document.getElementById("message");
+
   const email =
     document.getElementById("email").value.trim();
 
   const password =
     document.getElementById("password").value;
 
-  const { data, error } =
-    await supabaseClient.auth.signInWithPassword({
-
-      email: email,
-
-      password: password
-
-    });
-
-  if (error) {
-
-    document.getElementById("message").textContent =
-      error.message;
-
+  if (!email || !password) {
+    message.textContent = "Please enter your email and password.";
     return;
   }
 
-  await showCustomerAccount(data.user);
+  message.textContent = "Logging in...";
 
-await loadMyOrders();
+  try {
 
-subscribeToMyOrders();
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+    if (error) {
+      console.error("Login error:", error);
+
+      message.textContent =
+        "Login failed: " + error.message;
+
+      return;
+    }
+
+    if (!data.user) {
+      message.textContent =
+        "Login failed. No user was returned.";
+
+      return;
+    }
+
+    message.textContent = "Login successful...";
+
+    await showCustomerAccount(data.user);
+
+    await loadMyOrders();
+
+    subscribeToMyOrders();
+
+  } catch (error) {
+
+    console.error("Unexpected login error:", error);
+
+    message.textContent =
+      "Something went wrong: " + error.message;
+  }
 }
     // ===============================
 // REALTIME ORDER UPDATES
