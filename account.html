@@ -441,37 +441,40 @@ async function loadMyOrders() {
   orders.forEach(order => {
 
   const statuses = [
-    "Confirmed",
-    "Processing",
-    "Ready",
-    "Shipped",
-    "Delivered"
-  ];
+  "Confirmed",
+  "Processing",
+  "Ready",
+  "Shipped",
+  "Delivered"
+];
 
-  const currentStatus =
-    statuses.indexOf(order.status);
+const currentStatus = statuses.findIndex(
+  status =>
+    status.toLowerCase() ===
+    String(order.status).trim().toLowerCase()
+);
 
-  let statusSteps = "";
+let statusSteps = "";
 
-  statuses.forEach((status, index) => {
+statuses.forEach((status, index) => {
 
-    let className = "";
+  let className = "";
 
-    if (index < currentStatus) {
-      className = "completed";
-    }
+  if (currentStatus >= 0 && index < currentStatus) {
+    className = "completed";
+  }
 
-    if (index === currentStatus) {
-      className = "active";
-    }
+  if (currentStatus >= 0 && index === currentStatus) {
+    className = "active";
+  }
 
-    statusSteps += `
-      <div class="status-step ${className}">
-        <div class="status-dot"></div>
-        ${status}
-      </div>
-    `;
-  });
+  statusSteps += `
+    <div class="status-step ${className}">
+      <div class="status-dot"></div>
+      <span>${status}</span>
+    </div>
+  `;
+});
 
   html += `
     <div class="order-card">
