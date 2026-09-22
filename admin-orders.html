@@ -192,6 +192,16 @@
   placeholder="Search by name, email, phone, order ID or product..."
   oninput="searchOrders()"
 >
+    <select id="statusFilter" onchange="filterOrders()">
+
+  <option value="All">All Orders</option>
+  <option value="Confirmed">Confirmed</option>
+  <option value="Processing">Processing</option>
+  <option value="Ready">Ready</option>
+  <option value="Shipped">Shipped</option>
+  <option value="Delivered">Delivered</option>
+
+</select>
 
     <div id="ordersList"></div>
 
