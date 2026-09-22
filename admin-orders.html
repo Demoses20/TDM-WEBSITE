@@ -408,6 +408,10 @@ async function loadAllOrders() {
 // =====================================
 
 const totalOrders = orders.length;
+  const confirmedOrders =
+  orders.filter(order =>
+    order.status === "Confirmed"
+  ).length;
 
 const processingOrders =
   orders.filter(order =>
