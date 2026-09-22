@@ -852,6 +852,11 @@ function displayOrders(orders, customerMap) {
           <strong>Phone:</strong>
           ${customer.phone || "Not available"}
         </p>
+        <button
+  onclick="contactCustomer('${customer.phone || ""}', '${order.product_name}', '${order.status}')"
+>
+  Contact Customer on WhatsApp
+</button>
 
         <p>
           <strong>Order ID:</strong>
