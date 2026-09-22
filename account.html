@@ -512,15 +512,15 @@ statuses.forEach((status, index) => {
 <p class="tdm-notification">
     <strong>TDM Notification:</strong>
     ${
-        order.status === "Confirmed"
+        String(order.status).trim().toLowerCase() === "confirmed"
             ? "Your order has been confirmed. Thank you for choosing TDM Manufacturing."
-            : order.status === "Processing"
+            : String(order.status).trim().toLowerCase() === "processing"
             ? "Your order is currently being processed."
-            : order.status === "Ready"
+            : String(order.status).trim().toLowerCase() === "ready"
             ? "Your order is ready for delivery."
-            : order.status === "Shipped"
+            : String(order.status).trim().toLowerCase() === "shipped"
             ? "Your order has been shipped."
-            : order.status === "Delivered"
+            : String(order.status).trim().toLowerCase() === "delivered"
             ? "Your order has been delivered. Thank you for choosing TDM Manufacturing."
             : "Your order has been received and is being reviewed."
     }
