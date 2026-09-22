@@ -217,7 +217,9 @@ async function logIn() {
 
   await showCustomerAccount(data.user);
 
-  await loadMyOrders();
+await loadMyOrders();
+
+subscribeToMyOrders();
 }
     // ===============================
 // REALTIME ORDER UPDATES
