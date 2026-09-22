@@ -414,40 +414,81 @@ async function loadMyOrders() {
 
   orders.forEach(order => {
 
-    html += `
-      <div class="order-card">
+  const statuses = [
+    "Confirmed",
+    "Processing",
+    "Ready",
+    "Shipped",
+    "Delivered"
+  ];
 
-        <h3>${order.product_name}</h3>
+  const currentStatus =
+    statuses.indexOf(order.status);
 
-        <p>
-          <strong>Quantity:</strong>
-          ${order.quantity}
-        </p>
+  let statusSteps = "";
 
-        <p>
-          <strong>Amount:</strong>
-          ₦${Number(order.total_amount).toLocaleString()}
-        </p>
+  statuses.forEach((status, index) => {
 
-        <p>
-          <strong>Status:</strong>
-          ${order.status}
-        </p>
+    let className = "";
 
-        <p>
-          <strong>Order Date:</strong>
-          ${new Date(order.created_at).toLocaleDateString()}
-        </p>
+    if (index < currentStatus) {
+      className = "completed";
+    }
 
+    if (index === currentStatus) {
+      className = "active";
+    }
+
+    statusSteps += `
+      <div class="status-step ${className}">
+        <div class="status-dot"></div>
+        ${status}
       </div>
     `;
-
   });
 
+  html += `
+    <div class="order-card">
 
-  document.getElementById("ordersList").innerHTML =
-    html;
-}
+      <h3>${order.product_name}</h3>
+
+      <p>
+        <strong>Quantity:</strong>
+        ${order.quantity}
+      </p>
+
+      <p>
+        <strong>Amount:</strong>
+        ₦${Number(order.total_amount).toLocaleString()}
+      </p>
+
+      <p>
+        <strong>Status:</strong>
+        ${order.status}
+      </p>
+
+      <p>
+        <strong>Order Date:</strong>
+        ${new Date(order.created_at).toLocaleDateString()}
+      </p>
+
+      <div class="order-status">
+
+        <strong>Order Progress</strong>
+
+        <div class="status-steps">
+
+          <div class="status-line"></div>
+
+          ${statusSteps}
+
+        </div>
+
+      </div>
+
+    </div>
+  `;
+});
 
 
 // ===============================
