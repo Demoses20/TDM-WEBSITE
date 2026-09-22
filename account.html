@@ -417,9 +417,11 @@ async function loadCustomerAccount() {
   }
 
 
-  await showCustomerAccount(user);
+    await showCustomerAccount(user);
 
   await loadMyOrders();
+
+  subscribeToMyOrders();
 }
 
 
