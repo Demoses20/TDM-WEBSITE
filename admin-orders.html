@@ -717,6 +717,146 @@ async function adminLogout() {
 
   displayOrders(filteredOrders, customerMap);
   }
+  // =====================================
+// DISPLAY ORDERS
+// =====================================
+
+function displayOrders(orders, customerMap) {
+
+  const ordersList =
+    document.getElementById("ordersList");
+
+  if (!orders || orders.length === 0) {
+
+    ordersList.innerHTML =
+      "<p style='text-align:center;'>No matching orders found.</p>";
+
+    return;
+  }
+
+
+  let html = "";
+
+
+  orders.forEach(order => {
+
+    const customer =
+      customerMap[order.user_id] || {};
+
+
+    html += `
+
+      <div class="order-card">
+
+        <h2>
+          ${order.product_name}
+        </h2>
+
+        <p>
+          <strong>Customer Name:</strong>
+          ${customer.full_name || "Not available"}
+        </p>
+
+        <p>
+          <strong>Email:</strong>
+          ${customer.email || "Not available"}
+        </p>
+
+        <p>
+          <strong>Phone:</strong>
+          ${customer.phone || "Not available"}
+        </p>
+
+        <p>
+          <strong>Order ID:</strong>
+          ${order.id}
+        </p>
+
+        <p>
+          <strong>Quantity:</strong>
+          ${order.quantity}
+        </p>
+
+        <p>
+          <strong>Amount:</strong>
+          ₦${Number(
+            order.total_amount || 0
+          ).toLocaleString()}
+        </p>
+
+        <p>
+          <strong>Order Date:</strong>
+          ${new Date(
+            order.created_at
+          ).toLocaleString()}
+        </p>
+
+        <p>
+          <strong>Current Status:</strong>
+          ${order.status}
+        </p>
+
+        <label>
+          <strong>Change Order Status</strong>
+        </label>
+
+        <select
+          onchange="
+            updateOrderStatus(
+              '${order.id}',
+              this.value
+            )
+          "
+        >
+
+          <option value="Confirmed"
+            ${order.status === "Confirmed"
+              ? "selected"
+              : ""}>
+            Confirmed
+          </option>
+
+          <option value="Processing"
+            ${order.status === "Processing"
+              ? "selected"
+              : ""}>
+            Processing
+          </option>
+
+          <option value="Ready"
+            ${order.status === "Ready"
+              ? "selected"
+              : ""}>
+            Ready
+          </option>
+
+          <option value="Shipped"
+            ${order.status === "Shipped"
+              ? "selected"
+              : ""}>
+            Shipped
+          </option>
+
+          <option value="Delivered"
+            ${order.status === "Delivered"
+              ? "selected"
+              : ""}>
+            Delivered
+          </option>
+
+        </select>
+
+      </div>
+
+    `;
+
+  });
+
+
+  ordersList.innerHTML =
+    html;
+
+}
 
 </script>
 
