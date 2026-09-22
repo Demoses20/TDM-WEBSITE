@@ -675,6 +675,81 @@ async function adminLogout() {
 
 }
   function searchOrders() {
+    // =====================================
+// FILTER ORDERS BY STATUS
+// =====================================
+
+function filterOrders() {
+
+  const status =
+    document.getElementById("statusFilter")
+      .value;
+
+  const search =
+    document.getElementById("orderSearch")
+      .value
+      .trim()
+      .toLowerCase();
+
+  const orders =
+    window.allOrders || [];
+
+  const customers =
+    window.allCustomers || [];
+
+  const customerMap = {};
+
+  customers.forEach(customer => {
+    customerMap[customer.id] = customer;
+  });
+
+
+  const filteredOrders =
+    orders.filter(order => {
+
+      const customer =
+        customerMap[order.user_id] || {};
+
+      const matchesStatus =
+        status === "All" ||
+        order.status === status;
+
+
+      const matchesSearch =
+        !search ||
+
+        (order.product_name || "")
+          .toLowerCase()
+          .includes(search) ||
+
+        (order.id || "")
+          .toLowerCase()
+          .includes(search) ||
+
+        (customer.full_name || "")
+          .toLowerCase()
+          .includes(search) ||
+
+        (customer.email || "")
+          .toLowerCase()
+          .includes(search) ||
+
+        (customer.phone || "")
+          .toLowerCase()
+          .includes(search);
+
+
+      return matchesStatus && matchesSearch;
+
+    });
+
+
+  displayOrders(
+    filteredOrders,
+    customerMap
+  );
+
+}
 
   const search =
     document.getElementById("orderSearch")
