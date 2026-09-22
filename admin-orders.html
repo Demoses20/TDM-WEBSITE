@@ -259,6 +259,7 @@ async function loadAllOrders() {
     "Loading orders...";
 
 
+  // Get all orders
   const { data: orders, error } =
     await supabaseClient
       .from("Orders")
@@ -302,6 +303,43 @@ async function loadAllOrders() {
   }
 
 
+  // Get all customers
+  const { data: customers, error: customerError } =
+    await supabaseClient
+      .from("Customers")
+      .select(`
+        id,
+        full_name,
+        email,
+        phone
+      `);
+
+
+  if (customerError) {
+
+    console.error(
+      "Customer loading error:",
+      customerError
+    );
+
+    message.textContent =
+      "Orders loaded, but customer information could not be loaded.";
+
+    return;
+  }
+
+
+  // Create customer lookup
+  const customerMap = {};
+
+  customers.forEach(customer => {
+
+    customerMap[customer.id] =
+      customer;
+
+  });
+
+
   message.textContent =
     orders.length + " order(s)";
 
@@ -311,6 +349,10 @@ async function loadAllOrders() {
 
   orders.forEach(order => {
 
+    const customer =
+      customerMap[order.user_id] || {};
+
+
     html += `
 
       <div class="order-card">
@@ -319,20 +361,36 @@ async function loadAllOrders() {
           ${order.product_name}
         </h2>
 
+
+        <p>
+          <strong>Customer Name:</strong>
+          ${customer.full_name || "Not available"}
+        </p>
+
+
+        <p>
+          <strong>Email:</strong>
+          ${customer.email || "Not available"}
+        </p>
+
+
+        <p>
+          <strong>Phone:</strong>
+          ${customer.phone || "Not available"}
+        </p>
+
+
         <p>
           <strong>Order ID:</strong>
           ${order.id}
         </p>
 
-        <p>
-          <strong>Customer ID:</strong>
-          ${order.user_id}
-        </p>
 
         <p>
           <strong>Quantity:</strong>
           ${order.quantity}
         </p>
+
 
         <p>
           <strong>Amount:</strong>
@@ -341,12 +399,14 @@ async function loadAllOrders() {
           ).toLocaleString()}
         </p>
 
+
         <p>
           <strong>Order Date:</strong>
           ${new Date(
             order.created_at
           ).toLocaleString()}
         </p>
+
 
         <p>
           <strong>Current Status:</strong>
@@ -357,6 +417,7 @@ async function loadAllOrders() {
         <label>
           <strong>Change Order Status</strong>
         </label>
+
 
         <select
           onchange="
@@ -374,12 +435,14 @@ async function loadAllOrders() {
             Confirmed
           </option>
 
+
           <option value="Processing"
             ${order.status === "Processing"
               ? "selected"
               : ""}>
             Processing
           </option>
+
 
           <option value="Ready"
             ${order.status === "Ready"
@@ -388,12 +451,14 @@ async function loadAllOrders() {
             Ready
           </option>
 
+
           <option value="Shipped"
             ${order.status === "Shipped"
               ? "selected"
               : ""}>
             Shipped
           </option>
+
 
           <option value="Delivered"
             ${order.status === "Delivered"
