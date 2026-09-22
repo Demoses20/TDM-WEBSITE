@@ -491,11 +491,28 @@ statuses.forEach((status, index) => {
       </p>
 
       <p>
-        <strong>Order Date:</strong>
-        ${new Date(order.created_at).toLocaleDateString()}
-      </p>
+    <strong>Order Date:</strong>
+    ${new Date(order.created_at).toLocaleDateString()}
+</p>
 
-      <div class="order-status">
+<p class="tdm-notification">
+    <strong>TDM Notification:</strong>
+    ${
+        order.status === "Confirmed"
+            ? "Your order has been confirmed. Thank you for choosing TDM Manufacturing."
+            : order.status === "Processing"
+            ? "Your order is currently being processed."
+            : order.status === "Ready"
+            ? "Your order is ready for delivery."
+            : order.status === "Shipped"
+            ? "Your order has been shipped."
+            : order.status === "Delivered"
+            ? "Your order has been delivered. Thank you for choosing TDM Manufacturing."
+            : "Your order has been received and is being reviewed."
+    }
+</p>
+
+<div class="order-status">
 
         <strong>Order Progress</strong>
 
