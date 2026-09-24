@@ -619,6 +619,21 @@ const supabase = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
+  async function testSupabaseConnection() {
+    const { data, error } = await supabase
+        .from("products")
+        .select("id, name, slug, price, currency, status")
+        .eq("status", "published");
+
+    if (error) {
+        console.error("Supabase error:", error);
+        return;
+    }
+
+    console.log("TDM Products from Supabase:", data);
+}
+
+testSupabaseConnection();
 </script>
 
 </body>
