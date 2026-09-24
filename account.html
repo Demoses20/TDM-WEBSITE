@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TDM Customer Account</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .account-box {
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  margin: 40px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    #message {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .order-card {
+  background: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 15px 0;
+}
+
+.order-card h3 {
+  margin-top: 0;
+}
+
+.order-card p {
+  margin: 7px 0;
+}
+    .order-status {
+  margin-top: 15px;
+}
+
+.status-step {
+  text-align: center;
+  font-size: 11px;
+  flex: 1;
+  color: #999;
+  position: relative;
+}
+
+.status-dot {
+  width: 16px;
+  height: 16px;
+  background: #ddd;
+  border-radius: 50%;
+  margin: 0 auto 6px;
+  position: relative;
+  z-index: 2;
+}
+
+.status-step.active {
+  color: #008000;
+  font-weight: bold;
+}
+
+.status-step.active .status-dot {
+  background: #008000;
+}
+
+.status-step.completed {
+  color: #008000;
+  font-weight: bold;
+}
+
+.status-step.completed .status-dot {
+  background: #008000;
+}
+
+.status-line {
+  position: absolute;
+  top: 8px;
+  left: 10%;
+  right: 10%;
+  height: 3px;
+  background: #ddd;
+  z-index: 1;
+}
+    .tdm-notification {
+    background: #f0f8ff;
+    border: 1px solid #b8d8f0;
+    border-radius: 10px;
+    padding: 14px;
+    margin: 15px 0;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.tdm-notification strong {
+    display: block;
+    margin-bottom: 5px;
+}
+  </style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111111">
+</head>
+<body>
+
+<div class="account-box">
+
+  <!-- LOGIN / SIGN UP FORM -->
+  <div id="loginSection">
+
+    <h1>TDM Customer Account</h1>
+
+    <input type="text" id="fullName" placeholder="Full name">
+
+    <input type="email" id="email" placeholder="Email address">
+
+    <input type="tel" id="phone" placeholder="Phone number">
+
+    <input type="password" id="password" placeholder="Password">
+
+    <button onclick="signUp()">Create Account</button>
+
+    <button onclick="logIn()">Log In</button>
+
+    <p id="message"></p>
+
+  </div>
+
+
+  <!-- CUSTOMER DASHBOARD -->
+  <div id="dashboardSection" style="display:none;">
+
+    <h1>My TDM Account</h1>
+
+    <h2 id="welcomeName"></h2>
+
+    <p>
+      <strong>Email:</strong>
+      <span id="customerEmail"></span>
+    </p>
+  <p>
+  <strong>Phone:</strong>
+  <span id="customerPhone"></span>
+</p>
+
+<hr>
+
+<h2>My Orders</h2>
+
+<div id="ordersList">
+  Loading your orders...
+</div>
+
+<button onclick="logOut()">Log Out</button>
+
+</div>
+  <script>
+
+const SUPABASE_URL =
+  "https://ctdmpigyhinaqpicbycq.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_YNun4pQIhl7S6OJ1SBnYqg_NATcZhsm";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+
+// ===============================
+// CREATE ACCOUNT
+// ===============================
+async function signUp() {
+
+  const fullName =
+    document.getElementById("fullName").value.trim();
+
+  const phone =
+    document.getElementById("phone").value.trim();
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+  if (!fullName || !phone || !email || !password) {
+    document.getElementById("message").textContent =
+      "Please fill in all fields.";
+    return;
+  }
+
+  const { data, error } =
+    await supabaseClient.auth.signUp({
+
+      email: email,
+
+      password: password,
+
+      options: {
+
+        emailRedirectTo:
+          "https://demoses20.github.io/TDM-WEBSITE/account.html",
+
+        data: {
+          full_name: fullName,
+          phone: phone
+        }
+      }
+    });
+
+  if (error) {
+
+    document.getElementById("message").textContent =
+      error.message;
+
+    return;
+  }
+
+  document.getElementById("message").textContent =
+    "Account created. Please check your email and confirm your account.";
+}
+
+
+// ===============================
+// LOGIN
+// ===============================
+async function logIn() {
+
+  const message = document.getElementById("message");
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+  if (!email || !password) {
+    message.textContent = "Please enter your email and password.";
+    return;
+  }
+
+  message.textContent = "Logging in...";
+
+  try {
+
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+    if (error) {
+      console.error("Login error:", error);
+
+      message.textContent =
+        "Login failed: " + error.message;
+
+      return;
+    }
+
+    if (!data.user) {
+      message.textContent =
+        "Login failed. No user was returned.";
+
+      return;
+    }
+
+    message.textContent = "Login successful...";
+
+    await showCustomerAccount(data.user);
+
+    await loadMyOrders();
+
+    subscribeToMyOrders();
+
+  } catch (error) {
+
+    console.error("Unexpected login error:", error);
+
+    message.textContent =
+      "Something went wrong: " + error.message;
+  }
+}
+    // ===============================
+// REALTIME ORDER UPDATES
+// ===============================
+function subscribeToMyOrders() {
+
+  supabaseClient.auth.getUser().then(({ data: { user } }) => {
+
+    if (!user) return;
+
+    supabaseClient
+      .channel("my-orders-" + user.id)
+
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "Orders",
+          filter: "user_id=eq." + user.id
+        },
+        (payload) => {
+
+          console.log("Order updated:", payload);
+
+          loadMyOrders();
+
+        }
+      )
+
+      .subscribe();
+
+  });
+
+}
+
+
+// ===============================
+// SHOW CUSTOMER ACCOUNT
+// ===============================
+async function showCustomerAccount(user) {
+
+  const { data: customer, error } =
+    await supabaseClient
+      .from("Customers")
+      .select("full_name, email, phone")
+      .eq("id", user.id)
+      .single();
+
+  if (error) {
+
+    console.error(error);
+
+    document.getElementById("message").textContent =
+      "Customer information could not be loaded.";
+
+    return;
+  }
+
+  document.getElementById("welcomeName").textContent =
+    "Welcome, " +
+    (customer.full_name || "Customer") +
+    " 👋";
+
+  document.getElementById("customerEmail").textContent =
+    customer.email || user.email || "";
+
+  document.getElementById("customerPhone").textContent =
+    customer.phone || "Not provided";
+
+
+  // Hide login form
+  document.getElementById("loginSection").style.display =
+    "none";
+
+
+  // Show dashboard
+  document.getElementById("dashboardSection").style.display =
+    "block";
+}
+
+
+// ===============================
+// LOAD CUSTOMER ORDERS
+// ===============================
+async function loadMyOrders() {
+
+  const {
+    data: { user },
+    error: authError
+  } = await supabaseClient.auth.getUser();
+
+
+  if (authError || !user) {
+
+    document.getElementById("ordersList").textContent =
+      "Please log in to view your orders.";
+
+    return;
+  }
+
+
+  const { data: orders, error } =
+    await supabaseClient
+      .from("Orders")
+      .select(
+        "product_name, quantity, total_amount, status, created_at"
+      )
+      .eq("user_id", user.id)
+      .order("created_at", {
+        ascending: false
+      });
+
+
+  if (error) {
+
+    console.error(error);
+
+    document.getElementById("ordersList").textContent =
+      "Unable to load your orders.";
+
+    return;
+  }
+
+
+  if (!orders || orders.length === 0) {
+
+    document.getElementById("ordersList").textContent =
+      "You have no orders yet.";
+
+    return;
+  }
+
+
+  let html = "";
+
+
+  orders.forEach(order => {
+
+  const statuses = [
+  "Confirmed",
+  "Processing",
+  "Ready",
+  "Shipped",
+  "Delivered"
+];
+
+const currentStatus = statuses.findIndex(
+  status =>
+    status.toLowerCase() ===
+    String(order.status).trim().toLowerCase()
+);
+
+let statusSteps = "";
+
+statuses.forEach((status, index) => {
+
+  let className = "";
+
+  if (currentStatus >= 0 && index < currentStatus) {
+    className = "completed";
+  }
+
+  if (currentStatus >= 0 && index === currentStatus) {
+    className = "active";
+  }
+
+  statusSteps += `
+    <div class="status-step ${className}">
+      <div class="status-dot"></div>
+      <span>${status}</span>
+    </div>
+  `;
+});
+
+  html += `
+    <div class="order-card">
+
+      <h3>${order.product_name}</h3>
+
+      <p>
+        <strong>Quantity:</strong>
+        ${order.quantity}
+      </p>
+
+      <p>
+        <strong>Amount:</strong>
+        ₦${Number(order.total_amount).toLocaleString()}
+      </p>
+
+      <p>
+        <strong>Status:</strong>
+        ${order.status}
+      </p>
+
+      <p>
+    <strong>Order Date:</strong>
+    ${new Date(order.created_at).toLocaleDateString()}
+</p>
+
+<p class="tdm-notification">
+    <strong>TDM Notification:</strong>
+    ${
+        String(order.status).trim().toLowerCase() === "confirmed"
+            ? "Your order has been confirmed. Thank you for choosing TDM Manufacturing."
+            : String(order.status).trim().toLowerCase() === "processing"
+            ? "Your order is currently being processed."
+            : String(order.status).trim().toLowerCase() === "ready"
+            ? "Your order is ready for delivery."
+            : String(order.status).trim().toLowerCase() === "shipped"
+            ? "Your order has been shipped."
+            : String(order.status).trim().toLowerCase() === "delivered"
+            ? "Your order has been delivered. Thank you for choosing TDM Manufacturing."
+            : "Your order has been received and is being reviewed."
+    }
+</p>
+
+<div class="order-status">
+
+        <strong>Order Progress</strong>
+
+        <div class="status-steps">
+
+          <div class="status-line"></div>
+
+          ${statusSteps}
+
+        </div>
+
+      </div>
+
+    </div>
+  `;
+});
+    document.getElementById("ordersList").innerHTML = html;
+}
+
+
+// ===============================
+// CHECK LOGIN WHEN PAGE OPENS
+// ===============================
+async function loadCustomerAccount() {
+
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
+
+
+  if (!user) {
+
+    document.getElementById("loginSection").style.display =
+      "block";
+
+    document.getElementById("dashboardSection").style.display =
+      "none";
+
+    return;
+  }
+
+
+    await showCustomerAccount(user);
+
+  await loadMyOrders();
+
+  subscribeToMyOrders();
+}
+
+
+// ===============================
+// LOG OUT
+// ===============================
+async function logOut() {
+
+  const { error } =
+    await supabaseClient.auth.signOut();
+
+
+  if (error) {
+
+    alert(error.message);
+
+    return;
+  }
+
+
+  document.getElementById("dashboardSection").style.display =
+    "none";
+
+  document.getElementById("loginSection").style.display =
+    "block";
+
+  document.getElementById("message").textContent =
+    "You have been logged out.";
+}
+
+
+// ===============================
+// START
+// ===============================
+loadCustomerAccount();
+
+</script>
+
+<script>if("serviceWorker" in navigator) navigator.serviceWorker.register("./service-worker.js").catch(()=>{});</script>
+</body>
+</html>
