@@ -588,6 +588,99 @@ const supabase = window.supabase.createClient(
 }
 
 testSupabaseConnection();
+  <script>
+
+async function loadProducts() {
+
+    const container = document.getElementById("products-container");
+
+    const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("status", "published")
+        .eq("featured", true)
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Error loading products:", error);
+
+        container.innerHTML = `
+            <p style="text-align:center;">
+                Unable to load products at the moment.
+            </p>
+        `;
+
+        return;
+    }
+
+    if (!data || data.length === 0) {
+
+        container.innerHTML = `
+            <p style="text-align:center;">
+                No featured equipment available.
+            </p>
+        `;
+
+        return;
+    }
+
+    container.innerHTML = data.map(product => {
+
+        let image = "";
+
+        if (product.slug === "tdm-5kg-spiral-mixer") {
+            image = "mixer.png";
+        }
+
+        if (product.slug === "tdm-1-deck-2-trays-gas-oven") {
+            image = "oven.png";
+        }
+
+        return `
+            <div class="product">
+
+                <img
+                    src="${image}"
+                    alt="${product.name}"
+                    class="product-image"
+                >
+
+                <div class="product-content">
+
+                    <h3>${product.name}</h3>
+
+                    <p>
+                        ${product.short_description || ""}
+                    </p>
+
+                    <p>
+                        <strong>
+                            ${product.currency} ${Number(product.price).toLocaleString()}
+                        </strong>
+                    </p>
+
+                    <p>
+                        Stock available: ${product.stock_quantity}
+                    </p>
+
+                    <a
+                        href="contact.html"
+                        class="blue-button"
+                    >
+                        Request a Quote
+                    </a>
+
+                </div>
+
+            </div>
+        `;
+
+    }).join("");
+}
+
+loadProducts();
+
+</script>
 </script>
 
 </body>
