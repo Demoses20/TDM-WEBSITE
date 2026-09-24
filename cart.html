@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"><meta name="theme-color" content="#F97316">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><link rel="manifest" href="manifest.json"><title>TDM Manufacturing | Cart</title><style>body{margin:0;background:#f5f6f8;font-family:Arial,sans-serif;color:#171717;padding-bottom:90px}.wrap{max-width:900px;margin:auto;padding:24px 16px}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.head h1{margin:0}.cart-item{background:#fff;border:1px solid #e5e5e5;border-radius:15px;padding:13px;display:grid;grid-template-columns:80px 1fr auto;gap:13px;align-items:center;margin-bottom:10px}.cart-item img{width:80px;height:70px;object-fit:contain;border-radius:10px;background:#f1f1f1}.cart-item h3{margin:0 0 5px;font-size:16px}.cart-item p{margin:0;color:#666;font-size:13px}.qty{display:flex;align-items:center;gap:8px;margin-top:8px}.qty button{width:30px;height:30px;border:1px solid #ddd;background:#fff;border-radius:8px}.remove{border:0;background:transparent;color:#b00020}.summary{background:#111;color:#fff;border-radius:16px;padding:18px;margin-top:18px}.summary-row{display:flex;justify-content:space-between;margin:8px 0}.checkout{display:block;text-align:center;background:#fff;color:#111;border-radius:10px;padding:12px;margin-top:14px;font-weight:700;text-decoration:none}.empty{background:#fff;border-radius:16px;padding:45px 20px;text-align:center;color:#666}.continue{display:inline-block;margin-top:12px;background:#111;color:#fff;padding:11px 15px;border-radius:9px;text-decoration:none}</style><style>body{padding-bottom:82px}.bottom-nav{position:fixed;left:0;right:0;bottom:0;height:70px;background:#fff;border-top:1px solid #ddd;z-index:9999;display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -2px 12px #00000012}.bottom-nav a{position:relative;flex:1;max-width:180px;text-align:center;padding:8px 3px 5px;color:#777;font-size:10px;text-decoration:none;font-weight:600}.bottom-nav a span{display:block;font-size:20px;line-height:23px;margin-bottom:2px}.bottom-nav a:hover,.bottom-nav a.active{color:#111}.bottom-nav .cart-count{display:inline-flex;min-width:18px;height:18px;align-items:center;justify-content:center;border-radius:999px;background:#111;color:#fff;font-size:10px;padding:0 5px;position:absolute;top:3px;margin-left:-2px}</style><style>
+.tdm-app-header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px solid #e5e5e5;box-shadow:0 2px 12px rgba(0,0,0,.06);padding:9px 14px;box-sizing:border-box}
+.tdm-brand{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;text-decoration:none;color:#111}
+.tdm-brand img{width:44px;height:44px;object-fit:contain;border-radius:9px;background:#fff}
+.tdm-brand strong{display:block;font-size:17px;line-height:1.1}
+.tdm-brand span{display:block;color:#777;font-size:10px;margin-top:3px}
+@media(max-width:520px){.tdm-app-header{padding:8px 12px}.tdm-brand img{width:40px;height:40px}.tdm-brand strong{font-size:15px}.tdm-brand span{font-size:9px}}
+</style><link rel="stylesheet" href="app.css">
+<script src="app-common.js"></script>
+</head><body>
+<header class="tdm-app-header">
+  <a class="tdm-brand" href="index.html" aria-label="TDM Manufacturing Home">
+    <img src="logo.png" alt="TDM Manufacturing logo">
+    <div><strong>TDM Manufacturing</strong><span>Precision Engineering &amp; Fabricated Equipment</span></div>
+  </a>
+</header>
+<main class="wrap"><div class="head"><h1>My Cart</h1><a href="product.html">Continue shopping</a></div><div id="cartItems"></div><div id="summary"></div></main><script>
+const SUPABASE_URL='https://ctdmpigyhinaqpicbycq.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_YNun4pQIhl7S6OJ1SBnYqg_NATcZhsm';
+const supabaseClient=window.tdmGetSupabaseClient();
+let currentUser=null;
+async function initCart(){const r=await supabaseClient.auth.getSession();currentUser=r.data.session?.user||null;if(!currentUser){document.getElementById('cartItems').innerHTML='<div class="empty"><h2>Sign in to view your cart</h2><p>Your cart is linked to your customer account.</p><a class="continue" href="account.html?login=required">Log In / Create Account</a></div>';document.getElementById('summary').innerHTML='';return;}render();}
+function cart(){return tdmReadCart(currentUser?.id)}
+function save(c){tdmWriteCart(c,currentUser?.id);tdmUpdateCartBadges();render()}
+function money(v){return `₦ ${Number(v||0).toLocaleString()}`}
+function render(){const c=cart(),el=document.getElementById('cartItems'),sum=document.getElementById('summary');if(!c.length){el.innerHTML='<div class="empty"><h2>Your cart is empty</h2><p>Add equipment from the Store and it will appear here.</p><a class="continue" href="product.html">🛍️ Continue Shopping</a></div>';sum.innerHTML='';return;}let total=0;el.innerHTML=c.map((i,n)=>{const q=Number(i.quantity)||1;const price=Number(i.price)||0;total+=price*q;return `<div class="cart-item"><img src="${i.image||'logo.png'}" alt=""><div><h3>${i.name||'TDM Equipment'}</h3><p>${price?money(price):'Request quote'}</p><div class="qty"><button onclick="changeQty(${n},-1)">−</button><b>${q}</b><button onclick="changeQty(${n},1)">+</button><button class="remove" onclick="removeItem(${n})">Remove</button></div></div><b>${price?money(price*q):'Quote'}</b></div>`}).join('');sum.innerHTML=`<div class="summary"><div class="summary-row"><span>Items</span><b>${c.reduce((a,i)=>a+(Number(i.quantity)||0),0)}</b></div><div class="summary-row"><span>Estimated Total</span><b>${money(total)}</b></div><a class="checkout" href="checkout.html">Proceed to Checkout</a><a class="continue" style="margin-top:10px;width:100%" href="product.html">🛍️ Continue Shopping</a></div>`;}
+function changeQty(i,d){const c=cart();c[i].quantity=Math.max(1,(Number(c[i].quantity)||1)+d);save(c)}
+function removeItem(i){const c=cart();c.splice(i,1);save(c)}
+initCart();
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
+</script><nav class="bottom-nav" aria-label="App navigation">
+  <a href="index.html"><span>⌂</span>Home</a>
+  <a href="product.html"><span>▦</span>Store</a>
+  <a href="cart.html"><span>🛒</span>Cart <b id="cartCountBottom" class="cart-count">0</b></a>
+  <a href="service.html"><span>⚙</span>Service</a>
+  <a href="account.html"><span>♙</span>Account</a>
+</nav>
+</body></html>

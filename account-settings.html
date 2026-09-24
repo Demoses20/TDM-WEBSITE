@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f97316"><title>Account Settings | TDM Manufacturing</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="customer-common.js"></script>
+<style>
+body{margin:0;background:#fff7ed;font-family:Arial,sans-serif;color:#171717;padding-bottom:80px}
+header{background:#fff;border-bottom:2px solid #fed7aa;padding:10px 16px;position:sticky;top:0;z-index:5}
+.head{max-width:900px;margin:auto;display:flex;align-items:center;gap:10px}.head img{width:42px;height:42px;object-fit:contain}
+main{max-width:900px;margin:auto;padding:16px}.card{background:#fff;border:2px solid #fed7aa;border-radius:18px;padding:18px;margin:12px 0;box-shadow:0 8px 24px #f9731612}
+h1{font-size:24px}button,.btn{border:0;border-radius:13px;padding:13px 16px;background:#f97316;color:#fff;font-weight:900;text-decoration:none;cursor:pointer}
+button:disabled{opacity:.6}input,select,textarea{width:100%;box-sizing:border-box;padding:13px;border:1.5px solid #fdba74;border-radius:11px;margin:6px 0 14px;font:inherit;background:#fff}input:focus,textarea:focus{outline:none;border-color:#f97316;box-shadow:0 0 0 3px #f9731620}
+label{display:block;font-weight:800;margin-top:8px}.muted{color:#666}.status{min-height:24px;margin-top:12px}.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid #fed7aa;padding:10px;display:flex;justify-content:center;gap:18px;z-index:9}.nav a{text-decoration:none;color:#9a3412;font-size:12px;font-weight:800}
+.avatar-wrap{display:flex;align-items:center;gap:16px;margin-bottom:12px}.avatar{width:96px;height:96px;border-radius:50%;object-fit:cover;border:4px solid #f97316;background:#fff}.small{font-size:12px;color:#666}
+</style>
+</head>
+<body>
+<header><div class="head"><a href="account-dashboard.html"><img src="logo.png" alt="TDM"></a><div><b>TDM Manufacturing</b><div class="muted">Account Settings</div></div></div></header>
+<main><div id="guard">Loading...</div><div id="content" style="display:none">
+<h1>⚙️ Account Settings</h1>
+<section class="card">
+  <div class="avatar-wrap"><img id="preview" class="avatar" src="logo.png" alt="Profile picture"><div><b>Profile picture</b><div class="small">Choose a photo and then save your profile.</div></div></div>
+  <input id="photo" type="file" accept="image/*">
+  <label for="name">Full name</label><input id="name" autocomplete="name">
+  <label for="phone">Phone number</label><input id="phone" type="tel" autocomplete="tel">
+  <label for="home">Home address</label><textarea id="home" rows="3" autocomplete="street-address"></textarea>
+  <label for="delivery">Delivery address</label><textarea id="delivery" rows="3"></textarea>
+  <button id="saveBtn" type="button">Save Profile</button><div id="msg" class="status"></div>
+</section>
+<section class="card"><h3>Change Password</h3><p class="muted">Enter a new password of at least 6 characters.</p><input id="newpass" type="password" autocomplete="new-password" placeholder="New password"><button id="passwordBtn" type="button">Change Password</button><div id="passwordMsg" class="status"></div></section>
+</div></main>
+<nav class="nav"><a href="account-dashboard.html">Account</a><a href="account-orders.html">Orders</a><a href="cart.html">Cart</a><a href="account-payment.html">Payment</a><a href="account-notifications.html">Notifications</a></nav>
+<script>
+let profileUser=null, selectedPhoto=null;
+const $=id=>document.getElementById(id);
+(async()=>{try{const u=await tdmRequireUser('account-settings.html');if(!u)return;profileUser=u;await pageInit(u);$('guard').style.display='none';$('content').style.display='block';}catch(e){$('guard').textContent='Unable to load settings: '+e.message;}})();
+async function pageInit(user){
+  const p=await tdmGetProfile(user);
+  $('name').value=p.name==='Customer'?'':p.name;
+  $('phone').value=p.phone||''; $('home').value=p.home_address||''; $('delivery').value=p.delivery_address||'';
+  const saved=p.avatar_url||localStorage.getItem('tdm_profile_photo_'+user.id); if(saved)$('preview').src=saved;
+}
+$('photo').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;selectedPhoto=f;const reader=new FileReader();reader.onload=()=>{$('preview').src=reader.result};reader.readAsDataURL(f);});
+async function uploadAvatar(user,file){
+  const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
+  const path=`profiles/${user.id}/${Date.now()}.${ext}`;
+  const c=tdmCustomerClient();
+  const up=await c.storage.from('tdm-media').upload(path,file,{upsert:true,contentType:file.type||'image/jpeg'});
+  if(up.error)throw new Error('Profile photo upload failed: '+up.error.message);
+  return c.storage.from('tdm-media').getPublicUrl(path).data.publicUrl;
+}
+$('saveBtn').addEventListener('click',saveSettings);
+async function saveSettings(){
+  if(!profileUser)return;
+  const msg=$('msg'),btn=$('saveBtn'); btn.disabled=true; msg.textContent='Saving...'; msg.style.color='#9a3412';
+  try{
+    const n=$('name').value.trim(), ph=$('phone').value.trim(), h=$('home').value.trim(), d=$('delivery').value.trim();
+    if(!n){msg.textContent='Please enter your full name.';return;}
+    let avatarUrl=profileUser.user_metadata?.avatar_url||localStorage.getItem('tdm_profile_photo_'+profileUser.id)||'';
+    if(selectedPhoto) avatarUrl=await uploadAvatar(profileUser,selectedPhoto);
+    const metadata={...(profileUser.user_metadata||{}),full_name:n,phone:ph,home_address:h,delivery_address:d,address:d,avatar_url:avatarUrl};
+    const result=await tdmCustomerClient().auth.updateUser({data:metadata});
+    if(result.error)throw result.error;
+    profileUser=result.data.user||profileUser;
+    if(avatarUrl){$('preview').src=avatarUrl;localStorage.setItem('tdm_profile_photo_'+profileUser.id,avatarUrl);}
+    selectedPhoto=null; $('photo').value='';
+    msg.textContent='Profile updated successfully.'; msg.style.color='#15803d';
+  }catch(e){msg.textContent=e.message||'Profile update failed.';msg.style.color='#b91c1c';}
+  finally{btn.disabled=false;}
+}
+$('passwordBtn').addEventListener('click',changePassword);
+async function changePassword(){const p=$('newpass').value.trim(),msg=$('passwordMsg'),btn=$('passwordBtn');if(p.length<6){msg.textContent='Password should be at least 6 characters.';return}btn.disabled=true;msg.textContent='Changing password...';try{const r=await tdmCustomerClient().auth.updateUser({password:p});if(r.error)throw r.error;msg.textContent='Password changed successfully.';msg.style.color='#15803d';$('newpass').value='';}catch(e){msg.textContent='Password change failed: '+e.message;msg.style.color='#b91c1c';}finally{btn.disabled=false;}}
+</script>
+</body></html>
