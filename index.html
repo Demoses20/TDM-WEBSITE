@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "TDM Manufacturing",
+  "description": "TDM Manufacturing designs and fabricates bakery equipment, food processing equipment, custom machines and engineering equipment in Nigeria.",
+  "url": "https://demoses20.github.io/TDM-WEBSITE/",
+  "logo": "https://demoses20.github.io/TDM-WEBSITE/logo.png",
+  "foundingLocation": {
+    "@type": "Place",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "NG"
+    }
+  },
+  "areaServed": "Nigeria",
+  "brand": {
+    "@type": "Brand",
+    "name": "TDM Manufacturing"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+2347049087007",
+    "contactType": "customer service",
+    "areaServed": "NG"
+  },
+  "sameAs": [
+    "https://www.instagram.com/technicaldemoses?stkn=MXQyeG92aGtrenR0aw==/",
+    "https://youtube.com/@technicaldemoses?si=J-HLlMakEn3sNlfN"
+  ]
+}
+</script>
+
+<meta name="description" content="TDM Manufacturing designs and fabricates bakery equipment, food processing equipment, custom machines and engineering equipment in Nigeria.">
+
+<meta name="keywords" content="TDM Manufacturing, bakery equipment Nigeria, 5 kg spiral mixer, spiral mixer Nigeria, machine fabrication Nigeria, food processing equipment">
+
+<meta name="author" content="TDM Manufacturing">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<img src="logo.png" style="width:100%; height:150px;">
+
+<meta name="description" content="TDM Manufacturing designs and fabricates bakery equipment, food processing equipment, machinery and custom engineering solutions in Nigeria.">
+
+<title>TDM Manufacturing | Bakery Equipment & Machine Fabrication Nigeria</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f6f8;
+    color: #171717;
+    line-height: 1.6;
+}
+
+header {
+    background: #111;
+    color: white;
+    padding: 18px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.nav {
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.tagline {
+    font-size: 11px;
+    color: #bbb;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 15px;
+    font-size: 14px;
+}
+
+.hero {
+    padding: 80px 20px;
+    text-align: center;
+    background: #111;
+    color: white;
+}
+
+.hero h1 {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 19px;
+    max-width: 700px;
+    margin: 0 auto 25px;
+    line-height: 1.6;
+}
+
+.button {
+    display: inline-block;
+    margin-top: 28px;
+    padding: 14px 24px;
+    background: white;
+    color: #111;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 7px;
+}
+
+section {
+    max-width: 1050px;
+    margin: auto;
+    padding: 60px 20px;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.section-title h2 {
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+.section-title p {
+    color: #666;
+}
+
+.product {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.product-image {
+    height: 260px;
+    background: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #777;
+    font-size: 18px;
+}
+
+.product-content {
+    padding: 25px;
+}
+
+.product-content h3 {
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.product-content p {
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.specs {
+    list-style: none;
+    margin-top: 15px;
+}
+
+.specs li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.dark-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 13px 22px;
+    background: #111111;
+    color: white;
+    text-decoration: none;
+    border-radius: 7px;
+    font-weight: bold;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+
+.card h3 {
+    margin-bottom: 10px;
+}
+
+.card p {
+    color: #666;
+}
+
+.about {
+    background: white;
+    max-width: none;
+}
+
+.about-inner {
+    max-width: 850px;
+    margin: auto;
+    text-align: center;
+}
+
+.contact {
+    text-align: center;
+}
+
+footer {
+    background: #111;
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+}
+
+footer p {
+    color: #aaa;
+    font-size: 14px;
+}
+
+@media (max-width: 700px) {
+
+    .nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    nav a {
+        margin: 0 6px;
+        font-size: 13px;
+    }
+
+    .hero {
+        padding: 65px 20px;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+}
+
+.product-image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    display: block;
+    margin: 0 auto 20px;
+    border-radius: 10px;
+}
+
+.blue-button {
+    display: inline-block;
+    background: #003de1;
+    color: white;
+    padding: 14px 22px;
+    text-decoration: none;
+    border-radius: 6px;
+    margin: 8px;
+    font-weight: bold;
+}
+
+.green-button {
+    display: inline-block;
+    background: #008000;
+    color: white;
+    padding: 12px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    margin: 8px;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    nav {
+        margin-top: 15px;
+    }
+
+    nav a {
+        display: inline-block;
+        margin: 5px;
+        font-size: 14px;
+    }
+
+    .hero h1 {
+        font-size: 26px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+}
+
+.product-box .product-image {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+</style>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111111">
+
+<style>
+.app-topbar{position:sticky;top:0;z-index:100;background:#111;color:#fff;border-bottom:1px solid #2a2a2a;box-shadow:0 2px 12px #0002}
+.app-nav{max-width:1100px;margin:auto;display:flex;align-items:stretch;justify-content:space-around;min-height:58px}
+.app-nav-link{position:relative;flex:1;max-width:180px;text-align:center;padding:8px 5px 6px;color:#bbb;font-size:12px;text-decoration:none;font-weight:600}
+.app-nav-link span{display:block;font-size:20px;line-height:22px;margin-bottom:2px}.app-nav-link:hover,.app-nav-link.active{color:#fff}.cart-count{display:inline-flex;min-width:18px;height:18px;align-items:center;justify-content:center;border-radius:999px;background:#fff;color:#111;font-size:10px;padding:0 5px;margin-left:2px;vertical-align:middle}.bottom-nav{position:fixed;left:0;right:0;bottom:0;height:68px;background:#fff;border-top:1px solid #ddd;z-index:100;display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom)}.bottom-nav a{position:relative;flex:1;max-width:180px;text-align:center;padding:9px 3px 6px;color:#777;font-size:10px;text-decoration:none;font-weight:600}.bottom-nav a span{display:block;font-size:20px;line-height:23px;margin-bottom:2px}.bottom-nav a:hover,.bottom-nav a.active{color:#111}.bottom-nav .cart-count{background:#111;color:#fff;position:absolute;top:4px;margin-left:-2px}.app-spacer{height:76px}
+@media(max-width:520px){.app-nav-link{font-size:10px}.app-nav-link span{font-size:18px}.bottom-nav a{font-size:9px}}
+</style>
+</head>
+
+<body><header class="app-topbar"><div class="app-nav"><a class="app-nav-link" href="index.html" class="active"><span>⌂</span>Home</a><a class="app-nav-link" href="product.html"><span>▦</span>Store</a><a class="app-nav-link" href="service.html"><span>⚙</span>Services</a><a class="app-nav-link" href="account.html"><span>♙</span>Account</a><a class="app-nav-link cart-link" href="cart.html"><span>🛒</span>Cart <b id="cartCountTop" class="cart-count">0</b></a></div></header>
+
+<button id="installTDM" style="
+    display:none;
+    margin:20px auto;
+    padding:12px 20px;
+    font-size:16px;
+    font-weight:bold;
+    border:none;
+    border-radius:8px;
+    background:#000;
+    color:#fff;
+    cursor:pointer;
+">
+    Install TDM App
+</button>
+
+
+
+<section class="hero" id="home">
+
+    <h1>Engineering Equipment Built for Real Businesses</h1>
+
+    <p>
+        TDM Manufacturing designs and fabricates practical,
+        durable equipment for bakeries, food businesses and
+        industrial applications.
+    </p>
+
+    <a href="mixer.html" class="blue-button">
+        View Our 5 kg Spiral Mixer
+    </a>
+
+    <a href="oven.html" class="blue-button">
+        View our 1 deck 2 trays gas oven
+    </a>
+
+    <!-- TOP REQUEST A QUOTE -->
+    <a
+        href="https://wa.me/2347049087007?text=Hello%20TDM%20Manufacturing%2C%20I%20would%20like%20to%20request%20a%20quotation%20for%20your%20equipment.%20Please%20send%20me%20more%20information."
+        class="blue-button"
+        target="_blank"
+    >
+        Request a Quote
+    </a>
+
+</section>
+
+<section id="products">
+
+    <div class="section-title">
+        <h2>Featured Equipment</h2>
+        <p>Our equipment is designed with practical production in mind.</p>
+    </div>
+
+    <div id="products-container" class="cards">
+
+        <p style="text-align:center;">
+            Loading our equipment...
+        </p>
+
+    </div>
+
+</section>
+
+<section id="services">
+
+    <div class="section-title">
+        <h2>Our Services</h2>
+        <p>Engineering and fabrication solutions for your business.</p>
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+
+            <h3>Bakery Equipment</h3>
+
+            <p>
+                Fabrication of mixers, ovens and other equipment
+                for bakery production.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Custom Fabrication</h3>
+
+            <p>
+                Custom stainless steel and engineering equipment
+                built according to your requirements.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Precision Engineering</h3>
+
+            <p>
+                Practical engineering solutions designed around
+                real production needs.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="why-tdm">
+
+    <h2>Why Choose TDM Manufacturing?</h2>
+
+    <div class="why-grid">
+
+        <div>
+            <h3>🇳🇬 Made in Nigeria</h3>
+
+            <p>
+                Our equipment is designed and manufacture with
+                precision for Nigerian and international businesses.
+            </p>
+        </div>
+
+        <div>
+            <h3>⚙️ Built for Business</h3>
+
+            <p>
+                We focus on practical equipment designed for
+                real production needs.
+            </p>
+        </div>
+
+        <div>
+            <h3>🔧 Custom Fabrication</h3>
+
+            <p>
+                We can develop equipment according to your
+                required specifications.
+            </p>
+        </div>
+
+        <div>
+            <h3>🤝 Direct Support</h3>
+
+            <p>
+                Contact TDM directly for product information,
+                quotations and support.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="about">
+
+    <div class="about-inner">
+
+        <div class="section-title">
+
+            <h2>About TDM Manufacturing</h2>
+
+        </div>
+
+        <p>
+            TDM Manufacturing is a Nigerian engineering and fabrication
+            business focused on developing reliable
+            manufactured equipment.
+        </p>
+
+        <p style="margin-top:15px;">
+
+            Our goal is to make quality production equipment more
+            accessible to businesses in Nigeria and beyond.
+
+        </p>
+
+    </div>
+
+</section>
+
+<section class="contact" id="contact">
+
+    <div class="section-title">
+
+        <h2>Let's Build Your Equipment</h2>
+
+        <p>
+            Contact TDM Manufacturing for product information,
+            pricing and custom fabrication.
+        </p>
+
+    </div>
+
+    <a
+        class="blue-button"
+        href="https://wa.me/2347049087007"
+        target="_blank"
+    >
+        Chat With TDM on WhatsApp
+    </a>
+
+</section>
+
+<footer>
+
+    <p>
+        © 2026 TDM Manufacturing. All rights reserved.
+    </p>
+
+    <p style="margin-top:8px;">
+        Precision Engineering & Fabricated Equipment
+    </p>
+
+</footer>
+
+<script>
+
+if ("serviceWorker" in navigator) {
+
+    navigator.serviceWorker.register("./service-worker.js")
+
+        .then(function(registration) {
+
+            console.log(
+                "TDM service worker registered:",
+                registration.scope
+            );
+
+        })
+
+        .catch(function(error) {
+
+            console.log(
+                "TDM service worker registration failed:",
+                error
+            );
+
+        });
+
+}
+
+</script>
+
+<script>
+
+let deferredPrompt;
+
+window.addEventListener(
+    "beforeinstallprompt",
+    function(event) {
+
+        event.preventDefault();
+
+        deferredPrompt = event;
+
+        const installButton =
+            document.getElementById("installTDM");
+
+        installButton.style.display = "block";
+
+        installButton.addEventListener(
+            "click",
+            async function() {
+
+                deferredPrompt.prompt();
+
+                const result =
+                    await deferredPrompt.userChoice;
+
+                if (result.outcome === "accepted") {
+
+                    installButton.style.display = "none";
+
+                }
+
+                deferredPrompt = null;
+
+            }
+        );
+
+    }
+);
+
+window.addEventListener(
+    "appinstalled",
+    function() {
+
+        const installButton =
+            document.getElementById("installTDM");
+
+        if (installButton) {
+
+            installButton.style.display = "none";
+
+        }
+
+    }
+);
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+    "https://ctdmpigyhinaqpicbycq.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_YNun4pQIhl7S6OJ1SBnYqg_NATcZhsm";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+async function loadProducts() {
+
+    const container =
+        document.getElementById("products-container");
+
+    try {
+
+        const { data, error } =
+            await supabaseClient
+
+                .from("products")
+
+                .select("*")
+
+                .eq("status", "published")
+
+                .eq("featured", true)
+
+                .order(
+                    "created_at",
+                    { ascending: false }
+                );
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        console.log(
+            "TDM products:",
+            data
+        );
+
+
+        if (!data || data.length === 0) {
+
+            container.innerHTML = `
+
+                <p style="text-align:center;">
+                    No featured equipment available.
+                </p>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML = data.map(product => {
+
+            let image = "logo.png";
+
+
+            if (
+                product.slug ===
+                "tdm-5kg-spiral-mixer"
+            ) {
+
+                image = "mixer.png";
+
+            }
+
+
+            if (
+                product.slug ===
+                "tdm-1-deck-2-trays-gas-oven"
+            ) {
+
+                image = "oven.png";
+
+            }
+
+
+            return `
+
+                <div class="product">
+
+                    <img
+                        src="${image}"
+                        alt="${product.name}"
+                        class="product-image"
+                    >
+
+                    <div class="product-content">
+
+                        <h3>
+                            ${product.name}
+                        </h3>
+
+                        <p>
+                            ${product.short_description || ""}
+                        </p>
+
+                        <p>
+                            <strong>
+                                ${product.currency}
+                                ${Number(product.price).toLocaleString()}
+                            </strong>
+                        </p>
+
+                        <p>
+                            Stock available:
+                            ${product.stock_quantity}
+                        </p>
+
+
+                        <!-- PRODUCT REQUEST A QUOTE -->
+                        <a
+                            href="https://wa.me/2347049087007?text=${encodeURIComponent(
+                                `Hello TDM Manufacturing, I am interested in the ${product.name}. The listed price is ${product.currency} ${Number(product.price).toLocaleString()}. Please send me more information and a quotation.`
+                            )}"
+                            class="blue-button"
+                            target="_blank"
+                        >
+                            Request a Quote
+                        </a>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+
+    } catch (error) {
+
+        console.error(
+            "TDM Supabase error:",
+            error
+        );
+
+
+        container.innerHTML = `
+
+            <div style="
+                text-align:center;
+                padding:20px;
+            ">
+
+                <p>
+                    Unable to load equipment.
+                </p>
+
+                <p style="
+                    font-size:13px;
+                    color:#777;
+                    margin-top:10px;
+                ">
+
+                    Please try again shortly.
+
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+loadProducts();
+
+</script>
+
+<nav class="bottom-nav" aria-label="App navigation"><a href="index.html" class="active"><span>⌂</span>Home</a><a href="product.html"><span>▦</span>Store</a><a href="service.html"><span>⚙</span>Services</a><a href="account.html"><span>♙</span>Account</a><a href="cart.html"><span>🛒</span>Cart <b id="cartCountBottom" class="cart-count">0</b></a></nav>
+<script>
+(function(){
+  function getCart(){try{return JSON.parse(localStorage.getItem('tdm_cart')||'[]')}catch(e){return []}}
+  function updateCartBadges(){const n=getCart().reduce((s,i)=>s+(Number(i.quantity)||0),0);document.querySelectorAll('#cartCountTop,#cartCountBottom').forEach(x=>x.textContent=n)}
+  window.tdmCart=getCart; window.updateTdmCart=updateCartBadges;
+  updateCartBadges();
+  window.addEventListener('storage',updateCartBadges);
+})();
+</script>
+</body>
+</html>
