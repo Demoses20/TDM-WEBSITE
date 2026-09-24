@@ -1,0 +1,13 @@
+TDM Manufacturing App V5
+
+- Reworked the customer-facing visual design with a professional blue/cyan/purple app theme.
+- Made the bottom navigation bolder, more app-like and color accented.
+- Added a persistent brand header using the TDM logo.
+- Store Add to Cart now requires a logged-in customer and stores carts per customer account on the device.
+- Added customer Payment Center space in the dashboard.
+- Added customer Settings for name, phone, address, profile photo and password.
+- Improved Supabase auth persistence so customer sessions survive navigation and app reloads.
+- Added a real admin Media Upload area for images/videos using Supabase Storage bucket `tdm-media`.
+- Added product-media URL fallback and preview support in the admin dashboard.
+- Changed Cart "Continue shopping" from plain text to a prominent button.
+- Updated service worker cache to V5.
