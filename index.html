@@ -382,8 +382,14 @@
         View our 1 deck 2 trays gas oven
   </a>
 
-<a href="contact.html" class="green-button">
-    Contact TDM Manufacturing
+<a
+    href="https://wa.me/2347049087007?text=${encodeURIComponent(
+        `Hello TDM Manufacturing, I am interested in the ${product.name}. The listed price is ${product.currency} ${Number(product.price).toLocaleString()}. Please send me more information and a quotation.`
+    )}"
+    class="blue-button"
+    target="_blank"
+>
+    Request a Quote
 </a>
 
 
