@@ -567,124 +567,126 @@ window.addEventListener("appinstalled", function() {
 
 <script>
 const SUPABASE_URL = "https://ctdmpigyhinaqpicbycq.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YUn4pQIhl7S6OJ1SBnYqg_NATcZhsm";
 
-const supabase = window.supabase.createClient(
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_YUn4pQIhl7S6OJ1SBnYqg_NATcZhsm";
+
+const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
 );
-
-async function testSupabaseConnection() {
-
-    const { data, error } = await supabase
-        .from("products")
-        .select("id, name, slug, price, currency, status")
-        .eq("status", "published");
-
-    if (error) {
-        console.error("Supabase error:", error);
-        return;
-    }
-
-    console.log("TDM Products from Supabase:", data);
-}
-
-testSupabaseConnection();
-</script>
-
-<script>
 
 async function loadProducts() {
 
     const container = document.getElementById("products-container");
 
-    const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("status", "published")
-        .eq("featured", true)
-        .order("created_at", { ascending: false });
+    try {
 
-    if (error) {
+        const { data, error } = await supabaseClient
+            .from("products")
+            .select("*")
+            .eq("status", "published")
+            .eq("featured", true)
+            .order("created_at", { ascending: false });
 
-        console.error("Error loading products:", error);
-
-        container.innerHTML = `
-            <p style="text-align:center;">
-                Unable to load products at the moment.
-            </p>
-        `;
-
-        return;
-    }
-
-    if (!data || data.length === 0) {
-
-        container.innerHTML = `
-            <p style="text-align:center;">
-                No featured equipment available.
-            </p>
-        `;
-
-        return;
-    }
-
-    container.innerHTML = data.map(product => {
-
-        let image = "";
-
-        if (product.slug === "tdm-5kg-spiral-mixer") {
-            image = "mixer.png";
+        if (error) {
+            throw error;
         }
 
-        if (product.slug === "tdm-1-deck-2-trays-gas-oven") {
-            image = "oven.png";
+        console.log("TDM products:", data);
+
+        if (!data || data.length === 0) {
+
+            container.innerHTML = `
+                <p style="text-align:center;">
+                    No featured equipment available.
+                </p>
+            `;
+
+            return;
         }
 
-        return `
-            <div class="product">
+        container.innerHTML = data.map(product => {
 
-                <img
-                    src="${image}"
-                    alt="${product.name}"
-                    class="product-image"
-                >
+            let image = "logo.png";
 
-                <div class="product-content">
+            if (product.slug === "tdm-5kg-spiral-mixer") {
+                image = "mixer.png";
+            }
 
-                    <h3>${product.name}</h3>
+            if (product.slug === "tdm-1-deck-2-trays-gas-oven") {
+                image = "oven.png";
+            }
 
-                    <p>
-                        ${product.short_description || ""}
-                    </p>
+            return `
+                <div class="product">
 
-                    <p>
-                        <strong>
-                            ${product.currency} ${Number(product.price).toLocaleString()}
-                        </strong>
-                    </p>
-
-                    <p>
-                        Stock available: ${product.stock_quantity}
-                    </p>
-
-                    <a
-                        href="contact.html"
-                        class="blue-button"
+                    <img
+                        src="${image}"
+                        alt="${product.name}"
+                        class="product-image"
                     >
-                        Request a Quote
-                    </a>
+
+                    <div class="product-content">
+
+                        <h3>${product.name}</h3>
+
+                        <p>
+                            ${product.short_description || ""}
+                        </p>
+
+                        <p>
+                            <strong>
+                                ${product.currency}
+                                ${Number(product.price).toLocaleString()}
+                            </strong>
+                        </p>
+
+                        <p>
+                            Stock available:
+                            ${product.stock_quantity}
+                        </p>
+
+                        <a
+                            href="contact.html"
+                            class="blue-button"
+                        >
+                            Request a Quote
+                        </a>
+
+                    </div>
 
                 </div>
+            `;
 
+        }).join("");
+
+    } catch (error) {
+
+        console.error("TDM Supabase error:", error);
+
+        container.innerHTML = `
+            <div style="
+                text-align:center;
+                padding:20px;
+            ">
+                <p>
+                    Unable to load equipment.
+                </p>
+
+                <p style="
+                    font-size:13px;
+                    color:#777;
+                    margin-top:10px;
+                ">
+                    Please try again shortly.
+                </p>
             </div>
         `;
-
-    }).join("");
+    }
 }
 
 loadProducts();
-
 </script>
 
 </body>
