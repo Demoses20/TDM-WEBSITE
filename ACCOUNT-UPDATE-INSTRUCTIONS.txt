@@ -1,8 +1,0 @@
-TDM CUSTOMER ACCOUNT UPDATE
-
-1. The frontend now uses the same Supabase publishable key everywhere: sb_publishable_YUn4pQIhl7S6OJ1SBnYqg_NATcZhsm
-2. account.html redirects to account-dashboard.html.
-3. New pages: account-about.html, account-orders.html, account-affiliate.html, account-settings.html, account-payment.html, account-notifications.html.
-4. Run supabase-customer-account.sql in the Supabase SQL Editor before using affiliate rewards, saved payment methods, notifications, addresses, and tracking numbers.
-5. Never put a Supabase service_role/secret key in browser code. The included key is a publishable client key.
-6. Payment providers must be connected with their official SDK/webhook and their publishable/public key. Do not store raw card numbers or CVV in Supabase.
