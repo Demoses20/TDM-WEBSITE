@@ -1,0 +1,11 @@
+TDM Manufacturing App V4
+
+Changes:
+- Added visible TDM logo/brand header to customer pages.
+- Store product cards now show only Contact Us and Add to Cart.
+- Removed the Home-page Request a Quote button.
+- Added in-app affiliate center under Account. Customers can join, receive an app-generated referral code, copy/share a referral link, and referral codes are captured during signup.
+- Affiliate participation no longer requires WhatsApp.
+- Updated service worker cache version to force the new HTML/header/navigation to refresh.
+
+Note: referral attribution is carried into Supabase Auth user metadata. A full commission/earnings ledger can be added later with a dedicated affiliate database table and admin controls.
