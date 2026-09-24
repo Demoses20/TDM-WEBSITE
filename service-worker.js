@@ -1,7 +1,0 @@
-const CACHE_NAME = 'tdm-app-v6-orange';
-const APP_SHELL = [
-  "./","./index.html","./product.html","./product-detail.html","./cart.html","./service.html","./account.html","./account-about.html","./account-orders.html","./payment.html","./affiliate.html","./account-settings.html","./contact.html","./admin-orders.html","./manifest.json","./logo.png","./mixer.png","./oven.png","./icon-192x192.png","./icon-512x512.png","./app.css","./app-shell.css","./app-common.js"
-];
-self.addEventListener("install",event=>{event.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(APP_SHELL)).catch(()=>{}));self.skipWaiting()});
-self.addEventListener("activate",event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))));self.clients.claim()});
-self.addEventListener("fetch",event=>{if(event.request.method!=="GET")return;const url=new URL(event.request.url);if(url.origin!==self.location.origin)return;if(event.request.mode==="navigate"||url.pathname.endsWith(".html")||url.pathname==="/"){event.respondWith(fetch(event.request).then(r=>{if(r.ok)caches.open(CACHE_NAME).then(c=>c.put(event.request,r.clone()));return r}).catch(()=>caches.match(event.request).then(x=>x||caches.match("./index.html"))));return}event.respondWith(caches.match(event.request).then(x=>x||fetch(event.request).then(r=>{if(r.ok)caches.open(CACHE_NAME).then(c=>c.put(event.request,r.clone()));return r})))})
