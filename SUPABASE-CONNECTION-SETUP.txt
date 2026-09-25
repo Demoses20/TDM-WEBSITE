@@ -1,0 +1,17 @@
+TDM V12.6 SUPABASE CONNECTION
+
+The current website already contains the Supabase client configuration and uses the tdm-media storage bucket.
+
+Project URL is configured in app-common.js, customer-common.js and auth-common.js.
+The publishable key is intentionally used for browser access. Never add a service_role/secret key to these files.
+
+NEXT STEPS
+1. Open Supabase SQL Editor.
+2. Run SUPABASE-V12.6-CONNECTION-FINAL.sql once.
+3. Confirm the verification queries return products/product_images/home_banners and tdm-media.
+4. Log into the website with the TDM admin account.
+5. Open Admin > Store and upload a product image. It should be stored under tdm-media/products/.
+6. Save the product. The URL is stored in products.media_urls/image_url.
+7. Open Admin > Media to test store/promotions uploads and deletion.
+
+The checkout page uses the existing tdm_create_customer_order RPC from the V12.4/V12.5 SQL migrations. Actual card payment processing still requires a payment-provider integration (for example Paystack) and a secure server/webhook endpoint; the current Payment Center is not a live card processor.

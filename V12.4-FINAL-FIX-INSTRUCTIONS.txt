@@ -1,0 +1,19 @@
+TDM MANUFACTURING V12.4 FINAL FIX
+
+1. Upload/replace the website files from this ZIP in your GitHub Pages repository.
+2. Open Supabase SQL Editor.
+3. Run SUPABASE-V12.4-FINAL-FIX.sql once.
+4. Refresh the website/PWA (hard refresh or clear the old service-worker cache if an old version remains).
+
+FIXED IN THIS VERSION
+- Checkout no longer depends on a direct browser Orders insert. It uses tdm_create_customer_order() and has a 20-second timeout with a visible error instead of staying on "Creating order...".
+- Customer password change sends current_password + new password, matching Supabase's secure current-password setting.
+- Customer navigation has consistent iPhone-style icon tiles for Home, Store, Cart, Service and Account, with active-state highlighting.
+- Affiliate product links now contain the exact product id + affiliate ref, provide a visible Open Product link, and use a clipboard fallback.
+- Affiliate product IDs are made unique and the catalog is synced for published products.
+- Admin dashboard gets a sticky quick navigation bar for Orders, Store, Media, Shipping and Affiliates plus affiliate summary cards.
+- Admin total sales uses checkout_total when available.
+
+IMPORTANT
+- The SQL file must be run before the new checkout code can create orders.
+- Actual live card charging still requires a configured payment provider (for example Paystack/Flutterwave) and its public key/webhook setup. The checkout flow now reaches the Payment Center reliably.
