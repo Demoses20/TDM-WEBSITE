@@ -76,34 +76,61 @@ async function saveSettings(){
 }
 $('passwordBtn').addEventListener('click',changePassword);
 async function changePassword(){
-  const oldp=$('oldpass').value, p=$('newpass').value.trim(), msg=$('passwordMsg'), btn=$('passwordBtn');
-  if(!oldp){msg.textContent='Enter your current password.';return;}
-  if(p.length<6){msg.textContent='New password should be at least 6 characters.';return;}
-  btn.disabled=true;msg.textContent='Verifying current password...';
+  const oldp = $('oldpass').value;
+  const p = $('newpass').value.trim();
+  const msg = $('passwordMsg');
+  const btn = $('passwordBtn');
+
+  if(!oldp){
+    msg.textContent = 'Enter your current password.';
+    msg.style.color = '#b91c1c';
+    return;
+  }
+
+  if(p.length < 6){
+    msg.textContent = 'New password should be at least 6 characters.';
+    msg.style.color = '#b91c1c';
+    return;
+  }
+
+  if(oldp === p){
+    msg.textContent = 'New password must be different from your current password.';
+    msg.style.color = '#b91c1c';
+    return;
+  }
+
+  btn.disabled = true;
+  msg.textContent = 'Changing password...';
+  msg.style.color = '#9a3412';
+
   try{
-    const c=tdmCustomerClient();
-    const email=profileUser?.email||profileUser?.user_metadata?.email||'';
-    if(!email)throw new Error('This account has no email address. Add an email to the account before changing the password here.');
-    // Supabase validates the current password by signing in again, then updates the
-    // password on the same authenticated client. This works with projects that
-    // require the current password and avoids the unsupported current_password field.
-    const check=await c.auth.signInWithPassword({email,password:oldp});
-    if(check.error)throw new Error('Current password is incorrect.');
-    if(!check.data?.session)throw new Error('Supabase did not return a fresh authenticated session. Please sign in again and retry.');
-    const refreshed=await c.auth.getUser();
-    if(refreshed.error)throw refreshed.error;
-    const r=await c.auth.updateUser({password:p});
-    if(r.error)throw r.error;
-    msg.textContent='Password changed successfully.';msg.style.color='#15803d';$('oldpass').value='';$('newpass').value='';
-  }catch(e){msg.textContent='Password change failed: '+e.message;msg.style.color='#b91c1c';}
-  finally{btn.disabled=false;}
-}
-async function sendResetFromSettings(){
-  const out=$('resetMsg');
-  try{const email=profileUser?.email||profileUser?.user_metadata?.email;if(!email)throw new Error('No account email found.');
-    const r=await tdmCustomerClient().auth.resetPasswordForEmail(email,{redirectTo:new URL('reset-password.html',location.href).href});
-    if(r.error)throw r.error;out.textContent='Reset link sent. Check your email.';out.style.color='#15803d';
-  }catch(e){out.textContent=e.message;out.style.color='#b91c1c';}
+    const c = tdmCustomerClient();
+
+    const { data, error } = await c.auth.updateUser({
+      password: p,
+      current_password: oldp
+    });
+
+    if(error) throw error;
+
+    msg.textContent = 'Password changed successfully.';
+    msg.style.color = '#15803d';
+
+    $('oldpass').value = '';
+    $('newpass').value = '';
+
+  }catch(e){
+    console.error('Password change error:', e);
+
+    msg.textContent = 'Password change failed: ' + (
+      e?.message || 'Unknown error'
+    );
+
+    msg.style.color = '#b91c1c';
+
+  }finally{
+    btn.disabled = false;
+  }
 }
 </script>
 </body></html>
