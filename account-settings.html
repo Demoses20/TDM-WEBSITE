@@ -86,7 +86,8 @@ input,select,textarea{
   background:#fff
 }
 
-input:focus,textarea:focus{
+input:focus,
+textarea:focus{
   outline:none;
   border-color:#f97316;
   box-shadow:0 0 0 3px #f9731620
@@ -104,7 +105,8 @@ label{
 
 .status{
   min-height:24px;
-  margin-top:12px
+  margin-top:12px;
+  line-height:1.4
 }
 
 .nav{
@@ -149,10 +151,22 @@ label{
   color:#666
 }
 
+.success{
+  color:#15803d
+}
+
+.error{
+  color:#b91c1c
+}
+
+.warning{
+  color:#9a3412
+}
+
 hr{
   border:0;
   border-top:1px solid #ddd;
-  margin:22px 0
+  margin:24px 0
 }
 </style>
 
@@ -174,143 +188,180 @@ hr{
   </div>
 </header>
 
+
 <main>
 
-<div id="guard">Loading...</div>
+  <div id="guard">Loading...</div>
 
-<div id="content" style="display:none">
+  <div id="content" style="display:none">
 
-<h1>⚙️ Account Settings</h1>
+    <h1>⚙️ Account Settings</h1>
 
-<!-- PROFILE SETTINGS -->
-<section class="card">
 
-  <div class="avatar-wrap">
-    <img
-      id="preview"
-      class="avatar"
-      src="logo.png"
-      alt="Profile picture"
-    >
+    <!-- PROFILE -->
+    <section class="card">
 
-    <div>
-      <b>Profile picture</b>
-      <div class="small">
-        Choose a photo and then save your profile.
+      <div class="avatar-wrap">
+
+        <img
+          id="preview"
+          class="avatar"
+          src="logo.png"
+          alt="Profile picture"
+        >
+
+        <div>
+          <b>Profile picture</b>
+          <div class="small">
+            Choose a photo and save your profile.
+          </div>
+        </div>
+
       </div>
-    </div>
+
+
+      <input
+        id="photo"
+        type="file"
+        accept="image/*"
+      >
+
+
+      <label for="name">Full name</label>
+
+      <input
+        id="name"
+        autocomplete="name"
+        placeholder="Full name"
+      >
+
+
+      <label for="phone">Phone number</label>
+
+      <input
+        id="phone"
+        type="tel"
+        autocomplete="tel"
+        placeholder="Phone number"
+      >
+
+
+      <label for="home">Home address</label>
+
+      <textarea
+        id="home"
+        rows="3"
+        autocomplete="street-address"
+        placeholder="Home address"
+      ></textarea>
+
+
+      <label for="delivery">Delivery address</label>
+
+      <textarea
+        id="delivery"
+        rows="3"
+        placeholder="Delivery address"
+      ></textarea>
+
+
+      <button
+        id="saveBtn"
+        type="button"
+      >
+        Save Profile
+      </button>
+
+
+      <div
+        id="msg"
+        class="status"
+      ></div>
+
+    </section>
+
+
+
+    <!-- CHANGE PASSWORD -->
+    <section class="card">
+
+      <h3>Change Password</h3>
+
+      <p class="muted">
+        Enter your current password and a new password.
+      </p>
+
+
+      <label for="oldpass">
+        Current password
+      </label>
+
+      <input
+        id="oldpass"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Current password"
+      >
+
+
+      <label for="newpass">
+        New password
+      </label>
+
+      <input
+        id="newpass"
+        type="password"
+        autocomplete="new-password"
+        placeholder="New password (at least 6 characters)"
+      >
+
+
+      <button
+        id="passwordBtn"
+        type="button"
+      >
+        Save New Password
+      </button>
+
+
+      <div
+        id="passwordMsg"
+        class="status"
+      ></div>
+
+
+      <hr>
+
+
+      <h4>Forgot your password?</h4>
+
+      <p class="muted">
+        We will send a password-reset link to your account email.
+      </p>
+
+
+      <button
+        type="button"
+        onclick="sendResetFromSettings()"
+        class="btn"
+      >
+        Send Reset Link
+      </button>
+
+
+      <div
+        id="resetMsg"
+        class="status"
+      ></div>
+
+    </section>
+
   </div>
-
-  <input
-    id="photo"
-    type="file"
-    accept="image/*"
-  >
-
-  <label for="name">Full name</label>
-  <input
-    id="name"
-    autocomplete="name"
-  >
-
-  <label for="phone">Phone number</label>
-  <input
-    id="phone"
-    type="tel"
-    autocomplete="tel"
-  >
-
-  <label for="home">Home address</label>
-  <textarea
-    id="home"
-    rows="3"
-    autocomplete="street-address"
-  ></textarea>
-
-  <label for="delivery">Delivery address</label>
-  <textarea
-    id="delivery"
-    rows="3"
-  ></textarea>
-
-  <button
-    id="saveBtn"
-    type="button"
-  >
-    Save Profile
-  </button>
-
-  <div id="msg" class="status"></div>
-
-</section>
-
-
-<!-- CHANGE PASSWORD -->
-<section class="card">
-
-  <h3>Change Password</h3>
-
-  <p class="muted">
-    Enter your current password and a new password.
-  </p>
-
-  <label for="oldpass">
-    Current password
-  </label>
-
-  <input
-    id="oldpass"
-    type="password"
-    autocomplete="current-password"
-    placeholder="Current password"
-  >
-
-  <label for="newpass">
-    New password
-  </label>
-
-  <input
-    id="newpass"
-    type="password"
-    autocomplete="new-password"
-    placeholder="New password (at least 6 characters)"
-  >
-
-  <button
-    id="passwordBtn"
-    type="button"
-  >
-    Save New Password
-  </button>
-
-  <div id="passwordMsg" class="status"></div>
-
-  <hr>
-
-  <h4>Forgot your password?</h4>
-
-  <p class="muted">
-    We will send a password-reset link to your account email.
-  </p>
-
-  <button
-    type="button"
-    onclick="sendResetFromSettings()"
-    class="btn secondary"
-  >
-    Send Reset Link
-  </button>
-
-  <div id="resetMsg" class="status"></div>
-
-</section>
-
-</div>
 
 </main>
 
 
-<!-- BOTTOM NAVIGATION -->
+
 <nav
   class="tdm-customer-nav"
   aria-label="Main app navigation"
@@ -345,6 +396,7 @@ hr{
 </nav>
 
 
+
 <script>
 
 let profileUser = null;
@@ -353,11 +405,12 @@ let selectedPhoto = null;
 const $ = id => document.getElementById(id);
 
 
+
 /* =========================================================
    LOAD ACCOUNT
 ========================================================= */
 
-(async()=>{
+(async function(){
 
   try{
 
@@ -374,12 +427,16 @@ const $ = id => document.getElementById(id);
 
   }catch(e){
 
+    console.error(e);
+
     $('guard').textContent =
-      'Unable to load settings: ' + e.message;
+      'Unable to load settings: ' +
+      (e.message || 'Unknown error');
 
   }
 
 })();
+
 
 
 /* =========================================================
@@ -388,54 +445,91 @@ const $ = id => document.getElementById(id);
 
 async function pageInit(user){
 
-  const p = await tdmGetProfile(user);
+  try{
 
-  $('name').value =
-    p.name === 'Customer' ? '' : (p.name || '');
+    const p = await tdmGetProfile(user);
 
-  $('phone').value =
-    p.phone || '';
+    console.log('TDM profile loaded:', p);
 
-  $('home').value =
-    p.home_address || '';
 
-  $('delivery').value =
-    p.delivery_address || '';
+    $('name').value =
+      p?.name === 'Customer'
+      ? ''
+      : (p?.name || user.user_metadata?.full_name || '');
 
-  const saved =
-    p.avatar_url ||
-    localStorage.getItem(
-      'tdm_profile_photo_' + user.id
+
+    $('phone').value =
+      p?.phone ||
+      user.user_metadata?.phone ||
+      '';
+
+
+    $('home').value =
+      p?.home_address ||
+      user.user_metadata?.home_address ||
+      '';
+
+
+    $('delivery').value =
+      p?.delivery_address ||
+      user.user_metadata?.delivery_address ||
+      '';
+
+
+    const saved =
+      p?.avatar_url ||
+      user.user_metadata?.avatar_url ||
+      localStorage.getItem(
+        'tdm_profile_photo_' + user.id
+      );
+
+
+    if(saved){
+
+      $('preview').src = saved;
+
+    }
+
+  }catch(e){
+
+    console.error(
+      'Could not load customer profile:',
+      e
     );
 
-  if(saved){
-    $('preview').src = saved;
   }
 
 }
 
 
+
 /* =========================================================
-   SELECT PROFILE PHOTO
+   PHOTO PREVIEW
 ========================================================= */
 
-$('photo').addEventListener('change', e => {
+$('photo').addEventListener(
+  'change',
+  function(e){
 
-  const f = e.target.files?.[0];
+    const f = e.target.files?.[0];
 
-  if(!f) return;
+    if(!f) return;
 
-  selectedPhoto = f;
+    selectedPhoto = f;
 
-  const reader = new FileReader();
+    const reader = new FileReader();
 
-  reader.onload = () => {
-    $('preview').src = reader.result;
-  };
+    reader.onload = function(){
 
-  reader.readAsDataURL(f);
+      $('preview').src = reader.result;
 
-});
+    };
+
+    reader.readAsDataURL(f);
+
+  }
+);
+
 
 
 /* =========================================================
@@ -444,19 +538,22 @@ $('photo').addEventListener('change', e => {
 
 async function uploadAvatar(user,file){
 
-  if(!file){
-    throw new Error('No profile photo selected.');
-  }
-
   const ext =
-    (file.name.split('.').pop() || 'jpg')
-      .toLowerCase()
-      .replace(/[^a-z0-9]/g,'') || 'jpg';
+    (
+      file.name.split('.').pop() ||
+      'jpg'
+    )
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g,'') ||
+    'jpg';
+
 
   const path =
     `profiles/${user.id}/${Date.now()}.${ext}`;
 
+
   const c = tdmCustomerClient();
+
 
   const up =
     await c.storage
@@ -466,35 +563,34 @@ async function uploadAvatar(user,file){
         file,
         {
           upsert:true,
-          contentType:file.type || 'image/jpeg'
+          contentType:
+            file.type || 'image/jpeg'
         }
       );
 
+
   if(up.error){
 
+    console.error(
+      'Storage upload error:',
+      up.error
+    );
+
     throw new Error(
-      'Profile photo upload failed: ' +
       up.error.message
     );
 
   }
 
-  const publicUrl =
-    c.storage
-      .from('tdm-media')
-      .getPublicUrl(path)
-      .data
-      .publicUrl;
 
-  if(!publicUrl){
-    throw new Error(
-      'Profile photo uploaded but its public URL could not be created.'
-    );
-  }
-
-  return publicUrl;
+  return c.storage
+    .from('tdm-media')
+    .getPublicUrl(path)
+    .data
+    .publicUrl;
 
 }
+
 
 
 /* =========================================================
@@ -511,13 +607,16 @@ async function saveSettings(){
 
   if(!profileUser) return;
 
+
   const msg = $('msg');
   const btn = $('saveBtn');
 
+
   btn.disabled = true;
 
-  msg.textContent = 'Saving...';
-  msg.style.color = '#9a3412';
+  msg.textContent = 'Saving profile...';
+  msg.className = 'status warning';
+
 
   try{
 
@@ -539,16 +638,28 @@ async function saveSettings(){
       msg.textContent =
         'Please enter your full name.';
 
-      msg.style.color = '#b91c1c';
+      msg.className =
+        'status error';
+
+      btn.disabled = false;
 
       return;
+
     }
 
 
+
     /*
-      Keep existing avatar if no new photo
-      was selected.
+      IMPORTANT:
+
+      We save the customer information FIRST.
+
+      The profile photo is optional.
+
+      Therefore a Storage RLS error cannot stop
+      the name, phone and address from saving.
     */
+
 
     let avatarUrl =
       profileUser.user_metadata?.avatar_url ||
@@ -558,37 +669,31 @@ async function saveSettings(){
       '';
 
 
-    /*
-      Upload new photo if selected.
-    */
 
-    if(selectedPhoto){
-
-      avatarUrl =
-        await uploadAvatar(
-          profileUser,
-          selectedPhoto
-        );
-
-    }
-
-
-    /*
-      Update Supabase Auth metadata.
-    */
+    /* =====================================================
+       UPDATE SUPABASE AUTH USER METADATA
+    ===================================================== */
 
     const metadata = {
+
       ...(profileUser.user_metadata || {}),
+
       full_name:n,
+
       phone:ph,
+
       home_address:h,
+
       delivery_address:d,
+
       address:d,
+
       avatar_url:avatarUrl
+
     };
 
 
-    const result =
+    const authResult =
       await tdmCustomerClient()
         .auth
         .updateUser({
@@ -596,65 +701,197 @@ async function saveSettings(){
         });
 
 
-    if(result.error){
-      throw result.error;
+    if(authResult.error){
+
+      throw authResult.error;
+
     }
 
 
     profileUser =
-      result.data.user || profileUser;
+      authResult.data.user ||
+      profileUser;
 
 
-    /*
-      Update customer profile table.
-    */
 
-    await tdmSaveCustomerProfile(
-      profileUser,
-      {
-        full_name:n,
-        email:profileUser.email || '',
-        phone:ph,
-        home_address:h,
-        delivery_address:d,
-        avatar_url:avatarUrl
-      }
-    );
+    /* =====================================================
+       SAVE CUSTOMER PROFILE TABLE
+    ===================================================== */
 
+    try{
 
-    /*
-      Update screen and local cache.
-    */
+      await tdmSaveCustomerProfile(
 
-    if(avatarUrl){
+        profileUser,
 
-      $('preview').src = avatarUrl;
+        {
+          full_name:n,
+          name:n,
+          email:
+            profileUser.email || '',
+          phone:ph,
+          home_address:h,
+          delivery_address:d,
+          avatar_url:avatarUrl
+        }
 
-      localStorage.setItem(
-        'tdm_profile_photo_' + profileUser.id,
-        avatarUrl
+      );
+
+    }catch(profileError){
+
+      /*
+        Do not throw here.
+
+        Auth metadata has already been saved,
+        so the customer's basic profile remains
+        updated even if the profile table has
+        an RLS problem.
+      */
+
+      console.warn(
+        'Customer profile table update warning:',
+        profileError
       );
 
     }
 
 
-    selectedPhoto = null;
-    $('photo').value = '';
+
+    /* =====================================================
+       PROFILE PHOTO
+    ===================================================== */
+
+    if(selectedPhoto){
+
+      try{
+
+        msg.textContent =
+          'Profile information saved. Uploading photo...';
 
 
-    msg.textContent =
-      'Profile updated successfully.';
+        avatarUrl =
+          await uploadAvatar(
+            profileUser,
+            selectedPhoto
+          );
 
-    msg.style.color = '#15803d';
+
+        /*
+          Save the newly created public URL
+          back into Auth metadata.
+        */
+
+        const photoMetadata = {
+
+          ...(profileUser.user_metadata || {}),
+
+          full_name:n,
+          phone:ph,
+          home_address:h,
+          delivery_address:d,
+          address:d,
+          avatar_url:avatarUrl
+
+        };
+
+
+        const photoAuth =
+          await tdmCustomerClient()
+            .auth
+            .updateUser({
+              data:photoMetadata
+            });
+
+
+        if(photoAuth.error){
+
+          console.warn(
+            'Photo URL metadata update failed:',
+            photoAuth.error
+          );
+
+        }else{
+
+          profileUser =
+            photoAuth.data.user ||
+            profileUser;
+
+        }
+
+
+        $('preview').src = avatarUrl;
+
+
+        localStorage.setItem(
+          'tdm_profile_photo_' + profileUser.id,
+          avatarUrl
+        );
+
+
+        selectedPhoto = null;
+        $('photo').value = '';
+
+
+        msg.textContent =
+          'Profile updated successfully.';
+
+
+        msg.className =
+          'status success';
+
+
+      }catch(photoError){
+
+        /*
+          VERY IMPORTANT:
+
+          The profile itself has already been saved.
+
+          Only the photo failed.
+        */
+
+        console.error(
+          'Profile photo upload failed:',
+          photoError
+        );
+
+
+        msg.textContent =
+          'Profile information saved, but the profile photo could not be uploaded.';
+
+
+        msg.className =
+          'status warning';
+
+      }
+
+    }else{
+
+      msg.textContent =
+        'Profile updated successfully.';
+
+      msg.className =
+        'status success';
+
+    }
 
 
   }catch(e){
 
-    msg.textContent =
-      e.message ||
-      'Profile update failed.';
+    console.error(
+      'Profile save error:',
+      e
+    );
 
-    msg.style.color = '#b91c1c';
+
+    msg.textContent =
+      'Profile update failed: ' +
+      (e.message || 'Unknown error');
+
+
+    msg.className =
+      'status error';
+
 
   }finally{
 
@@ -663,6 +900,7 @@ async function saveSettings(){
   }
 
 }
+
 
 
 /* =========================================================
@@ -678,7 +916,7 @@ $('passwordBtn').addEventListener(
 async function changePassword(){
 
   const oldp =
-    $('oldpass').value.trim();
+    $('oldpass').value;
 
   const p =
     $('newpass').value.trim();
@@ -690,23 +928,13 @@ async function changePassword(){
     $('passwordBtn');
 
 
-  msg.style.color = '#b91c1c';
-
-
   if(!oldp){
 
     msg.textContent =
       'Enter your current password.';
 
-    return;
-
-  }
-
-
-  if(!p){
-
-    msg.textContent =
-      'Enter your new password.';
+    msg.className =
+      'status error';
 
     return;
 
@@ -718,15 +946,8 @@ async function changePassword(){
     msg.textContent =
       'New password should be at least 6 characters.';
 
-    return;
-
-  }
-
-
-  if(oldp === p){
-
-    msg.textContent =
-      'Your new password must be different from your current password.';
+    msg.className =
+      'status error';
 
     return;
 
@@ -736,9 +957,10 @@ async function changePassword(){
   btn.disabled = true;
 
   msg.textContent =
-    'Changing password...';
+    'Verifying current password...';
 
-  msg.style.color = '#9a3412';
+  msg.className =
+    'status warning';
 
 
   try{
@@ -747,36 +969,63 @@ async function changePassword(){
       tdmCustomerClient();
 
 
-    /*
-      Supabase project has current-password
-      protection enabled.
+    const email =
+      profileUser?.email ||
+      profileUser?.user_metadata?.email ||
+      '';
 
-      Send both the new password and the
-      current password to updateUser().
+
+    if(!email){
+
+      throw new Error(
+        'This account has no email address.'
+      );
+
+    }
+
+
+    /*
+      Verify current password.
     */
 
-    const {
-      data,
-      error
-    } =
-      await c.auth.updateUser({
-
-        password:p,
-
-        current_password:oldp
-
+    const check =
+      await c.auth.signInWithPassword({
+        email:email,
+        password:oldp
       });
 
 
-    if(error){
-      throw error;
+    if(check.error){
+
+      throw new Error(
+        'Current password is incorrect.'
+      );
+
+    }
+
+
+    /*
+      Change password.
+    */
+
+    const r =
+      await c.auth.updateUser({
+        password:p
+      });
+
+
+    if(r.error){
+
+      throw r.error;
+
     }
 
 
     msg.textContent =
       'Password changed successfully.';
 
-    msg.style.color = '#15803d';
+    msg.className =
+      'status success';
 
 
     $('oldpass').value = '';
@@ -785,14 +1034,20 @@ async function changePassword(){
 
   }catch(e){
 
+    console.error(
+      'Password change error:',
+      e
+    );
+
+
     msg.textContent =
       'Password change failed: ' +
-      (
-        e.message ||
-        'Unable to change password.'
-      );
+      (e.message || 'Unknown error');
 
-    msg.style.color = '#b91c1c';
+
+    msg.className =
+      'status error';
+
 
   }finally{
 
@@ -801,6 +1056,7 @@ async function changePassword(){
   }
 
 }
+
 
 
 /* =========================================================
@@ -829,12 +1085,11 @@ async function sendResetFromSettings(){
     }
 
 
-    /*
-      Use the new TDM Manufacturing domain.
-    */
-
     const redirectUrl =
-      'https://www.tdmmanufacturing.com/reset-password.html';
+      new URL(
+        'reset-password.html',
+        window.location.href
+      ).href;
 
 
     const r =
@@ -849,22 +1104,33 @@ async function sendResetFromSettings(){
 
 
     if(r.error){
+
       throw r.error;
+
     }
 
 
     out.textContent =
       'Reset link sent. Check your email.';
 
-    out.style.color = '#15803d';
+    out.className =
+      'status success';
 
 
   }catch(e){
 
-    out.textContent =
-      e.message;
+    console.error(
+      'Password reset error:',
+      e
+    );
 
-    out.style.color = '#b91c1c';
+
+    out.textContent =
+      e.message ||
+      'Unable to send reset link.';
+
+    out.className =
+      'status error';
 
   }
 
