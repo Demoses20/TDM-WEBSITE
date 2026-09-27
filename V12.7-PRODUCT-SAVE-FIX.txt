@@ -1,0 +1,11 @@
+TDM Manufacturing — V12.7 Product Save Fix
+
+Changes:
+- Fixed admin Store product saving against the current products table schema.
+- Added SKU field; SKU is auto-generated when left blank.
+- Product price is saved as 0 when blank because the current database column is NOT NULL; the storefront/admin now treats 0 as “Request quote”.
+- Preserved existing media upload flow and media_urls storage.
+- Preserved affiliate product upsert and product edit/delete/publish flows.
+- Bumped the service-worker cache version so the updated files can be picked up.
+
+No Supabase SQL migration is required for these code changes. Keep the existing products table and RLS policies.

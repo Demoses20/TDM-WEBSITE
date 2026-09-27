@@ -1,0 +1,17 @@
+TDM V12 UPDATE
+
+1. Upload all files to the GitHub Pages ROOT. index.html must be at repository root.
+2. In Supabase SQL Editor, run the NEW block at the bottom of supabase-customer-account.sql.
+3. Set your shipping fees in Admin Dashboard > Shipping & Checkout Fees.
+4. Admin Dashboard > Front Board: leave Automatic mode to always show the newest published product. Switch to Custom Advertisement for promotions.
+5. Admin Dashboard > Media Upload now accepts multiple images/videos. Save the product after uploading.
+6. Cart > Proceed to Checkout now goes to checkout.html, collects delivery address/distance, shows transportation/packaging/clearance fees, creates the order, then opens Payment Center.
+7. The admin order card now shows the customer's shipping address and checkout fees.
+8. Real Paystack/card charging still requires your live payment-provider integration keys/webhook; this update creates the order and payment handoff without storing card details.
+
+
+V12.1 SUPABASE/API REPAIR
+
+9. The browser-side Supabase configuration is set to the supplied project URL and publishable key.
+10. Run SUPABASE-V12.1-FIX.sql in Supabase SQL Editor to add the missing Orders shipping/checkout columns and repair the V12 support tables.
+11. The service-worker cache was bumped so the browser can replace stale V12 JavaScript/HTML.
