@@ -1,0 +1,15 @@
+TDM MANUFACTURING V12.3 FULL FIX
+
+1. Upload all files in this package to GitHub Pages, replacing the old files.
+2. In Supabase SQL Editor, run:
+   SUPABASE-V12.3-FULL-FIX.sql
+3. The migration creates/fixes:
+   - Customers profile columns + RLS
+   - customer_addresses
+   - customer_notifications + order notification trigger
+   - Orders customer_id/user_id/checkout/shipping/affiliate fields
+   - shipping settings and address zones
+   - tdm-media Storage policies including admin delete
+   - affiliate product catalog, clicks, commissions and admin controls
+4. Customer checkout no longer asks for kilometres. Shipping is calculated from the address/zone and the admin's configured shipping fee. The per-km field remains available for future automatic routing integration.
+5. For real card payments, a live payment provider (e.g. Paystack/Flutterwave) still requires the provider's public/secret keys and webhook configuration. The checkout flow now creates the order with the full product + configured shipping total and opens the Payment Center.
