@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://demoses20.github.io/TDM-WEBSITE/sitemap.xml
