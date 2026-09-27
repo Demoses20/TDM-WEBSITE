@@ -555,18 +555,7 @@ async function uploadAvatar(user,file){
   const c = tdmCustomerClient();
 
 
-  const up =
-    await c.storage
-      .from('tdm-media')
-      .upload(
-        path,
-        file,
-        {
-          upsert:true,
-          contentType:
-            file.type || 'image/jpeg'
-        }
-      );
+  const up=await c.storage.from('tdm-media').upload(path,file,{upsert:false,contentType:file.type||'image/jpeg'});
 
 
   if(up.error){
