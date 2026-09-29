@@ -11,22 +11,27 @@
 *::before,
 *::after{
   box-sizing:border-box;
+  min-width:0;
 }
 
-html,
-body{
+html{
   width:100%;
   max-width:100%;
-  min-width:0;
+  margin:0;
+  padding:0;
   overflow-x:hidden;
 }
 
 body{
+  width:100%;
+  max-width:100%;
+  min-width:0;
   margin:0;
+  padding:0 0 30px;
+  overflow-x:hidden;
   background:linear-gradient(180deg,#fffdf9,#fff7ed);
   font-family:Arial,sans-serif;
   color:var(--text);
-  padding-bottom:30px;
 }
 
 img,
@@ -34,35 +39,51 @@ video,
 canvas,
 svg{
   max-width:100%;
+  height:auto;
 }
 
+/* =========================
+   MAIN ADMIN CONTAINER
+========================= */
+
 .admin-shell{
-  width:min(1200px,100%);
-  max-width:100%;
+  display:block;
+  width:100%;
+  max-width:1200px;
   min-width:0;
-  margin:auto;
+  margin:0 auto;
   padding:14px;
+  overflow:hidden;
 }
 
 .admin-shell main{
+  display:block;
   width:100%;
   max-width:100%;
   min-width:0;
+  overflow:hidden;
 }
 
+/* =========================
+   CARDS
+========================= */
+
 .admin-card{
+  display:block;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  overflow:hidden;
   background:#fff;
   border:1px solid var(--border);
   border-radius:20px;
   padding:18px;
   box-shadow:0 10px 28px rgba(249,115,22,.08);
   margin:14px 0;
-  max-width:100%;
-  min-width:0;
-  overflow:hidden;
 }
 
 .auth-card{
+  width:100%;
   max-width:430px;
   margin:8vh auto;
   text-align:left;
@@ -80,8 +101,27 @@ svg{
   text-align:center;
 }
 
+/* =========================
+   TEXT
+========================= */
+
 .muted{
   color:var(--muted);
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+span,
+strong,
+b,
+small,
+label{
+  max-width:100%;
+  overflow-wrap:anywhere;
+  word-break:break-word;
 }
 
 label{
@@ -90,9 +130,14 @@ label{
   margin-top:12px;
 }
 
+/* =========================
+   FORM ELEMENTS
+========================= */
+
 input,
 textarea,
 select{
+  display:block;
   width:100%;
   max-width:100%;
   min-width:0;
@@ -106,7 +151,6 @@ select{
 
 textarea{
   resize:vertical;
-  max-width:100%;
 }
 
 button,
@@ -141,36 +185,42 @@ button.danger,
 .status{
   min-height:22px;
   margin-top:10px;
+  max-width:100%;
   overflow-wrap:anywhere;
-  word-break:break-word;
 }
 
 /* =========================
-   ADMIN HEADER
+   HEADER
 ========================= */
 
 .admin-header{
   position:sticky;
   top:0;
   z-index:20;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  overflow:hidden;
+
   background:rgba(255,255,255,.96);
   backdrop-filter:blur(12px);
   border-bottom:1px solid var(--border);
+
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:10px;
   padding:10px 4px;
-  max-width:100%;
-  min-width:0;
 }
 
 .brand{
   display:flex;
   align-items:center;
   gap:10px;
-  min-width:0;
+  flex:1 1 auto;
+  width:auto;
   max-width:100%;
+  min-width:0;
 }
 
 .brand img{
@@ -178,17 +228,15 @@ button.danger,
   height:46px;
   object-fit:contain;
   border-radius:10px;
-  flex:0 0 auto;
+  flex:0 0 46px;
 }
 
 .brand strong,
 .brand span{
   display:block;
+  max-width:100%;
   overflow-wrap:anywhere;
-}
-
-.brand strong{
-  min-width:0;
+  word-break:break-word;
 }
 
 .brand span{
@@ -200,16 +248,20 @@ button.danger,
   background:#111827;
 }
 
-/* Header toolbar is different from content toolbars */
+/* Header buttons */
 .admin-header .toolbar{
-  flex:0 0 auto;
-  min-width:0;
+  display:flex;
+  flex:0 1 auto;
+  width:auto;
   max-width:100%;
+  min-width:0;
+  gap:8px;
 }
 
 .admin-header .toolbar>*{
-  flex:0 0 auto;
+  flex:0 1 auto;
   min-width:0;
+  max-width:100%;
 }
 
 /* =========================
@@ -221,39 +273,42 @@ button.danger,
   justify-content:space-between;
   align-items:center;
   gap:12px;
-  padding:12px 0;
+  width:100%;
   max-width:100%;
   min-width:0;
+  padding:12px 0;
 }
 
 .dashboard-head>div{
+  flex:1 1 auto;
   min-width:0;
   max-width:100%;
 }
 
 .dashboard-head h1{
   margin-bottom:4px;
-  overflow-wrap:anywhere;
-}
-
-.dashboard-head p{
-  overflow-wrap:anywhere;
 }
 
 /* =========================
-   ADMIN NAVIGATION
+   ADMIN NAV
 ========================= */
 
 .admin-grid-nav{
   display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:12px;
   width:100%;
   max-width:100%;
   min-width:0;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:12px;
 }
 
 .admin-grid-nav a{
+  display:block;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  overflow:hidden;
+
   background:#fff;
   border:2px solid var(--orange);
   border-radius:18px;
@@ -261,9 +316,6 @@ button.danger,
   text-decoration:none;
   color:var(--deep);
   box-shadow:0 8px 20px rgba(249,115,22,.12);
-  min-width:0;
-  max-width:100%;
-  overflow:hidden;
 }
 
 .admin-grid-nav b{
@@ -276,14 +328,12 @@ button.danger,
   display:block;
   font-weight:900;
   font-size:16px;
-  overflow-wrap:anywhere;
 }
 
 .admin-grid-nav small{
   display:block;
   color:#667085;
   margin-top:4px;
-  overflow-wrap:anywhere;
 }
 
 /* =========================
@@ -292,27 +342,30 @@ button.danger,
 
 .stats{
   display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:10px;
-  margin:14px 0;
   width:100%;
   max-width:100%;
   min-width:0;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:10px;
+  margin:14px 0;
 }
 
 .stats>div{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  overflow:hidden;
+
   background:#fff;
   border:1px solid var(--border);
   border-radius:15px;
   padding:13px;
-  min-width:0;
-  max-width:100%;
-  overflow:hidden;
 }
 
 .stats b,
 .stats strong{
   display:block;
+  max-width:100%;
   overflow-wrap:anywhere;
   word-break:break-word;
 }
@@ -324,29 +377,24 @@ button.danger,
 }
 
 /* =========================
-   TOOLBARS / SEARCH / FILTERS
+   TOOLBAR
 ========================= */
 
 .toolbar{
   display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  align-items:center;
   width:100%;
   max-width:100%;
   min-width:0;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
 }
 
 .toolbar>*{
   flex:1 1 180px;
+  width:auto;
+  max-width:100%;
   min-width:0;
-  max-width:100%;
-}
-
-.toolbar input,
-.toolbar select,
-.toolbar button{
-  max-width:100%;
 }
 
 /* =========================
@@ -355,33 +403,39 @@ button.danger,
 
 .card-grid{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
   width:100%;
   max-width:100%;
   min-width:0;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
 }
 
 /* =========================
-   ITEM / AFFILIATE CARDS
+   ITEM / AFFILIATE CARD
 ========================= */
 
 .item-card{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:14px;
+  display:block;
   width:100%;
   max-width:100%;
   min-width:0;
   overflow:hidden;
+
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:14px;
+}
+
+.item-card>*{
+  max-width:100%;
+  min-width:0;
 }
 
 .item-card h2,
 .item-card h3,
 .item-card p{
   max-width:100%;
-  min-width:0;
   overflow-wrap:anywhere;
   word-break:break-word;
 }
@@ -389,51 +443,44 @@ button.danger,
 .item-card input,
 .item-card select,
 .item-card button{
+  width:100%;
   max-width:100%;
   min-width:0;
 }
 
-.item-card>div{
+.item-card div{
   max-width:100%;
   min-width:0;
-  overflow-wrap:anywhere;
-  word-break:break-word;
-}
-
-/* Prevent long order IDs, emails and payout data from stretching cards */
-.item-card pre,
-.item-card code{
-  max-width:100%;
-  overflow:auto;
-  white-space:pre-wrap;
   overflow-wrap:anywhere;
   word-break:break-word;
 }
 
 /* =========================
-   MEDIA THUMBNAILS
+   THUMBNAILS
 ========================= */
 
 .thumbs{
   display:flex;
+  width:100%;
+  max-width:100%;
+  min-width:0;
   gap:8px;
   overflow:auto;
   flex-wrap:wrap;
-  max-width:100%;
 }
 
 .thumbs img,
 .thumbs video{
   width:100px;
   height:80px;
+  max-width:100%;
   object-fit:cover;
   border-radius:9px;
   background:#f3f4f6;
-  max-width:100%;
 }
 
 /* =========================
-   STATUS PILL
+   PILL
 ========================= */
 
 .pill{
@@ -449,10 +496,11 @@ button.danger,
 }
 
 /* =========================
-   TABLES
+   TABLE
 ========================= */
 
 .table-wrap{
+  display:block;
   width:100%;
   max-width:100%;
   min-width:0;
@@ -483,10 +531,12 @@ button.danger,
 ========================= */
 
 .linkbox{
+  width:100%;
   max-width:100%;
   min-width:0;
   overflow-wrap:anywhere;
   word-break:break-all;
+
   background:#f9fafb;
   border:1px dashed #fdba74;
   padding:8px;
@@ -508,10 +558,6 @@ button.danger,
     grid-template-columns:repeat(3,minmax(0,1fr));
   }
 
-  .card-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
-
 }
 
 /* =========================
@@ -524,27 +570,34 @@ button.danger,
     width:100%;
     max-width:100%;
     padding:8px;
+    overflow:hidden;
   }
 
   .admin-header{
-    align-items:flex-start;
-    flex-wrap:wrap;
-    padding:8px 2px;
+    width:100%;
+    max-width:100%;
+    flex-direction:column;
+    align-items:stretch;
+    gap:8px;
   }
 
   .brand{
-    flex:1 1 180px;
-    min-width:0;
+    width:100%;
+    max-width:100%;
+    flex:none;
   }
 
   .admin-header .toolbar{
-    flex:1 1 100%;
+    display:flex;
     width:100%;
     max-width:100%;
+    flex-direction:row;
   }
 
   .admin-header .toolbar>*{
-    flex:1 1 auto;
+    flex:1 1 0;
+    width:0;
+    max-width:100%;
   }
 
   .admin-grid-nav{
@@ -587,38 +640,26 @@ button.danger,
   }
 
   .dashboard-head{
-    align-items:flex-start;
-    flex-wrap:wrap;
+    flex-direction:column;
+    align-items:stretch;
+    width:100%;
   }
 
   .dashboard-head>button,
   .dashboard-head>.btn{
     width:100%;
-  }
-
-  .brand strong{
-    font-size:15px;
-  }
-
-  .brand span{
-    font-size:10px;
+    max-width:100%;
   }
 
   .toolbar{
     flex-direction:column;
     align-items:stretch;
     width:100%;
+    max-width:100%;
   }
 
   .toolbar>*{
-    width:100%;
-    max-width:100%;
     flex:0 0 auto;
-  }
-
-  .toolbar input,
-  .toolbar select,
-  .toolbar button{
     width:100%;
     max-width:100%;
   }
@@ -661,29 +702,22 @@ button.danger,
     grid-template-columns:minmax(0,1fr);
   }
 
-  .stats>div{
-    padding:10px;
-  }
-
   .admin-grid-nav{
     grid-template-columns:minmax(0,1fr);
-  }
-
-  .admin-grid-nav a{
-    padding:11px;
-  }
-
-  .item-card{
-    padding:12px;
   }
 
   .admin-card{
     padding:12px;
   }
 
+  .item-card{
+    padding:12px;
+  }
+
   .brand img{
     width:40px;
     height:40px;
+    flex-basis:40px;
   }
 
   .brand strong{
