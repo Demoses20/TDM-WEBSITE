@@ -113,24 +113,18 @@ async function tdmSavePushSubscription() {
     );
   }
 
-  const { error } = await supabase
-    .from("push_subscriptions")
-    .upsert(
-      {
-        endpoint: json.endpoint,
-        p256dh: json.keys.p256dh,
-        auth: json.keys.auth,
-        user_id: userId,
-        updated_at: new Date().toISOString()
-      },
-      {
-        onConflict: "endpoint"
-      }
-    );
-
-  if (error) {
-    throw error;
+  const { data, error } = await supabase.rpc(
+  "save_push_subscription",
+  {
+    p_endpoint: json.endpoint,
+    p_p256dh: json.keys.p256dh,
+    p_auth: json.keys.auth
   }
+);
+
+if (error) {
+  throw error;
+}
 
   return {
     success: true,
