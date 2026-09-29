@@ -3,619 +3,1197 @@
 <head>
 
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f97316">
 
-<title>TDM Customer Account</title>
+<title>TDM Admin Dashboard</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="customer-common.js"></script>
+<script src="app-common.js"></script>
+<script src="admin-common.js"></script>
 
-<link rel="stylesheet" href="customer-ui.css">
+<link rel="stylesheet" href="admin-ui.css">
 
 <style>
+html,
+body{
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+}
 
-*{
+*,
+*:before,
+*:after{
     box-sizing:border-box;
 }
 
 body{
     margin:0;
-    background:#f7f7f7;
-    font-family:Arial,sans-serif;
-    color:#171717;
-    padding-bottom:86px;
 }
 
-.wrap{
-    max-width:900px;
-    margin:auto;
-    padding:16px;
-}
-
-/* HEADER */
-
-header{
-    background:#fff;
-    border-bottom:1px solid #eee;
-    padding:10px 16px;
-    position:sticky;
-    top:0;
-    z-index:1000;
-}
-
-.brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    text-decoration:none;
-    color:#111;
-}
-
-.brand img{
-    width:45px;
-    height:45px;
-    object-fit:contain;
-    border-radius:10px;
-}
-
-.brand b{
-    display:block;
-}
-
-.brand small{
-    display:block;
-    color:#9a3412;
-    margin-top:3px;
-}
-
-/* PROFILE */
-
-.profile{
-    background:#fff;
-    border-radius:18px;
-    padding:18px;
-    margin:14px 0;
-    display:flex;
-    gap:15px;
-    align-items:center;
-    box-shadow:0 2px 12px #0000000b;
-}
-
-.avatar{
-    width:72px;
-    height:72px;
-    border-radius:50%;
-    object-fit:cover;
-    background:#eee;
-    flex-shrink:0;
-}
-
-.profile h2{
-    margin:0 0 5px;
-    font-size:22px;
-}
-
-.profile-info{
-    min-width:0;
-}
-
-.profile-info div{
-    color:#666;
-    word-break:break-word;
-}
-
-/* ACCOUNT TILES */
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:11px;
-}
-
-.tile{
-    background:#fff;
-    border:1px solid #fed7aa;
-    border-radius:15px;
-    padding:16px;
-    text-decoration:none;
-    color:#9a3412;
-    font-weight:800;
-    min-height:72px;
-    transition:transform .15s ease,box-shadow .15s ease;
-}
-
-.tile:active{
-    transform:scale(.98);
-}
-
-.tile:hover{
-    box-shadow:0 4px 15px #0000000d;
-}
-
-.tile span{
-    display:block;
-    font-size:25px;
-    margin-bottom:8px;
-}
-
-.tile small{
-    display:block;
-    font-weight:500;
-    color:#666;
-    margin-top:3px;
-}
-
-/* LOGOUT */
-
-.logout{
-    margin-top:15px;
+.admin-shell,
+main{
     width:100%;
+    max-width:100%;
+}
+
+.login-wrap{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:#f7f7f7;
+}
+
+.login-card{
+    width:100%;
+    max-width:430px;
+    background:#fff;
+    border-radius:20px;
+    padding:26px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+    border:1px solid #fed7aa;
+}
+
+.login-logo{
+    width:70px;
+    height:70px;
+    object-fit:contain;
+    display:block;
+    margin:0 auto 14px;
+}
+
+.login-card h1{
+    text-align:center;
+    margin:0 0 8px;
+    font-size:25px;
+}
+
+.login-card .muted{
+    text-align:center;
+    margin-bottom:22px;
+}
+
+.login-card label{
+    display:block;
+    font-weight:700;
+    margin:12px 0 6px;
+}
+
+.login-card input{
+    width:100%;
+    padding:13px;
+    border:1px solid #fdba74;
+    border-radius:10px;
+    font:inherit;
+}
+
+.login-card button{
+    width:100%;
+    margin-top:16px;
     padding:14px;
     border:0;
-    border-radius:13px;
-    background:#111;
+    border-radius:11px;
+    background:#f97316;
     color:#fff;
     font-weight:800;
     font-size:15px;
     cursor:pointer;
 }
 
-.logout:active{
-    transform:scale(.99);
+.login-card button:disabled{
+    opacity:.65;
+    cursor:not-allowed;
 }
 
-/* LOADING */
-
-#loading{
-    background:#fff;
-    border-radius:15px;
-    padding:25px;
-    text-align:center;
-    color:#666;
-    margin-top:15px;
+.login-message{
+    margin-top:14px;
+    padding:11px;
+    border-radius:10px;
+    display:none;
+    font-size:14px;
 }
 
-/* BOTTOM NAV */
-
-.bottom-nav{
-    position:fixed;
-    left:0;
-    right:0;
-    bottom:0;
-    height:70px;
-    background:#fff;
-    border-top:1px solid #ddd;
-    z-index:9999;
-    display:flex;
-    justify-content:center;
-    padding-bottom:env(safe-area-inset-bottom);
-    box-shadow:0 -2px 12px #00000012;
-}
-
-.bottom-nav a{
-    position:relative;
-    flex:1;
-    max-width:180px;
-    text-align:center;
-    padding:8px 3px 5px;
-    color:#777;
-    font-size:10px;
-    text-decoration:none;
-    font-weight:600;
-}
-
-.bottom-nav a span{
+.login-message.error{
     display:block;
-    font-size:20px;
-    line-height:23px;
-    margin-bottom:2px;
+    background:#fee2e2;
+    color:#991b1b;
 }
 
-.bottom-nav a.active,
-.bottom-nav a:hover{
-    color:#111;
+.login-message.success{
+    display:block;
+    background:#dcfce7;
+    color:#166534;
 }
 
-.bottom-nav .cart-count{
-    display:inline-flex;
-    min-width:18px;
-    height:18px;
-    align-items:center;
-    justify-content:center;
-    border-radius:999px;
-    background:#111;
-    color:#fff;
-    font-size:10px;
-    padding:0 5px;
-    position:absolute;
-    top:3px;
-    margin-left:-2px;
+.admin-stat-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin:18px 0;
 }
 
-/* DESKTOP */
+.admin-stat{
+    background:#fff;
+    border:1px solid #fed7aa;
+    border-radius:15px;
+    padding:18px;
+}
 
-@media(min-width:700px){
+.admin-stat span{
+    display:block;
+    color:#666;
+    font-size:13px;
+    margin-bottom:7px;
+}
 
-    .grid{
-        grid-template-columns:repeat(3,1fr);
+.admin-stat strong{
+    display:block;
+    font-size:25px;
+}
+
+.admin-links{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+}
+
+.admin-link{
+    display:block;
+    background:#fff;
+    border:1px solid #fed7aa;
+    border-radius:16px;
+    padding:19px;
+    color:#171717;
+    text-decoration:none;
+    transition:transform .15s ease,box-shadow .15s ease;
+}
+
+.admin-link:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 18px rgba(0,0,0,.07);
+}
+
+.admin-link-icon{
+    font-size:30px;
+    margin-bottom:10px;
+}
+
+.admin-link h2{
+    margin:0 0 5px;
+    font-size:18px;
+}
+
+.admin-link p{
+    margin:0;
+    color:#666;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.quick-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.status-box{
+    margin-top:15px;
+    padding:12px;
+    border-radius:10px;
+    background:#f7f7f7;
+    color:#555;
+}
+
+@media(max-width:800px){
+    .admin-stat-grid{
+        grid-template-columns:repeat(2,1fr);
     }
 
+    .admin-links{
+        grid-template-columns:repeat(2,1fr);
+    }
 }
 
-/* SMALL PHONES */
+@media(max-width:520px){
+    .admin-stat-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:9px;
+    }
 
-@media(max-width:380px){
-
-    .profile{
+    .admin-stat{
         padding:14px;
     }
 
-    .avatar{
-        width:60px;
-        height:60px;
+    .admin-stat strong{
+        font-size:21px;
     }
 
-    .profile h2{
-        font-size:19px;
+    .admin-links{
+        grid-template-columns:1fr;
     }
-
-    .tile{
-        padding:14px;
-    }
-
 }
-
 </style>
 
 </head>
 
 <body>
 
-<header>
+<!-- =========================
+     ADMIN LOGIN
+========================= -->
 
-    <a class="brand" href="index.html" aria-label="TDM Manufacturing Home">
+<div id="loginScreen" class="login-wrap">
+
+    <div class="login-card">
 
         <img
             src="logo.png"
-            alt="TDM Manufacturing logo"
+            alt="TDM Manufacturing"
+            class="login-logo"
         >
 
-        <div>
+        <h1>TDM Admin</h1>
 
-            <b>TDM Manufacturing</b>
+        <p class="muted">
+            Sign in to access the TDM Manufacturing administration dashboard.
+        </p>
 
-            <small>Customer Account</small>
+        <form id="loginForm">
+
+            <label for="adminEmail">
+                Admin Email
+            </label>
+
+            <input
+                id="adminEmail"
+                type="email"
+                value="technicaldemoses@gmail.com"
+                autocomplete="username"
+                required
+            >
+
+            <label for="adminPassword">
+                Password
+            </label>
+
+            <input
+                id="adminPassword"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Enter admin password"
+                required
+            >
+
+            <button
+                id="loginButton"
+                type="submit"
+            >
+                Sign In
+            </button>
+
+        </form>
+
+        <div
+            id="loginMessage"
+            class="login-message"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     ADMIN DASHBOARD
+========================= -->
+
+<div
+    id="dashboardScreen"
+    class="admin-shell"
+    style="display:none;"
+>
+
+    <header class="admin-header">
+
+        <div class="brand">
+
+            <img
+                src="logo.png"
+                alt="TDM Manufacturing"
+            >
+
+            <div>
+
+                <strong>
+                    TDM Manufacturing
+                </strong>
+
+                <span>
+                    Administration Dashboard
+                </span>
+
+            </div>
 
         </div>
 
-    </a>
+        <div
+            class="toolbar"
+            style="justify-content:flex-end;"
+        >
 
-</header>
-
-
-<main class="wrap">
-
-    <div id="loading">
-        Loading account...
-    </div>
-
-
-    <div id="app" style="display:none;">
-
-
-        <!-- CUSTOMER PROFILE -->
-
-        <section class="profile">
-
-            <img
-                id="avatar"
-                class="avatar"
-                src="logo.png"
-                alt="Customer profile"
+            <a
+                class="btn secondary"
+                href="index.html"
             >
+                View Website
+            </a>
 
-            <div class="profile-info">
+            <button
+                onclick="tdmAdminLogout()"
+                class="logout"
+                type="button"
+            >
+                Log Out
+            </button>
 
-                <h2 id="name"></h2>
+        </div>
 
-                <div id="email"></div>
+    </header>
 
-                <div id="phone"></div>
+
+    <main>
+
+        <div class="dashboard-head">
+
+            <div>
+
+                <h1>
+                    ⚙️ Admin Dashboard
+                </h1>
+
+                <p class="muted">
+                    Manage TDM Manufacturing products, orders, customers,
+                    media and affiliate activity.
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                onclick="loadDashboard()"
+            >
+                Refresh
+            </button>
+
+        </div>
+
+
+        <!-- =========================
+             STATISTICS
+        ========================= -->
+
+        <section class="admin-stat-grid">
+
+            <div class="admin-stat">
+
+                <span>
+                    Products
+                </span>
+
+                <strong id="statProducts">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="admin-stat">
+
+                <span>
+                    Published Products
+                </span>
+
+                <strong id="statPublished">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="admin-stat">
+
+                <span>
+                    Orders
+                </span>
+
+                <strong id="statOrders">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="admin-stat">
+
+                <span>
+                    Customers
+                </span>
+
+                <strong id="statCustomers">
+                    —
+                </strong>
 
             </div>
 
         </section>
 
 
-        <!-- ACCOUNT OPTIONS -->
+        <!-- =========================
+             MANAGEMENT
+        ========================= -->
 
-        <div class="grid">
+        <section class="admin-card">
+
+            <h2>
+                Management
+            </h2>
+
+            <p class="muted">
+                Open an administration section below.
+            </p>
 
 
-            <a
-                class="tile"
-                href="account-about.html"
+            <div class="admin-links">
+
+
+                <a
+                    class="admin-link"
+                    href="admin-store.html"
+                >
+
+                    <div class="admin-link-icon">
+                        🛒
+                    </div>
+
+                    <h2>
+                        Store
+                    </h2>
+
+                    <p>
+                        Add, edit, publish, unpublish and delete products.
+                    </p>
+
+                </a>
+
+
+                <a
+                    class="admin-link"
+                    href="admin-orders.html"
+                >
+
+                    <div class="admin-link-icon">
+                        📦
+                    </div>
+
+                    <h2>
+                        Orders
+                    </h2>
+
+                    <p>
+                        Review customer orders, payments, statuses and tracking.
+                    </p>
+
+                </a>
+
+
+                <a
+                    class="admin-link"
+                    href="admin-media.html"
+                >
+
+                    <div class="admin-link-icon">
+                        🖼️
+                    </div>
+
+                    <h2>
+                        Media & Banners
+                    </h2>
+
+                    <p>
+                        Upload product media and manage the home advertisement.
+                    </p>
+
+                </a>
+
+
+                <a
+                    class="admin-link"
+                    href="admin-shipping.html"
+                >
+
+                    <div class="admin-link-icon">
+                        🚚
+                    </div>
+
+                    <h2>
+                        Shipping
+                    </h2>
+
+                    <p>
+                        Manage shipping information and delivery settings.
+                    </p>
+
+                </a>
+
+
+                <a
+                    class="admin-link"
+                    href="admin-affiliate.html"
+                >
+
+                    <div class="admin-link-icon">
+                        🤝
+                    </div>
+
+                    <h2>
+                        Affiliate Marketing
+                    </h2>
+
+                    <p>
+                        Manage affiliate products, links, clicks and commissions.
+                    </p>
+
+                </a>
+
+
+                <a
+                    class="admin-link"
+                    href="index.html"
+                >
+
+                    <div class="admin-link-icon">
+                        🌐
+                    </div>
+
+                    <h2>
+                        Website
+                    </h2>
+
+                    <p>
+                        Open the customer-facing TDM Manufacturing website.
+                    </p>
+
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             QUICK ACTIONS
+        ========================= -->
+
+        <section class="admin-card">
+
+            <h2>
+                Quick Actions
+            </h2>
+
+            <div class="quick-actions">
+
+                <a
+                    class="btn"
+                    href="admin-store.html"
+                >
+                    Add / Manage Products
+                </a>
+
+                <a
+                    class="btn"
+                    href="admin-orders.html"
+                >
+                    View Orders
+                </a>
+
+                <a
+                    class="btn"
+                    href="admin-media.html"
+                >
+                    Manage Media
+                </a>
+
+                <a
+                    class="btn"
+                    href="admin-affiliate.html"
+                >
+                    Manage Affiliates
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <section class="admin-card">
+
+            <h2>
+                Admin Status
+            </h2>
+
+            <div
+                id="dashboardStatus"
+                class="status-box"
             >
+                Checking administrator access...
+            </div>
 
-                <span>ℹ️</span>
+        </section>
 
-                About
+    </main>
 
-                <small>
-                    Learn about TDM
-                </small>
-
-            </a>
-
-
-            <a
-                class="tile"
-                href="account-orders.html"
-            >
-
-                <span>📦</span>
-
-                My Orders
-
-                <small>
-                    Track orders
-                </small>
-
-            </a>
-
-
-            <a
-                class="tile"
-                href="cart.html"
-            >
-
-                <span>🛒</span>
-
-                My Cart
-
-                <small>
-                    Review & checkout
-                </small>
-
-            </a>
-
-
-            <a
-                class="tile"
-                href="account-affiliate.html"
-            >
-
-                <span>🤝</span>
-
-                Affiliate Marketing
-
-                <small>
-                    Products, links & rewards
-                </small>
-
-            </a>
-
-
-            <a
-                class="tile"
-                href="account-settings.html"
-            >
-
-                <span>⚙️</span>
-
-                Settings
-
-                <small>
-                    Profile & security
-                </small>
-
-            </a>
-
-
-            <a
-                class="tile"
-                href="account-payment.html"
-            >
-
-                <span>💳</span>
-
-                Payment
-
-                <small>
-                    Pay & saved methods
-                </small>
-
-            </a>
-
-
-            <a
-                class="tile"
-                href="account-notifications.html"
-            >
-
-                <span>🔔</span>
-
-                Notifications
-
-                <small>
-                    Account messages
-                </small>
-
-            </a>
-
-
-        </div>
-
-
-        <!-- LOGOUT -->
-
-        <button
-            class="logout"
-            type="button"
-            onclick="tdmSignOut()"
-        >
-            Log Out
-        </button>
-
-
-    </div>
-
-</main>
-
-
-<!-- BOTTOM NAVIGATION -->
-
-<nav
-    class="tdm-customer-nav bottom-nav"
-    aria-label="Main app navigation"
->
-
-    <a href="index.html">
-
-        <span aria-hidden="true">⌂</span>
-
-        Home
-
-    </a>
-
-
-    <a href="product.html">
-
-        <span aria-hidden="true">▦</span>
-
-        Store
-
-    </a>
-
-
-    <a href="cart.html">
-
-        <span aria-hidden="true">🛒</span>
-
-        Cart
-
-        <b
-            id="cartCountBottom"
-            class="cart-count"
-        >
-            0
-        </b>
-
-    </a>
-
-
-    <a href="service.html">
-
-        <span aria-hidden="true">⚙</span>
-
-        Service
-
-    </a>
-
-
-    <a href="account-dashboard.html">
-
-        <span aria-hidden="true">♙</span>
-
-        Account
-
-    </a>
-
-</nav>
+</div>
 
 
 <script>
 
-(async function(){
+const ADMIN_EMAIL =
+    "technicaldemoses@gmail.com";
+
+
+/* =========================
+   LOGIN MESSAGE
+========================= */
+
+function showLoginMessage(message,type){
+
+    const box =
+        document.getElementById("loginMessage");
+
+    box.textContent = message;
+
+    box.className =
+        "login-message " +
+        (type || "error");
+
+}
+
+
+/* =========================
+   SHOW LOGIN
+========================= */
+
+function showLogin(){
+
+    document.getElementById("loginScreen")
+        .style.display = "flex";
+
+    document.getElementById("dashboardScreen")
+        .style.display = "none";
+
+}
+
+
+/* =========================
+   SHOW DASHBOARD
+========================= */
+
+function showDashboard(){
+
+    document.getElementById("loginScreen")
+        .style.display = "none";
+
+    document.getElementById("dashboardScreen")
+        .style.display = "block";
+
+}
+
+
+/* =========================
+   ADMIN LOGIN
+========================= */
+
+async function adminLogin(event){
+
+    event.preventDefault();
+
+    const email =
+        document.getElementById("adminEmail")
+            .value
+            .trim()
+            .toLowerCase();
+
+    const password =
+        document.getElementById("adminPassword")
+            .value;
+
+    const button =
+        document.getElementById("loginButton");
+
+
+    if(email !== ADMIN_EMAIL){
+
+        showLoginMessage(
+            "This account is not authorized for the TDM admin dashboard.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if(!password){
+
+        showLoginMessage(
+            "Please enter your admin password.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Signing in...";
+
 
     try{
 
-        /*
-         * Require the customer to be logged in.
-         * If not logged in, customer-common.js
-         * sends them to auth.html.
-         */
-
-        const user = await tdmRequireUser();
-
-        if(!user){
-            return;
-        }
+        const client =
+            tdmAdminClient();
 
 
-        /*
-         * Load the customer profile.
-         */
-
-        const profile = await tdmGetProfile(user);
-
-
-        /*
-         * Display customer information.
-         */
-
-        document.getElementById("name").textContent =
-            "Welcome, " + profile.name + " 👋";
+        const result =
+            await client.auth.signInWithPassword({
+                email:email,
+                password:password
+            });
 
 
-        document.getElementById("email").textContent =
-            profile.email || "Email not provided";
+        if(result.error){
 
-
-        document.getElementById("phone").textContent =
-            profile.phone || "Phone not provided";
-
-
-        /*
-         * Display profile picture if available.
-         */
-
-        if(profile.avatar_url){
-
-            document.getElementById("avatar").src =
-                profile.avatar_url;
+            throw result.error;
 
         }
 
 
-        /*
-         * Show account dashboard.
-         */
-
-        document.getElementById("loading").style.display =
-            "none";
-
-        document.getElementById("app").style.display =
-            "block";
+        const user =
+            result.data?.user;
 
 
-        /*
-         * Update cart count.
-         */
+        if(
+            !user ||
+            String(user.email || "").toLowerCase()
+                !== ADMIN_EMAIL
+        ){
 
-        await tdmUpdateCartBadges();
+            await client.auth.signOut();
+
+            throw new Error(
+                "This account is not authorized for the TDM admin dashboard."
+            );
+
+        }
+
+
+        showLoginMessage(
+            "Login successful. Opening dashboard...",
+            "success"
+        );
+
+
+        await new Promise(resolve =>
+            setTimeout(resolve,300)
+        );
+
+
+        await openDashboard();
 
 
     }catch(error){
 
         console.error(
-            "TDM account dashboard error:",
+            "TDM admin login error:",
             error
         );
 
 
-        document.getElementById("loading").textContent =
-            "Unable to load account: " +
-            (error?.message || "Please try again.");
+        showLoginMessage(
+            error?.message ||
+            "Unable to sign in. Please check your credentials.",
+            "error"
+        );
 
+
+    }finally{
+
+        button.disabled = false;
+
+        button.textContent =
+            "Sign In";
+
+    }
+
+}
+
+
+/* =========================
+   OPEN DASHBOARD
+========================= */
+
+async function openDashboard(){
+
+    try{
+
+        const user =
+            await tdmAdminRequire();
+
+
+        if(!user){
+
+            /*
+             * tdmAdminRequire normally redirects
+             * unauthorized users back here.
+             */
+
+            showLogin();
+
+            return;
+
+        }
+
+
+        showDashboard();
+
+
+        const status =
+            document.getElementById("dashboardStatus");
+
+
+        status.textContent =
+            "Administrator access verified for " +
+            user.email +
+            ".";
+
+
+        await loadDashboard();
+
+
+    }catch(error){
+
+        console.error(
+            "TDM dashboard access error:",
+            error
+        );
+
+
+        showLogin();
+
+        showLoginMessage(
+            error?.message ||
+            "Unable to verify administrator access.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================
+   LOAD DASHBOARD STATISTICS
+========================= */
+
+async function loadDashboard(){
+
+    const client =
+        tdmAdminClient();
+
+
+    document.getElementById("statProducts")
+        .textContent = "…";
+
+    document.getElementById("statPublished")
+        .textContent = "…";
+
+    document.getElementById("statOrders")
+        .textContent = "…";
+
+    document.getElementById("statCustomers")
+        .textContent = "…";
+
+
+    try{
+
+        const products =
+            await client
+                .from("products")
+                .select("id,status");
+
+
+        if(products.error){
+
+            console.warn(
+                "Products dashboard query:",
+                products.error.message
+            );
+
+        }
+
+
+        const productRows =
+            products.data || [];
+
+
+        document.getElementById("statProducts")
+            .textContent =
+            productRows.length;
+
+
+        document.getElementById("statPublished")
+            .textContent =
+            productRows.filter(
+                p => p.status === "published"
+            ).length;
+
+
+    }catch(error){
+
+        console.warn(
+            "Products statistics unavailable:",
+            error
+        );
+
+        document.getElementById("statProducts")
+            .textContent = "—";
+
+        document.getElementById("statPublished")
+            .textContent = "—";
+
+    }
+
+
+    try{
+
+        const orders =
+            await client
+                .from("Orders")
+                .select("id");
+
+
+        if(orders.error){
+
+            console.warn(
+                "Orders dashboard query:",
+                orders.error.message
+            );
+
+            document.getElementById("statOrders")
+                .textContent = "—";
+
+        }else{
+
+            document.getElementById("statOrders")
+                .textContent =
+                (orders.data || []).length;
+
+        }
+
+
+    }catch(error){
+
+        console.warn(
+            "Orders statistics unavailable:",
+            error
+        );
+
+        document.getElementById("statOrders")
+            .textContent = "—";
+
+    }
+
+
+    try{
+
+        const customers =
+            await client
+                .from("Customers")
+                .select("id");
+
+
+        if(customers.error){
+
+            console.warn(
+                "Customers dashboard query:",
+                customers.error.message
+            );
+
+            document.getElementById("statCustomers")
+                .textContent = "—";
+
+        }else{
+
+            document.getElementById("statCustomers")
+                .textContent =
+                (customers.data || []).length;
+
+        }
+
+
+    }catch(error){
+
+        console.warn(
+            "Customers statistics unavailable:",
+            error
+        );
+
+        document.getElementById("statCustomers")
+            .textContent = "—";
+
+    }
+
+}
+
+
+/* =========================
+   LOGIN FORM
+========================= */
+
+document
+    .getElementById("loginForm")
+    .addEventListener(
+        "submit",
+        adminLogin
+    );
+
+
+/* =========================
+   INITIALIZE
+========================= */
+
+(async function(){
+
+    try{
+
+        const client =
+            tdmAdminClient();
+
+
+        const sessionResult =
+            await client.auth.getSession();
+
+
+        const session =
+            sessionResult
+                ?.data
+                ?.session;
+
+
+        const user =
+            session?.user;
+
+
+        /*
+         * No session:
+         * show admin login.
+         */
+
+        if(!user){
+
+            showLogin();
+
+            const params =
+                new URLSearchParams(
+                    location.search
+                );
+
+
+            if(
+                params.get("login") ===
+                "required"
+            ){
+
+                showLoginMessage(
+                    "Please sign in as the TDM administrator to continue.",
+                    "error"
+                );
+
+            }
+
+            return;
+
+        }
+
+
+        /*
+         * Session exists, but check
+         * that it belongs to the admin.
+         */
+
+        if(
+            String(user.email || "")
+                .toLowerCase()
+            !== ADMIN_EMAIL
+        ){
+
+            await client.auth.signOut();
+
+            showLogin();
+
+            showLoginMessage(
+                "This account is not authorized for the TDM admin dashboard.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * Authorized admin.
+         */
+
+        showDashboard();
+
+        document.getElementById(
+            "dashboardStatus"
+        ).textContent =
+            "Administrator access verified for " +
+            user.email +
+            ".";
+
+
+        await loadDashboard();
+
+
+    }catch(error){
+
+        console.error(
+            "TDM admin initialization error:",
+            error
+        );
+
+
+        showLogin();
+
+        showLoginMessage(
+            "Unable to initialize the admin dashboard. " +
+            (error?.message || ""),
+            "error"
+        );
 
     }
 
 })();
 
 </script>
-
 
 </body>
 </html>
