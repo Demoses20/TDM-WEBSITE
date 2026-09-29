@@ -8,7 +8,7 @@
  */
 
 const TDM_VAPID_PUBLIC_KEY =
-  "REPLACE_WITH_YOUR_VAPID_PUBLIC_KEY";
+  "BAOnitz8dNFE1QYTB8_SdnMw2kuISrBlkaiY0-kSg1PlbhTJwFbySUP7TU7y0At1NuwwusVRwgDfHOC8AsVTTv8";
 
 function tdmUrlBase64ToUint8Array(base64String) {
   const padding = "=".repeat(
