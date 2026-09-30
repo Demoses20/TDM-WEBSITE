@@ -1,4 +1,4 @@
-const CACHE_NAME = "tdm-app-v12-11-push-click";
+const CACHE_NAME = "tdm-app-v12-11-push-fix";
 
 const APP_SHELL = [
   "./",
@@ -11,20 +11,26 @@ const APP_SHELL = [
   "./auth.html",
   "./login.html",
   "./signup.html",
+
   "./auth-common.js",
   "./customer-common.js",
+
   "./contact.html",
+
   "./admin-dashboard.html",
   "./admin-orders.html",
   "./admin-store.html",
   "./admin-media.html",
   "./admin-shipping.html",
   "./admin-affiliate.html",
+
   "./admin-common.js",
   "./admin-ui.css",
+
   "./logo.png",
   "./icon-192x192.png",
   "./icon-512x512.png",
+
   "./app.css",
   "./app-common.js",
   "./push-notifications.js",
@@ -33,9 +39,9 @@ const APP_SHELL = [
   "./customer-ui.css"
 ];
 
-/* ================================
+/* =====================================================
    INSTALL
-================================ */
+===================================================== */
 
 self.addEventListener("install", event => {
   event.waitUntil(
@@ -43,21 +49,18 @@ self.addEventListener("install", event => {
       .then(cache => cache.addAll(APP_SHELL))
       .catch(error => {
         console.error(
-          "TDM service worker cache error:",
+          "TDM service worker install/cache error:",
           error
         );
       })
   );
 
-  /*
-   * Immediately activate the new service worker.
-   */
   self.skipWaiting();
 });
 
-/* ================================
+/* =====================================================
    ACTIVATE
-================================ */
+===================================================== */
 
 self.addEventListener("activate", event => {
   event.waitUntil(
@@ -67,13 +70,15 @@ self.addEventListener("activate", event => {
           .filter(key => key !== CACHE_NAME)
           .map(key => caches.delete(key))
       )
-    ).then(() => self.clients.claim())
+    )
   );
+
+  self.clients.claim();
 });
 
-/* ================================
+/* =====================================================
    PUSH NOTIFICATION
-================================ */
+===================================================== */
 
 self.addEventListener("push", event => {
   event.waitUntil(
@@ -86,7 +91,6 @@ self.addEventListener("push", event => {
           data = event.data.json();
         }
       } catch (error) {
-
         try {
           data = {
             body: event.data
@@ -117,21 +121,12 @@ self.addEventListener("push", event => {
         data.image_url ||
         "";
 
-      /*
-       * IMPORTANT:
-       * Accept both URL names sent by send-push.
-       */
-      const targetUrl =
+      const url =
         data.url ||
         data.product_url ||
         "https://www.tdmmanufacturing.com/";
 
-      const tag =
-        data.tag ||
-        "tdm-new-product";
-
       const notificationOptions = {
-
         body:
           productName &&
           !body.includes(productName)
@@ -146,35 +141,23 @@ self.addEventListener("push", event => {
           data.badge ||
           "https://www.tdmmanufacturing.com/icon-192x192.png",
 
-        /*
-         * EVERYTHING needed when notification
-         * is clicked is stored here.
-         */
         data: {
-          url: targetUrl,
-          product_url: targetUrl,
-          productName: productName,
-          product_name: productName
+          url: url,
+          productName: productName
         },
 
-        tag: tag,
+        tag:
+          data.tag ||
+          "tdm-new-product",
 
         renotify: true,
 
         requireInteraction: false
       };
 
-      /*
-       * Large notification image.
-       */
       if (image) {
         notificationOptions.image = image;
       }
-
-      console.log(
-        "TDM push notification URL:",
-        targetUrl
-      );
 
       await self.registration.showNotification(
         title,
@@ -185,9 +168,9 @@ self.addEventListener("push", event => {
   );
 });
 
-/* ================================
+/* =====================================================
    NOTIFICATION CLICK
-================================ */
+===================================================== */
 
 self.addEventListener(
   "notificationclick",
@@ -195,41 +178,17 @@ self.addEventListener(
 
     event.notification.close();
 
-    /*
-     * Read the URL stored inside the notification.
-     */
-    const notificationData =
-      event.notification &&
-      event.notification.data
-        ? event.notification.data
-        : {};
-
     const targetUrl =
-      notificationData.url ||
-      notificationData.product_url ||
+      event.notification?.data?.url ||
       "https://www.tdmmanufacturing.com/";
 
-    console.log(
-      "TDM notification clicked:",
-      targetUrl
-    );
-
     event.waitUntil(
+      clients.matchAll({
+        type: "window",
+        includeUncontrolled: true
+      })
+      .then(windowClients => {
 
-      (async () => {
-
-        /*
-         * Find currently open TDM windows/tabs.
-         */
-        const windowClients =
-          await clients.matchAll({
-            type: "window",
-            includeUncontrolled: true
-          });
-
-        /*
-         * Try an existing TDM window first.
-         */
         for (const client of windowClients) {
 
           try {
@@ -240,162 +199,137 @@ self.addEventListener(
             const target =
               new URL(targetUrl);
 
-            /*
-             * Only reuse a TDM Manufacturing
-             * window/tab.
-             */
             if (
               clientUrl.origin ===
               target.origin
             ) {
 
-              try {
+              return client
+                .navigate(targetUrl)
+                .then(() => client.focus());
 
-                await client.focus();
-
-                /*
-                 * Navigate the existing window
-                 * to the product URL.
-                 */
-                await client.navigate(
-                  target.href
-                );
-
-                return;
-
-              } catch (navigateError) {
-
-                console.warn(
-                  "TDM existing-window navigation failed:",
-                  navigateError
-                );
-
-                /*
-                 * Continue below and open the
-                 * URL in a new window/tab.
-                 */
-              }
             }
 
-          } catch (error) {
-
-            console.warn(
-              "TDM notification client check failed:",
-              error
-            );
-
-          }
-        }
-
-        /*
-         * If there is no usable existing window,
-         * open the exact product URL.
-         */
-        try {
-
-          await clients.openWindow(
-            targetUrl
-          );
-
-        } catch (openError) {
-
-          console.error(
-            "TDM notification openWindow failed:",
-            openError
-          );
+          } catch (_) {}
 
         }
 
-      })()
+        return clients.openWindow(targetUrl);
 
+      })
     );
   }
 );
 
-/* ================================
+/* =====================================================
    NOTIFICATION CLOSE
-================================ */
+===================================================== */
 
 self.addEventListener(
   "notificationclose",
   event => {
-
-    /*
-     * Reserved for future analytics.
-     */
-
+    // Reserved for future analytics.
   }
 );
 
-/* ================================
+/* =====================================================
    FETCH / PWA CACHE
-================================ */
+===================================================== */
 
 self.addEventListener("fetch", event => {
 
-  if (event.request.method !== "GET") {
+  const request = event.request;
+
+  /*
+   * Only GET requests are handled.
+   * Uploads, POSTs, PATCHes, DELETEs etc.
+   * are NEVER intercepted.
+   */
+
+  if (request.method !== "GET") {
     return;
   }
 
-  const url =
-    new URL(event.request.url);
+  const url = new URL(request.url);
 
   /*
-   * Only handle requests belonging
-   * to the TDM website.
+   * VERY IMPORTANT:
+   *
+   * Do not intercept anything outside
+   * the TDM website origin.
+   *
+   * This includes:
+   * - Supabase
+   * - Supabase Storage
+   * - APIs
+   * - external CDNs
    */
+
+  if (url.origin !== self.location.origin) {
+    return;
+  }
+
+  /*
+   * Never interfere with browser/API-style
+   * requests.
+   */
+
   if (
-    url.origin !==
-    self.location.origin
+    request.destination === "document" ||
+    request.destination === "script" ||
+    request.destination === "style" ||
+    request.destination === "image" ||
+    request.destination === "font"
   ) {
+    // handled below
+  } else {
     return;
   }
 
   /*
-   * HTML pages:
-   * NETWORK FIRST
+   * HTML:
+   *
+   * Network first.
+   *
+   * This is important for admin pages so that
+   * the newest GitHub version is loaded.
    */
+
   if (
-    event.request.mode === "navigate" ||
+    request.mode === "navigate" ||
     url.pathname.endsWith(".html") ||
-    url.pathname === "/"
+    url.pathname === "/" ||
+    url.pathname.endsWith("/")
   ) {
 
     event.respondWith(
 
-      fetch(event.request)
-
+      fetch(request)
         .then(response => {
 
           if (response.ok) {
 
+            const copy = response.clone();
+
             caches.open(CACHE_NAME)
               .then(cache => {
-
-                cache.put(
-                  event.request,
-                  response.clone()
-                );
-
-              });
+                cache.put(request, copy);
+              })
+              .catch(() => {});
 
           }
 
           return response;
 
         })
-
         .catch(() => {
 
-          return caches
-            .match(event.request)
+          return caches.match(request)
             .then(cached => {
 
               return (
                 cached ||
-                caches.match(
-                  "./index.html"
-                )
+                caches.match("./index.html")
               );
 
             });
@@ -408,34 +342,78 @@ self.addEventListener("fetch", event => {
   }
 
   /*
-   * Other files:
-   * CACHE FIRST
+   * JavaScript and CSS:
+   *
+   * Network first.
+   *
+   * This prevents an old admin-common.js,
+   * app-common.js or push-notifications.js
+   * from being used after you replace files.
    */
+
+  if (
+    request.destination === "script" ||
+    request.destination === "style"
+  ) {
+
+    event.respondWith(
+
+      fetch(request)
+        .then(response => {
+
+          if (response.ok) {
+
+            const copy = response.clone();
+
+            caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(request, copy);
+              })
+              .catch(() => {});
+
+          }
+
+          return response;
+
+        })
+        .catch(() => {
+
+          return caches.match(request);
+
+        })
+
+    );
+
+    return;
+  }
+
+  /*
+   * Images/fonts:
+   *
+   * Cache first.
+   */
+
   event.respondWith(
 
-    caches
-      .match(event.request)
-
+    caches.match(request)
       .then(cached => {
 
         if (cached) {
           return cached;
         }
 
-        return fetch(event.request)
+        return fetch(request)
           .then(response => {
 
             if (response.ok) {
 
+              const copy = response.clone();
+
               caches.open(CACHE_NAME)
                 .then(cache => {
-
-                  cache.put(
-                    event.request,
-                    response.clone()
-                  );
-
-                });
+                  cache.put(request, copy);
+                })
+                .catch(() => {});
 
             }
 
