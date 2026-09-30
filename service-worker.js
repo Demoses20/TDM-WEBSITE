@@ -172,54 +172,101 @@ self.addEventListener("push", event => {
    NOTIFICATION CLICK
 ===================================================== */
 
-self.addEventListener(
-  "notificationclick",
-  event => {
+self.addEventListener("notificationclick", event => {
 
-    event.notification.close();
+  event.notification.close();
 
-    const targetUrl =
-      event.notification?.data?.url ||
-      "https://www.tdmmanufacturing.com/";
+  event.waitUntil(
+    (async () => {
 
-    event.waitUntil(
-      clients.matchAll({
-        type: "window",
-        includeUncontrolled: true
-      })
-      .then(windowClients => {
+      const notificationData =
+        event.notification?.data || {};
 
-        for (const client of windowClients) {
+      let targetUrl =
+        notificationData.url ||
+        notificationData.product_url ||
+        "https://www.tdmmanufacturing.com/";
 
-          try {
+      /*
+       * Make sure the URL is valid and belongs
+       * to the TDM website.
+       */
 
-            const clientUrl =
-              new URL(client.url);
+      try {
+        targetUrl = new URL(
+          targetUrl,
+          "https://www.tdmmanufacturing.com/"
+        ).href;
+      } catch (error) {
+        targetUrl =
+          "https://www.tdmmanufacturing.com/";
+      }
 
-            const target =
-              new URL(targetUrl);
+      console.log(
+        "TDM notification clicked:",
+        targetUrl
+      );
 
-            if (
-              clientUrl.origin ===
-              target.origin
-            ) {
+      /*
+       * Look for an already-open TDM page.
+       */
 
-              return client
-                .navigate(targetUrl)
-                .then(() => client.focus());
+      const windowClients =
+        await clients.matchAll({
+          type: "window",
+          includeUncontrolled: true
+        });
 
-            }
+      /*
+       * If TDM is already open, navigate it
+       * to the product page.
+       */
 
-          } catch (_) {}
+      for (const client of windowClients) {
 
+        try {
+
+          const clientUrl =
+            new URL(client.url);
+
+          const target =
+            new URL(targetUrl);
+
+          if (
+            clientUrl.origin ===
+            target.origin
+          ) {
+
+            await client.focus();
+
+            await client.navigate(
+              targetUrl
+            );
+
+            return;
+
+          }
+
+        } catch (error) {
+          console.warn(
+            "Could not navigate existing TDM window:",
+            error
+          );
         }
+      }
 
-        return clients.openWindow(targetUrl);
+      /*
+       * If TDM is not already open,
+       * open the product page in a new window/tab.
+       */
 
-      })
-    );
-  }
-);
+      await clients.openWindow(
+        targetUrl
+      );
+
+    })()
+  );
+});
 
 /* =====================================================
    NOTIFICATION CLOSE
