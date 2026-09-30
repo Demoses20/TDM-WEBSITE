@@ -175,68 +175,96 @@ let data = {};
 });
 
 /* ================================
-NOTIFICATION CLICK
+   NOTIFICATION CLICK
 ================================ */
 
-self.addEventListener(
-"notificationclick",
-event => {
+self.addEventListener("notificationclick", event => {
+  event.waitUntil(
+    (async () => {
 
-event.notification.close();  
+      const notification = event.notification;
 
-const targetUrl =  
-  event.notification &&  
-  event.notification.data &&  
-  event.notification.data.url  
+      const data = notification?.data || {};
 
-    ? event.notification.data.url  
+      let targetUrl =
+        data.url ||
+        data.product_url ||
+        "https://www.tdmmanufacturing.com/";
 
-    : "https://www.tdmmanufacturing.com/";  
+      try {
+        targetUrl = new URL(
+          targetUrl,
+          "https://www.tdmmanufacturing.com/"
+        ).href;
+      } catch (error) {
+        console.error(
+          "Invalid notification URL:",
+          targetUrl,
+          error
+        );
 
-event.waitUntil(  
+        targetUrl =
+          "https://www.tdmmanufacturing.com/";
+      }
 
-  clients.matchAll({  
-    type: "window",  
-    includeUncontrolled: true  
-  })  
+      notification.close();
 
-  .then(windowClients => {  
+      const windowClients =
+        await clients.matchAll({
+          type: "window",
+          includeUncontrolled: true
+        });
 
-    for (const client of windowClients) {  
+      /*
+       * Look for an already-open TDM window.
+       */
 
-      try {  
+      for (const client of windowClients) {
 
-        const clientUrl =  
-          new URL(client.url);  
+        try {
 
-        const target =  
-          new URL(targetUrl);  
+          const clientUrl =
+            new URL(client.url);
 
-        if (  
-          clientUrl.origin ===  
-          target.origin  
-        ) {  
+          const target =
+            new URL(targetUrl);
 
-          return client  
-            .navigate(targetUrl)  
-            .then(() => client.focus());  
+          if (
+            clientUrl.origin ===
+            target.origin
+          ) {
 
-        }  
+            await client.focus();
 
-      } catch (_) {}  
+            await client.navigate(
+              targetUrl
+            );
 
-    }  
+            return;
+          }
 
-    return clients.openWindow(  
-      targetUrl  
-    );  
+        } catch (error) {
 
-  })  
+          console.warn(
+            "Existing TDM window navigation failed:",
+            error
+          );
 
-);
+        }
+      }
 
-}
-);
+      /*
+       * No existing TDM window.
+       * Open the product directly.
+       */
+
+      await clients.openWindow(
+        targetUrl
+      );
+
+    })()
+  );
+});
 
 /* ================================
 NOTIFICATION CLOSE
