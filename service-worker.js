@@ -1,392 +1,392 @@
-const CACHE_NAME = "tdm-app-v12-11-push-fix";
+const CACHE_NAME = "tdm-app-v12-10-install";
 
 const APP_SHELL = [
-  "./",
-  "./index.html",
-  "./product.html",
-  "./cart.html",
-  "./checkout.html",
-  "./service.html",
-  "./account.html",
-  "./auth.html",
-  "./login.html",
-  "./signup.html",
-
-  "./auth-common.js",
-  "./customer-common.js",
-
-  "./contact.html",
-
-  "./admin-dashboard.html",
-  "./admin-orders.html",
-  "./admin-store.html",
-  "./admin-media.html",
-  "./admin-shipping.html",
-  "./admin-affiliate.html",
-
-  "./admin-common.js",
-  "./admin-ui.css",
-
-  "./logo.png",
-  "./icon-192x192.png",
-  "./icon-512x512.png",
-
-  "./app.css",
-  "./app-common.js",
-  "./push-notifications.js",
-  "./pwa-install.js",
-  "./manifest.json",
-  "./customer-ui.css"
+"./",
+"./index.html",
+"./product.html",
+"./cart.html",
+"./checkout.html",
+"./service.html",
+"./account.html",
+"./auth.html",
+"./login.html",
+"./signup.html",
+"./auth-common.js",
+"./customer-common.js",
+"./contact.html",
+"./admin-dashboard.html",
+"./admin-orders.html",
+"./admin-store.html",
+"./admin-media.html",
+"./admin-shipping.html",
+"./admin-affiliate.html",
+"./admin-common.js",
+"./admin-ui.css",
+"./logo.png",
+"./icon-192x192.png",
+"./icon-512x512.png",
+"./app.css",
+"./app-common.js",
+"./push-notifications.js",
+"./pwa-install.js",
+"./manifest.json",
+"./customer-ui.css"
 ];
 
-/* =====================================================
-   INSTALL
-===================================================== */
-
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_SHELL))
-      .catch(error => {
-        console.error(
-          "TDM service worker install/cache error:",
-          error
-        );
-      })
-  );
-
-  self.skipWaiting();
-});
-
-/* =====================================================
-   ACTIVATE
-===================================================== */
-
-self.addEventListener("activate", event => {
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
-      )
-    )
-  );
-
-  self.clients.claim();
-});
-
-/* =====================================================
-   PUSH NOTIFICATION
-===================================================== */
-
-self.addEventListener("push", event => {
-  event.waitUntil(
-    (async () => {
-
-      let data = {};
-
-      try {
-        if (event.data) {
-          data = event.data.json();
-        }
-      } catch (error) {
-        try {
-          data = {
-            body: event.data
-              ? event.data.text()
-              : ""
-          };
-        } catch (_) {
-          data = {};
-        }
-      }
-
-      const title =
-        data.title ||
-        "TDM Manufacturing";
-
-      const body =
-        data.body ||
-        data.description ||
-        "A new update is available from TDM Manufacturing.";
-
-      const productName =
-        data.productName ||
-        data.product_name ||
-        "";
-
-      const image =
-        data.image ||
-        data.image_url ||
-        "";
-
-      const url =
-        data.url ||
-        data.product_url ||
-        "https://www.tdmmanufacturing.com/";
-
-      const notificationOptions = {
-        body:
-          productName &&
-          !body.includes(productName)
-            ? `${productName}\n${body}`
-            : body,
-
-        icon:
-          data.icon ||
-          "https://www.tdmmanufacturing.com/icon-192x192.png",
-
-        badge:
-          data.badge ||
-          "https://www.tdmmanufacturing.com/icon-192x192.png",
-
-        data: {
-          url: url,
-          productName: productName
-        },
-
-        tag:
-          data.tag ||
-          "tdm-new-product",
-
-        renotify: true,
-
-        requireInteraction: false
-      };
-
-      if (image) {
-        notificationOptions.image = image;
-      }
-
-      await self.registration.showNotification(
-        title,
-        notificationOptions
-      );
-
-    })()
-  );
-});
 /* ================================
-   NOTIFICATION CLICK
+INSTALL
 ================================ */
 
-self.addEventListener("notificationclick", event => {
-
-  event.notification.close();
-
-  const targetUrl =
-    event.notification?.data?.url ||
-    "https://www.tdmmanufacturing.com/";
-
-  event.waitUntil(
-    clients.openWindow(targetUrl)
-  );
-
-});
-
-/* =====================================================
-   NOTIFICATION CLOSE
-===================================================== */
-
-self.addEventListener(
-  "notificationclose",
-  event => {
-    // Reserved for future analytics.
-  }
+self.addEventListener("install", event => {
+event.waitUntil(
+caches.open(CACHE_NAME)
+.then(cache => cache.addAll(APP_SHELL))
+.catch(error => {
+console.error(
+"TDM service worker cache error:",
+error
+);
+})
 );
 
-/* =====================================================
-   FETCH / PWA CACHE
-===================================================== */
+self.skipWaiting();
+});
+
+/* ================================
+ACTIVATE
+================================ */
+
+self.addEventListener("activate", event => {
+event.waitUntil(
+caches.keys().then(keys =>
+Promise.all(
+keys
+.filter(key => key !== CACHE_NAME)
+.map(key => caches.delete(key))
+)
+)
+);
+
+self.clients.claim();
+});
+
+/* ================================
+PUSH NOTIFICATION
+================================ */
+
+self.addEventListener("push", event => {
+event.waitUntil(
+(async () => {
+
+let data = {};  
+
+  try {  
+    if (event.data) {  
+      data = event.data.json();  
+    }  
+  } catch (error) {  
+
+    try {  
+      data = {  
+        body: event.data  
+          ? event.data.text()  
+          : ""  
+      };  
+    } catch (_) {  
+      data = {};  
+    }  
+
+  }  
+
+  const title =  
+    data.title ||  
+    "TDM Manufacturing";  
+
+  const body =  
+    data.body ||  
+    data.description ||  
+    "A new update is available from TDM Manufacturing.";  
+
+  const productName =  
+    data.productName ||  
+    data.product_name ||  
+    "";  
+
+  const image =  
+    data.image ||  
+    data.image_url ||  
+    "";  
+
+  const url =  
+    data.url ||  
+    data.product_url ||  
+    "https://www.tdmmanufacturing.com/";  
+
+  const notificationOptions = {  
+
+    body:  
+      productName &&  
+      !body.includes(productName)  
+
+        ? `${productName}\n${body}`  
+
+        : body,  
+
+    icon:  
+      data.icon ||  
+      "https://www.tdmmanufacturing.com/icon-192x192.png",  
+
+    badge:  
+      data.badge ||  
+      "https://www.tdmmanufacturing.com/icon-192x192.png",  
+
+    data: {  
+      url: url,  
+      productName: productName  
+    },  
+
+    tag:  
+      data.tag ||  
+      "tdm-new-product",  
+
+    renotify: true,  
+
+    requireInteraction: false  
+
+  };  
+
+  /*  
+   * Some browsers support large notification  
+   * images. We only add it when supplied.  
+   */  
+
+  if (image) {  
+    notificationOptions.image = image;  
+  }  
+
+  await self.registration.showNotification(  
+    title,  
+    notificationOptions  
+  );  
+
+})()
+
+);
+});
+
+/* ================================
+NOTIFICATION CLICK
+================================ */
+
+self.addEventListener(
+"notificationclick",
+event => {
+
+event.notification.close();  
+
+const targetUrl =  
+  event.notification &&  
+  event.notification.data &&  
+  event.notification.data.url  
+
+    ? event.notification.data.url  
+
+    : "https://www.tdmmanufacturing.com/";  
+
+event.waitUntil(  
+
+  clients.matchAll({  
+    type: "window",  
+    includeUncontrolled: true  
+  })  
+
+  .then(windowClients => {  
+
+    for (const client of windowClients) {  
+
+      try {  
+
+        const clientUrl =  
+          new URL(client.url);  
+
+        const target =  
+          new URL(targetUrl);  
+
+        if (  
+          clientUrl.origin ===  
+          target.origin  
+        ) {  
+
+          return client  
+            .navigate(targetUrl)  
+            .then(() => client.focus());  
+
+        }  
+
+      } catch (_) {}  
+
+    }  
+
+    return clients.openWindow(  
+      targetUrl  
+    );  
+
+  })  
+
+);
+
+}
+);
+
+/* ================================
+NOTIFICATION CLOSE
+================================ */
+
+self.addEventListener(
+"notificationclose",
+event => {
+
+/*  
+ * Reserved for future notification  
+ * analytics.  
+ */
+
+}
+);
+
+/* ================================
+FETCH / PWA CACHE
+================================ */
 
 self.addEventListener("fetch", event => {
 
-  const request = event.request;
+if (event.request.method !== "GET") {
+return;
+}
 
-  /*
-   * Only GET requests are handled.
-   * Uploads, POSTs, PATCHes, DELETEs etc.
-   * are NEVER intercepted.
-   */
+const url =
+new URL(event.request.url);
 
-  if (request.method !== "GET") {
-    return;
-  }
+/*
 
-  const url = new URL(request.url);
+Only handle requests belonging
 
-  /*
-   * VERY IMPORTANT:
-   *
-   * Do not intercept anything outside
-   * the TDM website origin.
-   *
-   * This includes:
-   * - Supabase
-   * - Supabase Storage
-   * - APIs
-   * - external CDNs
-   */
+to the TDM website.
+*/
 
-  if (url.origin !== self.location.origin) {
-    return;
-  }
 
-  /*
-   * Never interfere with browser/API-style
-   * requests.
-   */
+if (
+url.origin !==
+self.location.origin
+) {
+return;
+}
 
-  if (
-    request.destination === "document" ||
-    request.destination === "script" ||
-    request.destination === "style" ||
-    request.destination === "image" ||
-    request.destination === "font"
-  ) {
-    // handled below
-  } else {
-    return;
-  }
+/*
 
-  /*
-   * HTML:
-   *
-   * Network first.
-   *
-   * This is important for admin pages so that
-   * the newest GitHub version is loaded.
-   */
+HTML pages use network first.
 
-  if (
-    request.mode === "navigate" ||
-    url.pathname.endsWith(".html") ||
-    url.pathname === "/" ||
-    url.pathname.endsWith("/")
-  ) {
+This allows GitHub Pages changes
 
-    event.respondWith(
+to appear without waiting for
 
-      fetch(request)
-        .then(response => {
+an old cached HTML file.
+*/
 
-          if (response.ok) {
 
-            const copy = response.clone();
+if (
+event.request.mode === "navigate" ||
+url.pathname.endsWith(".html") ||
+url.pathname === "/"
+) {
 
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(request, copy);
-              })
-              .catch(() => {});
+event.respondWith(  
 
-          }
+  fetch(event.request)  
 
-          return response;
+    .then(response => {  
 
-        })
-        .catch(() => {
+      if (response.ok) {  
 
-          return caches.match(request)
-            .then(cached => {
+        caches.open(CACHE_NAME)  
+          .then(cache => {  
 
-              return (
-                cached ||
-                caches.match("./index.html")
-              );
+            cache.put(  
+              event.request,  
+              response.clone()  
+            );  
 
-            });
+          });  
 
-        })
+      }  
 
-    );
+      return response;  
 
-    return;
-  }
+    })  
 
-  /*
-   * JavaScript and CSS:
-   *
-   * Network first.
-   *
-   * This prevents an old admin-common.js,
-   * app-common.js or push-notifications.js
-   * from being used after you replace files.
-   */
+    .catch(() => {  
 
-  if (
-    request.destination === "script" ||
-    request.destination === "style"
-  ) {
+      return caches  
+        .match(event.request)  
+        .then(cached => {  
 
-    event.respondWith(
+          return (  
+            cached ||  
+            caches.match(  
+              "./index.html"  
+            )  
+          );  
 
-      fetch(request)
-        .then(response => {
+        });  
 
-          if (response.ok) {
+    })  
 
-            const copy = response.clone();
+);  
 
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(request, copy);
-              })
-              .catch(() => {});
+return;
 
-          }
+}
 
-          return response;
+/*
 
-        })
-        .catch(() => {
+Other files use cache first.
+*/
 
-          return caches.match(request);
 
-        })
+event.respondWith(
 
-    );
+caches  
+  .match(event.request)  
 
-    return;
-  }
+  .then(cached => {  
 
-  /*
-   * Images/fonts:
-   *
-   * Cache first.
-   */
+    if (cached) {  
+      return cached;  
+    }  
 
-  event.respondWith(
+    return fetch(event.request)  
+      .then(response => {  
 
-    caches.match(request)
-      .then(cached => {
+        if (response.ok) {  
 
-        if (cached) {
-          return cached;
-        }
+          caches.open(CACHE_NAME)  
+            .then(cache => {  
 
-        return fetch(request)
-          .then(response => {
+              cache.put(  
+                event.request,  
+                response.clone()  
+              );  
 
-            if (response.ok) {
+            });  
 
-              const copy = response.clone();
+        }  
 
-              caches.open(CACHE_NAME)
-                .then(cache => {
-                  cache.put(request, copy);
-                })
-                .catch(() => {});
+        return response;  
 
-            }
+      });  
 
-            return response;
+  })
 
-          });
-
-      })
-
-  );
+);
 
 });
