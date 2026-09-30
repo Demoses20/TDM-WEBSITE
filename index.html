@@ -1,0 +1,2675 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- =========================
+         BASIC SEO / SITE INFO
+    ========================== -->
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="TDM Manufacturing designs and fabricates bakery equipment, food processing equipment, machinery and custom engineering solutions in Nigeria."
+    >
+
+    <meta
+        name="keywords"
+        content="TDM Manufacturing, bakery equipment Nigeria, 5 kg spiral mixer, spiral mixer Nigeria, machine fabrication Nigeria, food processing equipment"
+    >
+
+    <meta
+        name="author"
+        content="TDM Manufacturing"
+    >
+
+    <meta
+        name="theme-color"
+        content="#111111"
+    >
+
+    <title>
+        TDM Manufacturing | Bakery Equipment & Machine Fabrication Nigeria
+    </title>
+
+
+    <!-- =========================
+         ORGANIZATION SCHEMA
+    ========================== -->
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "TDM Manufacturing",
+        "description": "TDM Manufacturing designs and fabricates bakery equipment, food processing equipment, custom machines and engineering equipment in Nigeria.",
+        "url": "https://www.tdmmanufacturing.com/",
+        "logo": "https://www.tdmmanufacturing.com/logo.png",
+        "foundingLocation": {
+            "@type": "Place",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "NG"
+            }
+        },
+        "areaServed": "Nigeria",
+        "brand": {
+            "@type": "Brand",
+            "name": "TDM Manufacturing"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+2347049087007",
+            "contactType": "customer service",
+            "areaServed": "NG"
+        },
+        "sameAs": [
+            "https://www.instagram.com/technicaldemoses?stkn=MXQyeG92aGtrenR0aw==/",
+            "https://youtube.com/@technicaldemoses?si=J-HLlMakEn3sNlfN"
+        ]
+    }
+    </script>
+
+
+    <!-- =========================
+         PWA
+    ========================== -->
+
+    <link
+        rel="manifest"
+        href="manifest.json"
+    >
+
+
+    <!-- =========================
+         MAIN CSS
+    ========================== -->
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6f8;
+            color: #171717;
+            line-height: 1.6;
+            padding-bottom: 82px;
+        }
+
+
+        img {
+            max-width: 100%;
+        }
+
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+
+        /* =========================
+           APP HEADER
+        ========================== */
+
+        .tdm-app-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #fff;
+            border-bottom: 1px solid #e5e5e5;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
+            padding: 9px 14px;
+        }
+
+
+        .tdm-brand {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #111;
+        }
+
+
+        .tdm-brand img {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+            border-radius: 9px;
+            background: #fff;
+        }
+
+
+        .tdm-brand strong {
+            display: block;
+            font-size: 17px;
+            line-height: 1.1;
+        }
+
+
+        .tdm-brand span {
+            display: block;
+            color: #777;
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+
+        /* =========================
+           FRONT BOARD
+        ========================== */
+
+        .tdm-front-board {
+            max-width: 1100px;
+            margin: 18px auto 0;
+            padding: 0 16px;
+        }
+
+
+        .tdm-front-board-inner {
+            min-height: 270px;
+            border-radius: 26px;
+            overflow: hidden;
+
+            display: grid;
+            grid-template-columns: 1.15fr .85fr;
+
+            align-items: stretch;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c2d12,
+                    #f97316 62%,
+                    #fb923c
+                );
+
+            box-shadow:
+                0 18px 40px rgba(194, 65, 12, .24);
+
+            color: #fff;
+        }
+
+
+        .tdm-front-copy {
+            padding: 34px 32px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+
+        .tdm-front-kicker {
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+
+            background: rgba(255, 255, 255, .16);
+            border: 1px solid rgba(255, 255, 255, .30);
+
+            padding: 7px 11px;
+            border-radius: 999px;
+
+            align-self: flex-start;
+        }
+
+
+        .tdm-front-copy h2 {
+            font-size: 34px;
+            line-height: 1.12;
+            margin: 13px 0 10px;
+        }
+
+
+        .tdm-front-copy p {
+            font-size: 16px;
+            line-height: 1.55;
+            margin: 0 0 18px;
+            max-width: 620px;
+        }
+
+
+        .tdm-front-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+
+        .tdm-front-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #fff;
+            color: #9a3412;
+
+            border-radius: 13px;
+
+            padding: 13px 18px;
+
+            font-weight: 900;
+            text-decoration: none;
+
+            max-width: 190px;
+
+            box-shadow:
+                0 8px 18px rgba(0, 0, 0, .14);
+        }
+
+
+        .tdm-front-media {
+            height: 270px;
+            min-height: 270px;
+
+            background: rgba(255, 255, 255, .12);
+
+            display: flex;
+            align-items: stretch;
+            justify-content: stretch;
+
+            padding: 0;
+            overflow: hidden;
+        }
+
+
+        .tdm-front-media img,
+        .tdm-front-media video {
+            display: block;
+            width: 100%;
+            height: 100%;
+            max-height: none;
+
+            object-fit: cover;
+            object-position: center center;
+
+            border-radius: 0;
+
+            background: transparent;
+        }
+
+
+        .tdm-front-media .product-media-wrap {
+            width: 100%;
+            height: 100% !important;
+            min-height: 0 !important;
+            overflow: hidden;
+            display: block;
+        }
+
+
+        /* =========================
+           NOTIFICATION BUTTON
+        ========================== */
+
+        #enableNotificationsBtn {
+            display: block;
+
+            margin: 12px auto 20px;
+
+            padding: 12px 20px;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            border: none;
+            border-radius: 8px;
+
+            background: #F97316;
+            color: #fff;
+
+            cursor: pointer;
+        }
+
+
+        #enableNotificationsBtn:active {
+            transform: scale(.98);
+        }
+
+
+        /* =========================
+           INSTALL BUTTON
+        ========================== */
+
+        #installTDM {
+            display: none;
+
+            margin: 12px auto;
+
+            padding: 12px 20px;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            border: none;
+            border-radius: 8px;
+
+            background: #111;
+            color: #fff;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================
+           GENERAL SECTIONS
+        ========================== */
+
+        section {
+            max-width: 1050px;
+            margin: auto;
+            padding: 60px 20px;
+        }
+
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+
+        .section-title h2 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+
+        .section-title p {
+            color: #666;
+        }
+
+
+        /* =========================
+           HERO
+        ========================== */
+
+        .hero {
+            padding: 80px 20px;
+
+            text-align: center;
+
+            background: #111;
+            color: white;
+
+            max-width: none;
+        }
+
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+
+        .hero p {
+            font-size: 19px;
+            max-width: 700px;
+            margin: 0 auto 25px;
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           BUTTONS
+        ========================== */
+
+        .blue-button,
+        .green-button {
+            display: inline-block;
+
+            background: #F97316;
+            color: white;
+
+            padding: 14px 22px;
+
+            text-decoration: none;
+
+            border-radius: 7px;
+
+            margin: 8px;
+
+            font-weight: bold;
+        }
+
+
+        .blue-button:hover,
+        .green-button:hover {
+            opacity: .92;
+        }
+
+
+        .dark-button {
+            display: inline-block;
+
+            margin-top: 20px;
+
+            padding: 13px 22px;
+
+            background: #111;
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 7px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           PRODUCT GRID
+        ========================== */
+
+        .cards {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(220px, 1fr)
+                );
+
+            gap: 20px;
+        }
+
+
+        .product {
+            background: white;
+
+            border-radius: 14px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, .08);
+        }
+
+
+        .product-image {
+            width: 100%;
+
+            max-width: 500px;
+
+            height: 260px;
+
+            object-fit: contain;
+
+            display: block;
+
+            margin: 0 auto;
+
+            background: #eee;
+
+            border-radius: 10px 10px 0 0;
+        }
+
+
+        .product-media-wrap {
+            position: relative;
+            width: 100%;
+            height: 260px;
+            overflow: hidden;
+            background: #eee;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .product-media-wrap video,
+        .product-media-wrap img {
+            width: 100%;
+            height: 100%;
+            max-width: 500px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+            background: #eee;
+        }
+
+        /* Alibaba-style video play control: completely transparent center */
+        .product-video-play {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.92);
+            background: transparent;
+            box-shadow: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .product-video-play::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-top: 9px solid transparent;
+            border-bottom: 9px solid transparent;
+            border-left: 14px solid rgba(255,255,255,.98);
+            margin-left: 3px;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,.55));
+        }
+
+
+        .product-content {
+            padding: 25px;
+        }
+
+
+        .product-content h3 {
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+
+        .product-content p {
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+
+        .product-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+
+        .product-contact-btn,
+        .product-cart-btn {
+            padding: 12px 14px;
+
+            border-radius: 10px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            font-size: 14px;
+        }
+
+
+        .product-contact-btn {
+            background: #fff;
+
+            border: 1px solid #d6e0f0;
+
+            color: #111;
+
+            text-decoration: none;
+        }
+
+
+        .product-cart-btn {
+            background: #111;
+
+            border: 1px solid #111;
+
+            color: #fff;
+        }
+
+
+        .product-cart-btn:active,
+        .product-contact-btn:active {
+            transform: scale(.98);
+        }
+
+
+        /* =========================
+           SERVICE CARDS
+        ========================== */
+
+        .card {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, .06);
+        }
+
+
+        .card h3 {
+            margin-bottom: 10px;
+        }
+
+
+        .card p {
+            color: #666;
+        }
+
+
+        /* =========================
+           WHY TDM
+        ========================== */
+
+        .why-tdm {
+            max-width: 1050px;
+            margin: auto;
+            padding: 60px 20px;
+        }
+
+
+        .why-tdm > h2 {
+            text-align: center;
+            font-size: 30px;
+            margin-bottom: 35px;
+        }
+
+
+        .why-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(220px, 1fr)
+                );
+
+            gap: 20px;
+        }
+
+
+        .why-grid > div {
+            background: #fff;
+
+            padding: 25px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, .06);
+        }
+
+
+        .why-grid h3 {
+            margin-bottom: 10px;
+        }
+
+
+        .why-grid p {
+            color: #666;
+        }
+
+
+        /* =========================
+           ABOUT
+        ========================== */
+
+        .about {
+            background: white;
+
+            max-width: none;
+        }
+
+
+        .about-inner {
+            max-width: 850px;
+
+            margin: auto;
+
+            text-align: center;
+        }
+
+
+        /* =========================
+           CONTACT
+        ========================== */
+
+        .contact {
+            text-align: center;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================== */
+
+        footer {
+            background: #111;
+
+            color: white;
+
+            text-align: center;
+
+            padding: 30px 20px;
+        }
+
+
+        footer p {
+            color: #aaa;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           BOTTOM NAVIGATION
+        ========================== */
+
+        .bottom-nav {
+            position: fixed;
+
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            height: 70px;
+
+            background: #fff;
+
+            border-top: 1px solid #ddd;
+
+            z-index: 9999;
+
+            display: flex;
+
+            justify-content: center;
+
+            padding-bottom:
+                env(safe-area-inset-bottom);
+
+            box-shadow:
+                0 -2px 12px #00000012;
+        }
+
+
+        .bottom-nav a {
+            position: relative;
+
+            flex: 1;
+
+            max-width: 180px;
+
+            text-align: center;
+
+            padding: 8px 3px 5px;
+
+            color: #777;
+
+            font-size: 10px;
+
+            text-decoration: none;
+
+            font-weight: 600;
+        }
+
+
+        .bottom-nav a span {
+            display: block;
+
+            font-size: 20px;
+
+            line-height: 23px;
+
+            margin-bottom: 2px;
+        }
+
+
+        .bottom-nav a:hover,
+        .bottom-nav a.active {
+            color: #111;
+        }
+
+
+        .bottom-nav .cart-count {
+            display: inline-flex;
+
+            min-width: 18px;
+            height: 18px;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 999px;
+
+            background: #111;
+            color: #fff;
+
+            font-size: 10px;
+
+            padding: 0 5px;
+
+            position: absolute;
+
+            top: 3px;
+
+            margin-left: -2px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================== */
+
+        @media (max-width: 700px) {
+
+            .tdm-front-board {
+                padding: 0 10px;
+            }
+
+
+            .tdm-front-board-inner {
+                grid-template-columns: 1fr;
+                min-height: 0;
+            }
+
+
+            .tdm-front-copy {
+                padding: 27px 22px 22px;
+            }
+
+
+            .tdm-front-copy h2 {
+                font-size: 27px;
+            }
+
+
+            .tdm-front-media {
+                height: 260px;
+                min-height: 260px;
+                padding: 0;
+            }
+
+
+            .hero {
+                padding: 65px 20px;
+            }
+
+
+            .hero h1 {
+                font-size: 32px;
+            }
+        }
+
+
+        @media (max-width: 600px) {
+
+            .hero h1 {
+                font-size: 26px;
+            }
+
+
+            .hero p {
+                font-size: 16px;
+            }
+
+
+            .tdm-brand img {
+                width: 40px;
+                height: 40px;
+            }
+
+
+            .tdm-brand strong {
+                font-size: 15px;
+            }
+
+
+            .tdm-brand span {
+                font-size: 9px;
+            }
+
+
+            .product-content {
+                padding: 20px;
+            }
+
+
+            .product-content h3 {
+                font-size: 22px;
+            }
+        }
+
+
+        @media (max-width: 520px) {
+
+            .tdm-app-header {
+                padding: 8px 12px;
+            }
+
+
+            .product-actions {
+                flex-direction: column;
+            }
+
+
+            .product-contact-btn,
+            .product-cart-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+    </style>
+
+
+    <!-- =========================
+         APP STYLES / COMMON JS
+    ========================== -->
+
+    <link
+        rel="stylesheet"
+        href="app.css"
+    >
+
+    <script src="app-common.js"></script>
+
+    <script src="push-notifications.js"></script>
+
+  <script src="pwa-install.js"></script>
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="tdm-app-header">
+
+        <a
+            class="tdm-brand"
+            href="index.html"
+            aria-label="TDM Manufacturing Home"
+        >
+
+            <img
+                src="logo.png"
+                alt="TDM Manufacturing logo"
+            >
+
+            <div>
+
+                <strong>
+                    TDM Manufacturing
+                </strong>
+
+                <span>
+                    Precision Engineering &amp; Fabricated Equipment
+                </span>
+
+            </div>
+
+        </a>
+
+    </header>
+
+
+    <!-- =========================
+         FRONT FEATURE BOARD
+    ========================== -->
+
+    <section
+        id="frontBoard"
+        class="tdm-front-board"
+        aria-label="TDM featured product and promotion"
+    >
+
+        <div class="tdm-front-board-inner">
+
+
+            <div class="tdm-front-copy">
+
+                <span
+                    class="tdm-front-kicker"
+                    id="frontKicker"
+                >
+                    NEW AT TDM
+                </span>
+
+
+                <h2 id="frontTitle">
+                    Loading the latest TDM product…
+                </h2>
+
+
+                <p id="frontText">
+                    Our newest equipment and current promotions
+                    will appear here automatically.
+                </p>
+
+
+                <div class="tdm-front-actions">
+
+                    <a
+                        id="frontCta"
+                        class="tdm-front-cta"
+                        href="product.html"
+                    >
+                        View Store
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="tdm-front-media"
+                id="frontMedia"
+            >
+
+                <img
+                    src="logo.png"
+                    alt="TDM Manufacturing"
+                >
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         INSTALL APP
+    ========================== -->
+
+    <button
+        id="installTDM"
+        type="button"
+    >
+        Install TDM App
+    </button>
+
+
+    <!-- =========================
+         NOTIFICATIONS
+    ========================== -->
+
+    <button
+        id="enableNotificationsBtn"
+        type="button"
+        onclick="tdmEnableNotifications()"
+    >
+        🔔 Enable TDM Notifications
+    </button>
+
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section
+        class="hero"
+        id="home"
+    >
+
+        <h1>
+            Engineering Equipment Built for Real Businesses
+        </h1>
+
+
+        <p>
+            TDM Manufacturing designs and fabricates practical,
+            durable equipment for bakeries, food businesses and
+            industrial applications.
+        </p>
+
+
+        <a
+            href="product.html"
+            class="blue-button"
+        >
+            Visit the TDM Store
+        </a>
+
+    </section>
+
+
+    <!-- =========================
+         FEATURED PRODUCTS
+    ========================== -->
+
+    <section id="products">
+
+        <div class="section-title">
+
+            <h2>
+                Featured Equipment
+            </h2>
+
+            <p>
+                Our equipment is designed with practical
+                production in mind.
+            </p>
+
+        </div>
+
+
+        <div
+            id="products-container"
+            class="cards"
+        >
+
+            <p style="text-align:center;">
+                Loading our equipment...
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         SERVICES
+    ========================== -->
+
+    <section id="services">
+
+        <div class="section-title">
+
+            <h2>
+                Our Services
+            </h2>
+
+            <p>
+                Engineering and fabrication solutions for your business.
+            </p>
+
+        </div>
+
+
+        <div class="cards">
+
+
+            <div class="card">
+
+                <h3>
+                    Bakery Equipment
+                </h3>
+
+                <p>
+                    Fabrication of mixers, ovens and other equipment
+                    for bakery production.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    Custom Fabrication
+                </h3>
+
+                <p>
+                    Custom stainless steel and engineering equipment
+                    built according to your requirements.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    Precision Engineering
+                </h3>
+
+                <p>
+                    Practical engineering solutions designed around
+                    real production needs.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         WHY TDM
+    ========================== -->
+
+    <section class="why-tdm">
+
+        <h2>
+            Why Choose TDM Manufacturing?
+        </h2>
+
+
+        <div class="why-grid">
+
+
+            <div>
+
+                <h3>
+                    🇳🇬 Made in Nigeria
+                </h3>
+
+                <p>
+                    Our equipment is designed and manufactured
+                    with precision for Nigerian and international
+                    businesses.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h3>
+                    ⚙️ Built for Business
+                </h3>
+
+                <p>
+                    We focus on practical equipment designed for
+                    real production needs.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h3>
+                    🔧 Custom Fabrication
+                </h3>
+
+                <p>
+                    We can develop equipment according to your
+                    required specifications.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h3>
+                    🤝 Direct Support
+                </h3>
+
+                <p>
+                    Contact TDM directly for product information,
+                    quotations and support.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         ABOUT
+    ========================== -->
+
+    <section class="about">
+
+        <div class="about-inner">
+
+            <div class="section-title">
+
+                <h2>
+                    About TDM Manufacturing
+                </h2>
+
+            </div>
+
+
+            <p>
+                TDM Manufacturing is a Nigerian engineering and
+                fabrication business focused on developing reliable
+                manufactured equipment.
+            </p>
+
+
+            <p style="margin-top:15px;">
+
+                Our goal is to make quality production equipment
+                more accessible to businesses in Nigeria and beyond.
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         CONTACT
+    ========================== -->
+
+    <section
+        class="contact"
+        id="contact"
+    >
+
+        <div class="section-title">
+
+            <h2>
+                Let's Build Your Equipment
+            </h2>
+
+            <p>
+                Contact TDM Manufacturing for product information,
+                pricing and custom fabrication.
+            </p>
+
+        </div>
+
+
+        <a
+            class="blue-button"
+            href="https://wa.me/2347049087007"
+            target="_blank"
+            rel="noopener"
+        >
+            Chat With TDM on WhatsApp
+        </a>
+
+    </section>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <p>
+            © 2026 TDM Manufacturing. All rights reserved.
+        </p>
+
+
+        <p style="margin-top:8px;">
+            Precision Engineering &amp; Fabricated Equipment
+        </p>
+
+    </footer>
+
+
+    <!-- =========================
+         SERVICE WORKER
+    ========================== -->
+
+    <script>
+
+        if ("serviceWorker" in navigator) {
+
+            navigator.serviceWorker.register("./service-worker.js")
+
+                .then(function (registration) {
+
+                    console.log(
+                        "TDM service worker registered:",
+                        registration.scope
+                    );
+
+                })
+
+                .catch(function (error) {
+
+                    console.log(
+                        "TDM service worker registration failed:",
+                        error
+                    );
+
+                });
+
+        }
+
+    </script>
+
+
+    <!-- =========================
+         PWA INSTALL PROMPT
+    ========================== -->
+
+    <script>
+
+        let deferredPrompt = null;
+
+
+        window.addEventListener(
+            "beforeinstallprompt",
+            function (event) {
+
+                event.preventDefault();
+
+                deferredPrompt = event;
+
+
+                const installButton =
+                    document.getElementById("installTDM");
+
+
+                if (!installButton) {
+                    return;
+                }
+
+
+                installButton.style.display = "block";
+
+
+                installButton.onclick = async function () {
+
+                    if (!deferredPrompt) {
+                        return;
+                    }
+
+
+                    deferredPrompt.prompt();
+
+
+                    try {
+
+                        const result =
+                            await deferredPrompt.userChoice;
+
+
+                        if (result.outcome === "accepted") {
+
+                            installButton.style.display = "none";
+
+                        }
+
+                    } catch (error) {
+
+                        console.warn(
+                            "TDM install prompt error:",
+                            error
+                        );
+
+                    }
+
+
+                    deferredPrompt = null;
+
+                };
+
+            }
+        );
+
+
+        window.addEventListener(
+            "appinstalled",
+            function () {
+
+                const installButton =
+                    document.getElementById("installTDM");
+
+
+                if (installButton) {
+
+                    installButton.style.display = "none";
+
+                }
+
+
+                deferredPrompt = null;
+
+            }
+        );
+
+    </script>
+
+
+    <!-- =========================
+         SUPABASE
+    ========================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <!-- =========================
+         HOME PAGE DATABASE LOGIC
+    ========================== -->
+
+    <script>
+
+        /*
+         * IMPORTANT:
+         * app-common.js creates the shared TDM Supabase client.
+         * We use that client here so the home page stays compatible
+         * with the rest of the application.
+         */
+
+        const supabaseClient =
+            window.tdmGetSupabaseClient();
+
+
+        /* =========================================
+           GLOBAL HOME PRODUCT CACHE
+        ========================================= */
+
+        window.tdmHomeProducts = [];
+
+
+        /* =========================================
+           HTML ESCAPING
+        ========================================= */
+
+        function escapeHome(value) {
+
+            return String(value ?? "")
+                .replace(
+                    /[&<>'"]/g,
+                    function (character) {
+
+                        return {
+
+                            "&": "&amp;",
+                            "<": "&lt;",
+                            ">": "&gt;",
+                            "'": "&#39;",
+                            '"': "&quot;"
+
+                        }[character];
+
+                    }
+                );
+
+        }
+
+
+        /* =========================================
+           MEDIA PARSER
+        ========================================= */
+
+        function parseFrontMedia(value) {
+
+            if (!value) {
+                return [];
+            }
+
+
+            if (Array.isArray(value)) {
+
+                return value.flatMap(
+                    parseFrontMedia
+                );
+
+            }
+
+
+            if (typeof value === "object") {
+
+                return [
+
+                    value.url ||
+                    value.publicUrl ||
+                    value.src ||
+                    value.path
+
+                ].filter(Boolean);
+
+            }
+
+
+            const text =
+                String(value).trim();
+
+
+            if (!text) {
+                return [];
+            }
+
+
+            /*
+             * Try JSON first.
+             */
+
+            try {
+
+                const parsed =
+                    JSON.parse(text);
+
+
+                if (parsed !== text) {
+
+                    return parseFrontMedia(parsed);
+
+                }
+
+            } catch (error) {
+
+                /*
+                 * Not JSON.
+                 */
+
+            }
+
+
+            /*
+             * Support comma-separated or
+             * line-separated media values.
+             */
+
+            return text
+                .split(/[\n,]+/)
+                .map(function (item) {
+
+                    return item.trim();
+
+                })
+                .filter(Boolean);
+
+        }
+
+
+        /* =========================================
+           PRODUCT MEDIA LIST
+        ========================================= */
+
+        function frontMediaList(product) {
+
+            if (!product) {
+                return ["logo.png"];
+            }
+
+
+            const values = [
+
+                product.media_urls,
+                product.images,
+                product.image_urls,
+                product.media,
+                product.photos,
+                product.photo_urls,
+                product.image_url,
+                product.image
+
+            ];
+
+
+            const media =
+                values.flatMap(parseFrontMedia);
+
+
+            if (media.length) {
+
+                return media;
+
+            }
+
+
+            return ["logo.png"];
+
+        }
+
+
+        /* =========================================
+           MEDIA HTML
+        ========================================= */
+
+        function frontMediaMarkup(url, poster) {
+
+            const safeUrl =
+                escapeHome(url || "logo.png");
+
+            const safePoster =
+                poster ? escapeHome(poster) : "";
+
+            const isVideo =
+                /\.(mp4|webm|ogg|mov)(\?|$)/i
+                    .test(String(url || ""));
+
+            if (isVideo) {
+
+                return `
+                    <div class="product-media-wrap" style="height:100%; min-height:270px;">
+                        <video
+                            src="${safeUrl}"
+                            ${safePoster ? `poster="${safePoster}"` : ""}
+                            muted
+                            playsinline
+                            autoplay
+                            loop
+                            preload="auto"
+                        ></video>
+                    </div>
+                `;
+
+            }
+
+            return `
+                <img
+                    src="${safeUrl}"
+                    alt="TDM Manufacturing"
+                    onerror="this.src='logo.png'"
+                >
+            `;
+
+        }
+
+
+        /* =========================================
+           FRONT BOARD
+        ========================================= */
+
+        async function renderFrontBoard(products) {
+
+            const title =
+                document.getElementById("frontTitle");
+
+            const text =
+                document.getElementById("frontText");
+
+            const kicker =
+                document.getElementById("frontKicker");
+
+            const cta =
+                document.getElementById("frontCta");
+
+            const media =
+                document.getElementById("frontMedia");
+
+
+            if (
+                !title ||
+                !text ||
+                !kicker ||
+                !cta ||
+                !media
+            ) {
+                return;
+            }
+
+
+            /*
+             * First try the custom home banner.
+             */
+
+            try {
+
+                const {
+                    data: boards,
+                    error
+                } =
+                    await supabaseClient
+                        .from("home_banners")
+                        .select("*")
+                        .eq("active", true)
+                        .order(
+                            "created_at",
+                            {
+                                ascending: false
+                            }
+                        )
+                        .limit(1);
+
+
+                if (
+                    !error &&
+                    Array.isArray(boards) &&
+                    boards.length &&
+                    boards[0].mode === "custom"
+                ) {
+
+                    const banner =
+                        boards[0];
+
+
+                    kicker.textContent =
+                        banner.kicker ||
+                        "TDM PROMOTION";
+
+
+                    title.textContent =
+                        banner.title ||
+                        "TDM Manufacturing";
+
+
+                    text.textContent =
+                        banner.description ||
+                        "";
+
+
+                    cta.textContent =
+                        banner.cta_text ||
+                        "Visit Store";
+
+
+                    cta.href =
+                        banner.cta_url ||
+                        "product.html";
+
+
+                    media.innerHTML =
+                        frontMediaMarkup(
+                            banner.media_url ||
+                            "logo.png"
+                        );
+
+
+                    return;
+
+                }
+
+            } catch (error) {
+
+                console.warn(
+                    "TDM home banner unavailable. Using latest product.",
+                    error
+                );
+
+            }
+
+
+            /*
+             * If there is no custom banner,
+             * use the latest published product.
+             */
+
+            const product =
+                Array.isArray(products) &&
+                products.length
+                    ? products[0]
+                    : null;
+
+
+            if (!product) {
+
+                kicker.textContent =
+                    "TDM MANUFACTURING";
+
+
+                title.textContent =
+                    "Engineering Equipment Built for Real Businesses";
+
+
+                text.textContent =
+                    "Publish a product from the Admin Dashboard and it will automatically appear on this front board.";
+
+
+                cta.textContent =
+                    "Visit Store";
+
+
+                cta.href =
+                    "product.html";
+
+
+                media.innerHTML = `
+                    <img
+                        src="logo.png"
+                        alt="TDM Manufacturing"
+                    >
+                `;
+
+
+                return;
+
+            }
+
+
+            kicker.textContent =
+                "NEW PRODUCT";
+
+
+            title.textContent =
+                product.name ||
+                "New TDM Equipment";
+
+
+            text.textContent =
+                product.short_description ||
+                product.description ||
+                "New equipment from TDM Manufacturing.";
+
+
+            cta.textContent =
+                "View Product";
+
+
+            cta.href =
+                "product.html?product=" +
+                encodeURIComponent(
+                    product.id ||
+                    product.slug ||
+                    ""
+                );
+
+
+            const mediaList =
+                frontMediaList(product);
+
+            const frontVideo =
+                mediaList.find(function (url) {
+                    return /\.(mp4|webm|ogg|mov)(\?|$)/i.test(String(url || ""));
+                });
+
+            const frontImage =
+                mediaList.find(function (url) {
+                    return !/\.(mp4|webm|ogg|mov)(\?|$)/i.test(String(url || ""));
+                });
+
+            media.innerHTML =
+                frontMediaMarkup(
+                    frontVideo || frontImage || "logo.png",
+                    frontVideo ? frontImage : ""
+                );
+
+        }
+
+
+        /* =========================================
+           LOAD PRODUCTS
+        ========================================= */
+
+        async function loadProducts() {
+
+            const container =
+                document.getElementById(
+                    "products-container"
+                );
+
+
+            if (!container) {
+                return;
+            }
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .from("products")
+                        .select("*")
+                        .eq("status", "published")
+                        .order(
+                            "created_at",
+                            {
+                                ascending: false
+                            }
+                        );
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                const rows =
+                    Array.isArray(data)
+                        ? data
+                        : [];
+
+
+                /*
+                 * Save products globally.
+                 * Add-to-cart buttons use the index instead
+                 * of putting full product JSON inside HTML.
+                 */
+
+                window.tdmHomeProducts =
+                    rows;
+
+
+                /*
+                 * Render front board.
+                 */
+
+                await renderFrontBoard(rows);
+
+
+                /*
+                 * Featured products first.
+                 */
+
+                const featured =
+                    rows
+                        .filter(function (product) {
+
+                            return product.featured === true;
+
+                        })
+                        .slice(0, 4);
+
+
+                const display =
+                    featured.length
+                        ? featured
+                        : rows.slice(0, 4);
+
+
+                if (!display.length) {
+
+                    container.innerHTML = `
+                        <p
+                            style="
+                                text-align:center;
+                                grid-column:1/-1;
+                                padding:20px;
+                            "
+                        >
+                            No equipment available yet.
+                        </p>
+                    `;
+
+
+                    return;
+
+                }
+
+
+                /*
+                 * Render product cards.
+                 */
+
+                container.innerHTML =
+                    display.map(
+                        function (product) {
+
+                            const productIndex =
+                                rows.indexOf(product);
+
+
+                            const mediaList =
+                                frontMediaList(product);
+
+                            const video =
+                                mediaList.find(function (url) {
+                                    return /\.(mp4|webm|ogg|mov)(\?|$)/i.test(String(url || ""));
+                                });
+
+                            const image =
+                                mediaList.find(function (url) {
+                                    return !/\.(mp4|webm|ogg|mov)(\?|$)/i.test(String(url || ""));
+                                }) ||
+                                "";
+
+
+                            const price =
+                                product.price === null ||
+                                product.price === undefined ||
+                                product.price === "" ||
+                                Number(product.price) === 0
+
+                                    ? "Request quote"
+
+                                    : `${
+                                        product.currency || "₦"
+                                    } ${
+                                        Number(
+                                            product.price
+                                        ).toLocaleString()
+                                    }`;
+
+
+                            const productId =
+                                product.id ||
+                                product.slug ||
+                                "";
+
+
+                            const productUrl =
+                                "product.html?product=" +
+                                encodeURIComponent(
+                                    productId
+                                );
+
+
+                            const whatsappMessage =
+                                encodeURIComponent(
+                                    `Hello TDM Manufacturing, I am interested in the ${product.name || "TDM equipment"}.`
+                                );
+
+
+                            return `
+
+                                <div class="product">
+
+                                    <a
+                                        href="${escapeHome(productUrl)}"
+                                        style="
+                                            text-decoration:none;
+                                            color:inherit;
+                                        "
+                                    >
+
+                                        ${video ? `
+                                            <div class="product-media-wrap">
+                                                <video
+                                                    src="${escapeHome(video)}"
+                                                    ${image ? `poster="${escapeHome(image)}"` : ""}
+                                                    muted
+                                                    playsinline
+                                                    preload="auto"
+                                                ></video>
+                                                <span class="product-video-play" aria-hidden="true"></span>
+                                            </div>
+                                        ` : `
+                                            <img
+                                                src="${escapeHome(image || "logo.png")}"
+                                                alt="${escapeHome(
+                                                    product.name ||
+                                                    "TDM equipment"
+                                                )}"
+                                                class="product-image"
+                                                onerror="this.src='logo.png'"
+                                            >
+                                        `}
+
+                                    </a>
+
+
+                                    <div class="product-content">
+
+                                        <h3>
+                                            ${escapeHome(
+                                                product.name ||
+                                                "TDM Equipment"
+                                            )}
+                                        </h3>
+
+
+                                        <p>
+                                            ${escapeHome(
+                                                product.short_description ||
+                                                product.description ||
+                                                ""
+                                            )}
+                                        </p>
+
+
+                                        <p>
+                                            <strong>
+                                                ${escapeHome(price)}
+                                            </strong>
+                                        </p>
+
+
+                                        <p>
+                                            Stock available:
+                                            ${escapeHome(
+                                                product.stock_quantity ??
+                                                "Made to order"
+                                            )}
+                                        </p>
+
+
+                                        <div
+                                            class="product-actions"
+                                        >
+
+                                            <a
+                                                href="https://wa.me/2347049087007?text=${whatsappMessage}"
+                                                class="product-contact-btn"
+                                                target="_blank"
+                                                rel="noopener"
+                                            >
+                                                Contact Us
+                                            </a>
+
+
+                                            <button
+                                                class="product-cart-btn"
+                                                type="button"
+                                                onclick="
+                                                    tdmHomeAddToCartByIndex(
+                                                        ${productIndex}
+                                                    )
+                                                "
+                                            >
+                                                Add to Cart
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            `;
+
+                        }
+                    ).join("");
+
+
+            } catch (error) {
+
+                console.error(
+                    "TDM Supabase error:",
+                    error
+                );
+
+
+                await renderFrontBoard([]);
+
+
+                container.innerHTML = `
+
+                    <div
+                        style="
+                            text-align:center;
+                            padding:20px;
+                            grid-column:1/-1;
+                        "
+                    >
+
+                        <p>
+                            Unable to load equipment.
+                        </p>
+
+                        <p
+                            style="
+                                font-size:13px;
+                                color:#777;
+                                margin-top:6px;
+                            "
+                        >
+                            Please try again shortly.
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        /* =========================================
+           ADD PRODUCT TO CART
+        ========================================= */
+
+        async function tdmHomeAddToCartByIndex(index) {
+
+            const product =
+                window.tdmHomeProducts[index];
+
+
+            if (!product) {
+
+                alert(
+                    "This product is no longer available."
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * Require customer login.
+             */
+
+            const user =
+                await tdmRequireCustomer(
+                    "index.html"
+                );
+
+
+            if (!user) {
+                return;
+            }
+
+
+            try {
+
+                const cart =
+                    tdmReadCart(user.id);
+
+
+                const productName =
+                    product.name ||
+                    "TDM Equipment";
+
+
+                const existing =
+                    cart.find(
+                        function (item) {
+
+                            return (
+                                item.product_id &&
+                                product.id &&
+                                item.product_id === product.id
+                            ) ||
+                            item.name === productName;
+
+                        }
+                    );
+
+
+                if (existing) {
+
+                    existing.quantity =
+                        (Number(existing.quantity) || 1) + 1;
+
+                } else {
+
+                    cart.push({
+
+                        product_id:
+                            product.id || null,
+
+                        name:
+                            productName,
+
+                        price:
+                            Number(product.price) || 0,
+
+                        image:
+                            product.image_url ||
+                            product.image ||
+                            frontMediaList(product)[0] ||
+                            "logo.png",
+
+                        quantity: 1
+
+                    });
+
+                }
+
+
+                tdmWriteCart(
+                    cart,
+                    user.id
+                );
+
+
+                if (
+                    typeof tdmUpdateCartBadges ===
+                    "function"
+                ) {
+
+                    await tdmUpdateCartBadges();
+
+                }
+
+
+                alert(
+                    productName +
+                    " added to your cart."
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "TDM cart error:",
+                    error
+                );
+
+
+                alert(
+                    "Unable to add this product to your cart. Please try again."
+                );
+
+            }
+
+        }
+
+
+        /*
+         * Keep the old function name available
+         * in case another part of the site uses it.
+         */
+
+        async function tdmHomeAddToCart(product) {
+
+            const index =
+                window.tdmHomeProducts.indexOf(product);
+
+
+            if (index >= 0) {
+
+                return tdmHomeAddToCartByIndex(
+                    index
+                );
+
+            }
+
+
+            /*
+             * Fallback for externally supplied products.
+             */
+
+            const user =
+                await tdmRequireCustomer(
+                    "index.html"
+                );
+
+
+            if (!user) {
+                return;
+            }
+
+
+            const cart =
+                tdmReadCart(user.id);
+
+
+            const productName =
+                product.name ||
+                "TDM Equipment";
+
+
+            const existing =
+                cart.find(
+                    function (item) {
+
+                        return (
+                            item.product_id &&
+                            product.id &&
+                            item.product_id === product.id
+                        ) ||
+                        item.name === productName;
+
+                    }
+                );
+
+
+            if (existing) {
+
+                existing.quantity =
+                    (Number(existing.quantity) || 1) + 1;
+
+            } else {
+
+                cart.push({
+
+                    product_id:
+                        product.id || null,
+
+                    name:
+                        productName,
+
+                    price:
+                        Number(product.price) || 0,
+
+                    image:
+                        product.image_url ||
+                        product.image ||
+                        "logo.png",
+
+                    quantity: 1
+
+                });
+
+            }
+
+
+            tdmWriteCart(
+                cart,
+                user.id
+            );
+
+
+            if (
+                typeof tdmUpdateCartBadges ===
+                "function"
+            ) {
+
+                await tdmUpdateCartBadges();
+
+            }
+
+
+            alert(
+                productName +
+                " added to your cart."
+            );
+
+        }
+
+
+        /* =========================================
+           BOTTOM NAV ACTIVE STATE
+        ========================================= */
+
+        function setActiveBottomNav() {
+
+            const links =
+                document.querySelectorAll(
+                    ".bottom-nav a"
+                );
+
+
+            const currentPage =
+                (
+                    window.location.pathname
+                    .split("/")
+                    .pop() ||
+                    "index.html"
+                ).toLowerCase();
+
+
+            links.forEach(
+                function (link) {
+
+                    const href =
+                        (
+                            link.getAttribute("href") ||
+                            ""
+                        )
+                        .split("?")[0]
+                        .split("#")[0]
+                        .toLowerCase();
+
+
+                    link.classList.toggle(
+                        "active",
+                        href === currentPage
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================================
+           START HOME PAGE
+        ========================================== */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                setActiveBottomNav();
+
+                loadProducts();
+
+            }
+        );
+
+    </script>
+
+
+    <!-- =========================
+         BOTTOM NAVIGATION
+    ========================== -->
+
+    <nav
+        class="bottom-nav"
+        aria-label="App navigation"
+    >
+
+        <a
+            href="index.html"
+        >
+            <span>⌂</span>
+            Home
+        </a>
+
+
+        <a
+            href="product.html"
+        >
+            <span>▦</span>
+            Store
+        </a>
+
+
+        <a
+            href="cart.html"
+        >
+            <span>🛒</span>
+            Cart
+
+            <b
+                id="cartCountBottom"
+                class="cart-count"
+            >
+                0
+            </b>
+
+        </a>
+
+
+        <a
+            href="service.html"
+        >
+            <span>⚙</span>
+            Service
+        </a>
+
+
+        <a
+            href="account.html"
+        >
+            <span>♙</span>
+            Account
+        </a>
+
+    </nav>
+
+
+</body>
+
+</html>
