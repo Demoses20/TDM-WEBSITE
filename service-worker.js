@@ -1,4 +1,4 @@
-const CACHE_NAME = "tdm-app-v12-10-install";
+const CACHE_NAME = "tdm-app-v12-11-push-click";
 
 const APP_SHELL = [
   "./",
@@ -49,6 +49,9 @@ self.addEventListener("install", event => {
       })
   );
 
+  /*
+   * Immediately activate the new service worker.
+   */
   self.skipWaiting();
 });
 
@@ -64,10 +67,8 @@ self.addEventListener("activate", event => {
           .filter(key => key !== CACHE_NAME)
           .map(key => caches.delete(key))
       )
-    )
+    ).then(() => self.clients.claim())
   );
-
-  self.clients.claim();
 });
 
 /* ================================
@@ -95,7 +96,6 @@ self.addEventListener("push", event => {
         } catch (_) {
           data = {};
         }
-
       }
 
       const title =
@@ -117,19 +117,25 @@ self.addEventListener("push", event => {
         data.image_url ||
         "";
 
-      const url =
+      /*
+       * IMPORTANT:
+       * Accept both URL names sent by send-push.
+       */
+      const targetUrl =
         data.url ||
         data.product_url ||
         "https://www.tdmmanufacturing.com/";
+
+      const tag =
+        data.tag ||
+        "tdm-new-product";
 
       const notificationOptions = {
 
         body:
           productName &&
           !body.includes(productName)
-
             ? `${productName}\n${body}`
-
             : body,
 
         icon:
@@ -140,29 +146,35 @@ self.addEventListener("push", event => {
           data.badge ||
           "https://www.tdmmanufacturing.com/icon-192x192.png",
 
+        /*
+         * EVERYTHING needed when notification
+         * is clicked is stored here.
+         */
         data: {
-          url: url,
-          productName: productName
+          url: targetUrl,
+          product_url: targetUrl,
+          productName: productName,
+          product_name: productName
         },
 
-        tag:
-          data.tag ||
-          "tdm-new-product",
+        tag: tag,
 
         renotify: true,
 
         requireInteraction: false
-
       };
 
       /*
-       * Some browsers support large notification
-       * images. We only add it when supplied.
+       * Large notification image.
        */
-
       if (image) {
         notificationOptions.image = image;
       }
+
+      console.log(
+        "TDM push notification URL:",
+        targetUrl
+      );
 
       await self.registration.showNotification(
         title,
@@ -183,24 +195,41 @@ self.addEventListener(
 
     event.notification.close();
 
-    const targetUrl =
+    /*
+     * Read the URL stored inside the notification.
+     */
+    const notificationData =
       event.notification &&
-      event.notification.data &&
-      event.notification.data.url
+      event.notification.data
+        ? event.notification.data
+        : {};
 
-        ? event.notification.data.url
+    const targetUrl =
+      notificationData.url ||
+      notificationData.product_url ||
+      "https://www.tdmmanufacturing.com/";
 
-        : "https://www.tdmmanufacturing.com/";
+    console.log(
+      "TDM notification clicked:",
+      targetUrl
+    );
 
     event.waitUntil(
 
-      clients.matchAll({
-        type: "window",
-        includeUncontrolled: true
-      })
+      (async () => {
 
-      .then(windowClients => {
+        /*
+         * Find currently open TDM windows/tabs.
+         */
+        const windowClients =
+          await clients.matchAll({
+            type: "window",
+            includeUncontrolled: true
+          });
 
+        /*
+         * Try an existing TDM window first.
+         */
         for (const client of windowClients) {
 
           try {
@@ -211,26 +240,73 @@ self.addEventListener(
             const target =
               new URL(targetUrl);
 
+            /*
+             * Only reuse a TDM Manufacturing
+             * window/tab.
+             */
             if (
               clientUrl.origin ===
               target.origin
             ) {
 
-              return client
-                .navigate(targetUrl)
-                .then(() => client.focus());
+              try {
 
+                await client.focus();
+
+                /*
+                 * Navigate the existing window
+                 * to the product URL.
+                 */
+                await client.navigate(
+                  target.href
+                );
+
+                return;
+
+              } catch (navigateError) {
+
+                console.warn(
+                  "TDM existing-window navigation failed:",
+                  navigateError
+                );
+
+                /*
+                 * Continue below and open the
+                 * URL in a new window/tab.
+                 */
+              }
             }
 
-          } catch (_) {}
+          } catch (error) {
+
+            console.warn(
+              "TDM notification client check failed:",
+              error
+            );
+
+          }
+        }
+
+        /*
+         * If there is no usable existing window,
+         * open the exact product URL.
+         */
+        try {
+
+          await clients.openWindow(
+            targetUrl
+          );
+
+        } catch (openError) {
+
+          console.error(
+            "TDM notification openWindow failed:",
+            openError
+          );
 
         }
 
-        return clients.openWindow(
-          targetUrl
-        );
-
-      })
+      })()
 
     );
   }
@@ -245,8 +321,7 @@ self.addEventListener(
   event => {
 
     /*
-     * Reserved for future notification
-     * analytics.
+     * Reserved for future analytics.
      */
 
   }
@@ -269,7 +344,6 @@ self.addEventListener("fetch", event => {
    * Only handle requests belonging
    * to the TDM website.
    */
-
   if (
     url.origin !==
     self.location.origin
@@ -278,13 +352,9 @@ self.addEventListener("fetch", event => {
   }
 
   /*
-   * HTML pages use network first.
-   *
-   * This allows GitHub Pages changes
-   * to appear without waiting for
-   * an old cached HTML file.
+   * HTML pages:
+   * NETWORK FIRST
    */
-
   if (
     event.request.mode === "navigate" ||
     url.pathname.endsWith(".html") ||
@@ -338,9 +408,9 @@ self.addEventListener("fetch", event => {
   }
 
   /*
-   * Other files use cache first.
+   * Other files:
+   * CACHE FIRST
    */
-
   event.respondWith(
 
     caches
