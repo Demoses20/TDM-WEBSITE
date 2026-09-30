@@ -75,6 +75,7 @@ PUSH NOTIFICATION
 ================================ */
 
 self.addEventListener("push", event => {
+  console.log("TDM PUSH EVENT RECEIVED");
 event.waitUntil(
 (async () => {
 
