@@ -1,0 +1,89 @@
+name: Update sitemap from published products
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sitemap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate sitemap
+        env:
+          SUPABASE_URL: https://ctdmpigyhinaqpicbycq.supabase.co
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request, urllib.parse
+          from xml.sax.saxutils import escape
+
+          base = "https://www.tdmmanufacturing.com"
+          url = os.environ["SUPABASE_URL"].rstrip("/") + "/rest/v1/products"
+          params = urllib.parse.urlencode({
+              "select": "id,slug,updated_at,created_at",
+              "status": "eq.published",
+              "order": "created_at.desc"
+          })
+          req = urllib.request.Request(
+              url + "?" + params,
+              headers={
+                  "apikey": os.environ["SUPABASE_PUBLISHABLE_KEY"],
+                  "Authorization": "Bearer " + os.environ["SUPABASE_PUBLISHABLE_KEY"],
+                  "Accept": "application/json",
+              },
+          )
+
+          with urllib.request.urlopen(req, timeout=30) as response:
+              products = json.load(response)
+
+          urls = [
+              (base + "/", None),
+              (base + "/product.html", None),
+              (base + "/service.html", None),
+              (base + "/contact.html", None),
+          ]
+
+          for p in products:
+              product_id = str(p.get("id") or "").strip()
+              if not product_id:
+                  continue
+              product_url = base + "/product.html?product=" + urllib.parse.quote(product_id, safe="")
+              lastmod = p.get("updated_at") or p.get("created_at")
+              urls.append((product_url, lastmod))
+
+          lines = [
+              '<?xml version="1.0" encoding="UTF-8"?>',
+              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+          ]
+          for loc, lastmod in urls:
+              lines.append("  <url>")
+              lines.append(f"    <loc>{escape(loc)}</loc>")
+              if lastmod:
+                  lines.append(f"    <lastmod>{escape(str(lastmod).replace('+00:00','Z'))}</lastmod>")
+              lines.append("  </url>")
+          lines.append("</urlset>")
+          lines.append("")
+
+          with open("sitemap.xml", "w", encoding="utf-8") as f:
+              f.write("\n".join(lines))
+          print(f"Generated sitemap with {len(urls)} URLs.")
+          PY
+
+      - name: Commit sitemap if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sitemap.xml
+          if git diff --cached --quiet; then
+            echo "Sitemap unchanged."
+          else
+            git commit -m "Update sitemap with published products"
+            git push
+          fi
