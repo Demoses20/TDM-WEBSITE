@@ -1,0 +1,107 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f97316"><title>Payment Center | TDM Manufacturing</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="customer-common.js"></script>
+<style>
+body{margin:0;background:#f7f7f7;font-family:Arial,sans-serif;color:#171717;padding-bottom:80px}
+header{background:#fff;border-bottom:1px solid #eee;padding:10px 16px;position:sticky;top:0;z-index:5}.head{max-width:900px;margin:auto;display:flex;align-items:center;gap:10px}.head img{width:42px;height:42px;object-fit:contain}
+main{max-width:900px;margin:auto;padding:16px}.card{background:#fff;border:1px solid #fed7aa;border-radius:16px;padding:16px;margin:12px 0}h1{font-size:24px}
+button,.btn{border:0;border-radius:12px;padding:12px 15px;background:#f97316;color:#fff;font-weight:800;text-decoration:none;cursor:pointer}button:disabled{opacity:.6;cursor:not-allowed}
+.muted{color:#666}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#dcfce7;color:#15803d;font-weight:800;font-size:12px}
+.saved-method{border:1px solid #eee;border-radius:14px;padding:14px;margin:10px 0}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.actions button{flex:1;min-width:130px}
+.danger{background:#b91c1c}.checkrow{display:flex;gap:10px;align-items:flex-start;margin:12px 0;padding:12px;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px}.checkrow input{width:auto;margin:3px 0 0}
+.notice{padding:10px 12px;border-radius:10px;background:#f3f4f6;margin-top:10px}
+</style><link rel="stylesheet" href="customer-ui.css"><link rel="manifest" href="manifest.json"><script src="pwa-install.js"></script>
+</head><body>
+<header><div class="head"><a href="account-dashboard.html"><img src="logo.png" alt="TDM Manufacturing"></a><div><b>TDM Manufacturing</b><div class="muted">Payment Center</div></div></div></header>
+<main><div id="guard">Loading...</div><div id="content" style="display:none">
+<h1>💳 Payment Center</h1>
+<section class="card"><div class="row"><span>Cart total</span><b id="total">₦0</b></div><p class="muted">Choose a payment route. Card details are entered securely on Paystack. TDM does not store your CVV or full card number.</p></section>
+<section class="card"><h3>Saved payment methods</h3><div id="saved">Loading...</div><div id="savedInfo" class="notice muted" style="display:none"></div></section>
+<section class="card"><h3>Secure Payment</h3><p class="muted">Pay securely through Paystack. Your card details are handled by Paystack and are not stored by TDM.</p>
+<label class="checkrow"><input type="checkbox" id="savePaymentMethod"><span><b>Save this card for future TDM payments</b><br><small class="muted">Your full card number and CVV are never stored by TDM. Only a secure Paystack authorization is saved.</small></span></label>
+<button class="btn" id="paystackBtn" onclick="startPaystack()" style="width:100%;margin-bottom:10px">Pay Now with Paystack</button><p id="paymsg"></p><div id="verifyBox" class="muted"></div></section>
+</div></main>
+<nav class="tdm-customer-nav" aria-label="Main app navigation">
+<a href="index.html"><span aria-hidden="true">⌂</span>Home</a><a href="product.html"><span aria-hidden="true">▦</span>Store</a><a href="cart.html"><span aria-hidden="true">🛒</span>Cart <b id="cartCountBottom" class="cart-count">0</b></a><a href="service.html"><span aria-hidden="true">⚙</span>Service</a><a href="account-dashboard.html"><span aria-hidden="true">♙</span>Account</a>
+</nav>
+<script>
+let payUser=null;
+(async()=>{const u=await tdmRequireUser();if(!u)return;payUser=u;document.getElementById('guard').style.display='none';document.getElementById('content').style.display='block';try{await pageInit(u)}catch(e){console.error(e);document.getElementById('content').innerHTML='<div class="card">Error: '+tdmEsc(e.message||e)+'</div>';}})();
+
+async function pageInit(user){
+ payUser=user;
+ const stored=Number(sessionStorage.getItem('tdm_last_checkout_total')||0);
+ const cart=tdmReadCart(user.id);
+ const total=stored||cart.reduce((s,i)=>s+(Number(i.price)||0)*(Number(i.quantity)||1),0);
+ document.getElementById('total').textContent=tdmMoney(total);
+ await loadMethods();
+ const ref=new URLSearchParams(location.search).get('reference');
+ if(ref)await verifyPayment(ref);
+}
+
+async function startPaystack(){
+ const btn=document.getElementById('paystackBtn'),msg=document.getElementById('paymsg');
+ const ids=JSON.parse(sessionStorage.getItem('tdm_last_order_ids')||'[]');
+ if(!ids.length){msg.textContent='No checkout order was found. Please return to cart and checkout again.';return;}
+ const saveCard=document.getElementById('savePaymentMethod').checked;
+ btn.disabled=true;btn.textContent='Connecting to Paystack…';msg.textContent='';
+ try{
+  const {data,error}=await tdmCustomerClient().functions.invoke('paystack-payment',{body:{action:'initialize',order_ids:ids,save_payment_method:saveCard}});
+  if(error)throw error;if(!data?.authorization_url)throw new Error(data?.error||'Payment initialization failed.');
+  location.href=data.authorization_url;
+ }catch(e){console.error(e);msg.textContent='Unable to start payment: '+(e.message||e);btn.disabled=false;btn.textContent='Pay Now with Paystack';}
+}
+
+async function verifyPayment(reference){
+ const box=document.getElementById('verifyBox');box.textContent='Verifying your payment…';
+ try{
+  const {data,error}=await tdmCustomerClient().functions.invoke('paystack-payment',{body:{action:'verify',reference}});
+  if(error)throw error;
+  if(data?.paid){
+   box.innerHTML='<span class="pill">Payment successful</span><p>Your payment has been confirmed and your order is now marked as paid.</p>';
+   sessionStorage.removeItem('tdm_last_order_ids');sessionStorage.removeItem('tdm_last_checkout_total');
+   document.getElementById('total').textContent='₦0';
+   const btn=document.getElementById('paystackBtn');btn.disabled=true;btn.textContent='Payment Completed';
+   document.getElementById('savePaymentMethod').disabled=true;await loadMethods();
+  }else box.textContent='Payment status: '+(data?.status||'pending')+'. If you just completed payment, please wait a moment and refresh.';
+ }catch(e){console.error(e);box.textContent='Payment verification failed: '+(e.message||e);}
+}
+
+async function loadMethods(){
+ const saved=document.getElementById('saved'),info=document.getElementById('savedInfo');
+ const {data,error}=await tdmCustomerClient().from('saved_payment_methods').select('id,provider,method_type,display_name,last4,is_default').eq('user_id',payUser.id).order('created_at',{ascending:false});
+ if(error){console.error(error);saved.innerHTML='<p class="muted">Saved payment methods are temporarily unavailable.</p>';return;}
+ if(!data?.length){saved.innerHTML='<p class="muted">No saved cards yet. You can save a card after making a Paystack payment.</p>';info.style.display='none';return;}
+ saved.innerHTML=data.map(x=>`<div class="saved-method"><div class="row"><div><b>💳 ${tdmEsc(x.display_name||'Saved card')}</b><div class="muted">${tdmEsc(x.provider||'Paystack')}${x.last4?' · •••• '+tdmEsc(x.last4):''}</div></div>${x.is_default?'<span class="pill">Default</span>':''}</div><div class="actions"><button onclick="chargeSavedCard('${x.id}')">Pay with this card</button><button class="danger" onclick="removeMethod('${x.id}')">Remove</button></div></div>`).join('');
+ info.style.display='block';info.textContent='Saved cards use secure Paystack authorizations. TDM never receives your full card number or CVV.';
+}
+
+async function chargeSavedCard(savedPaymentMethodId){
+ const ids=JSON.parse(sessionStorage.getItem('tdm_last_order_ids')||'[]'),msg=document.getElementById('paymsg');
+ if(!ids.length){msg.textContent='No unpaid checkout order was found. Please return to cart and checkout again.';return;}
+ msg.textContent='Processing your saved card…';
+ try{
+  const {data,error}=await tdmCustomerClient().functions.invoke('paystack-payment',{body:{action:'charge_saved',order_ids:ids,saved_payment_method_id:savedPaymentMethodId}});
+  if(error)throw error;
+  if(data?.requires_action&&data?.authorization_url){location.href=data.authorization_url;return;}
+  if(data?.paid){
+   msg.innerHTML='<span class="pill">Payment successful</span>';
+   sessionStorage.removeItem('tdm_last_order_ids');sessionStorage.removeItem('tdm_last_checkout_total');
+   document.getElementById('total').textContent='₦0';
+   const btn=document.getElementById('paystackBtn');btn.disabled=true;btn.textContent='Payment Completed';
+   await loadMethods();
+  }else msg.textContent='Payment status: '+(data?.status||'pending');
+ }catch(e){console.error(e);msg.textContent='Saved-card payment failed: '+(e.message||e);}
+}
+
+async function removeMethod(id){
+ if(!confirm('Remove this saved payment method from your TDM account?'))return;
+ const msg=document.getElementById('paymsg');
+ try{
+  const {error}=await tdmCustomerClient().from('saved_payment_methods').delete().eq('id',id).eq('user_id',payUser.id);
+  if(error)throw error;
+  msg.textContent='Saved payment method removed.';await loadMethods();
+ }catch(e){console.error(e);msg.textContent='Unable to remove payment method: '+(e.message||e);}
+}
+</script></body></html>
