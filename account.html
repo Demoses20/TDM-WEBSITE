@@ -1,0 +1,35 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>TDM Customer Account</title><meta http-equiv="refresh" content="0; url=account-dashboard.html"><link rel="stylesheet" href="customer-ui.css">
+  <link rel="manifest" href="manifest.json">
+  <script src="pwa-install.js"></script>
+</head><body><p>Opening your TDM customer account...</p><script>location.replace('account-dashboard.html'+location.search+location.hash);</script>
+<script id="tdm-no-pinch-zoom">
+(function () {
+  "use strict";
+
+  // Keep normal one-finger scrolling and page interaction available.
+  // Block only multi-touch pinch gestures and browser gesture zoom.
+  var blockPinch = function (event) {
+    if (event.touches && event.touches.length > 1) {
+      event.preventDefault();
+    }
+  };
+
+  document.addEventListener("touchmove", blockPinch, { passive: false });
+
+  ["gesturestart", "gesturechange", "gestureend"].forEach(function (type) {
+    document.addEventListener(type, function (event) {
+      event.preventDefault();
+    }, { passive: false });
+  });
+
+  // Chrome/desktop trackpad Ctrl+wheel zoom; ordinary wheel scrolling is untouched.
+  document.addEventListener("wheel", function (event) {
+    if (event.ctrlKey) event.preventDefault();
+  }, { passive: false });
+
+  // Explicitly retain native panning while excluding CSS pinch-zoom gestures.
+  document.documentElement.style.touchAction = "pan-x pan-y";
+})();
+</script>
+
+</body></html>
