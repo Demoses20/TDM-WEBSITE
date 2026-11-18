@@ -1,0 +1,19 @@
+{
+  "name": "tdm-store-mobile",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TDM STORE Android and iOS application",
+  "scripts": {
+    "cap:sync": "cap sync",
+    "android": "cap open android",
+    "ios": "cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/core": "^8.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.0.0",
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/ios": "^8.0.0"
+  }
+}
