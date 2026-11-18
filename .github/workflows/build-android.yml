@@ -6,8 +6,8 @@ on:
       - tdm-store-mobile-app
     paths:
       - 'mobile-app/**'
+      - 'icon-512x512.png'
       - '.github/workflows/build-android.yml'
-
   workflow_dispatch:
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get repository files
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Node.js
@@ -32,7 +32,7 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Prepare website files
+      - name: Prepare website
         run: |
           mkdir -p mobile-app/www
           find . -maxdepth 1 -type f \
@@ -45,23 +45,69 @@ jobs:
                -name '*.txt' \) \
             -exec cp {} mobile-app/www/ \;
 
-      - name: Install app dependencies
+      - name: Install dependencies
         working-directory: mobile-app
-        run: npm install
+        run: |
+          npm install
+          npm install --save-dev @capacitor/assets
 
       - name: Generate Android project
         working-directory: mobile-app
         run: npx cap add android
 
-      - name: Synchronize website with Android
+      - name: Prepare official TDM icons
+        run: |
+          pip install pillow
+          mkdir -p mobile-app/assets
+          python - <<'PY'
+          from PIL import Image
+
+          logo = Image.open(
+              "mobile-app/www/icon-512x512.png"
+          ).convert("RGBA")
+
+          icon = logo.resize(
+              (1024, 1024),
+              Image.Resampling.LANCZOS
+          )
+
+          icon.save("mobile-app/assets/icon-only.png")
+
+          splash = Image.new(
+              "RGB",
+              (2732, 2732),
+              "#080808"
+          )
+
+          splash_logo = logo.resize(
+              (1700, 1700),
+              Image.Resampling.LANCZOS
+          )
+
+          splash.paste(
+              splash_logo,
+              (516, 516),
+              splash_logo
+          )
+
+          splash.save(
+              "mobile-app/assets/splash.png"
+          )
+          PY
+
+      - name: Generate native app icons
+        working-directory: mobile-app
+        run: npx capacitor-assets generate --android
+
+      - name: Synchronize Android
         working-directory: mobile-app
         run: npx cap sync android
 
-      - name: Build Android APK
+      - name: Build Android test APK
         working-directory: mobile-app/android
         run: ./gradlew assembleDebug
 
-      - name: Upload Android APK
+      - name: Upload TDM STORE APK
         uses: actions/upload-artifact@v4
         with:
           name: TDM-STORE-Android-Test
