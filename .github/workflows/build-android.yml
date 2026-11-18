@@ -1,0 +1,62 @@
+name: Build TDM STORE Android App
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get repository files
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Prepare website files
+        run: |
+          mkdir -p mobile-app/www
+          find . -maxdepth 1 -type f \
+            \( -name '*.html' -o \
+               -name '*.js' -o \
+               -name '*.css' -o \
+               -name '*.png' -o \
+               -name '*.json' -o \
+               -name '*.xml' -o \
+               -name '*.txt' \) \
+            -exec cp {} mobile-app/www/ \;
+
+      - name: Install app dependencies
+        working-directory: mobile-app
+        run: npm install
+
+      - name: Generate Android project
+        working-directory: mobile-app
+        run: npx cap add android
+
+      - name: Synchronize website with Android
+        working-directory: mobile-app
+        run: npx cap sync android
+
+      - name: Build Android APK
+        working-directory: mobile-app/android
+        run: ./gradlew assembleDebug
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: TDM-STORE-Android-Test
+          path: mobile-app/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
