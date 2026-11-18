@@ -1,6 +1,13 @@
 name: Build TDM STORE Android App
 
 on:
+  push:
+    branches:
+      - tdm-store-mobile-app
+    paths:
+      - 'mobile-app/**'
+      - '.github/workflows/build-android.yml'
+
   workflow_dispatch:
 
 permissions:
