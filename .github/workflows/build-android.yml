@@ -55,10 +55,11 @@ jobs:
         working-directory: mobile-app
         run: npx cap add android
 
-      - name: Prepare official TDM icons
+      - name: Prepare TDM official icons
         run: |
           pip install pillow
           mkdir -p mobile-app/assets
+
           python - <<'PY'
           from PIL import Image
 
@@ -66,44 +67,58 @@ jobs:
               "mobile-app/www/icon-512x512.png"
           ).convert("RGBA")
 
-          icon = logo.resize(
+          # Standard app icon
+          logo.resize(
               (1024, 1024),
+              Image.Resampling.LANCZOS
+          ).save("mobile-app/assets/icon-only.png")
+
+          # Android adaptive icon foreground
+          foreground = Image.new(
+              "RGBA", (1024, 1024), (0, 0, 0, 0)
+          )
+
+          mark = logo.resize(
+              (700, 700),
               Image.Resampling.LANCZOS
           )
 
-          icon.save("mobile-app/assets/icon-only.png")
-
-          splash = Image.new(
-              "RGB",
-              (2732, 2732),
-              "#080808"
+          foreground.alpha_composite(
+              mark, (162, 162)
           )
 
-          splash_logo = logo.resize(
+          foreground.save(
+              "mobile-app/assets/icon-foreground.png"
+          )
+
+          # Android adaptive icon background
+          Image.new(
+              "RGB", (1024, 1024), "#080808"
+          ).save("mobile-app/assets/icon-background.png")
+
+          # Splash screen
+          splash = Image.new(
+              "RGB", (2732, 2732), "#080808"
+          )
+
+          mark = logo.resize(
               (1700, 1700),
               Image.Resampling.LANCZOS
           )
 
-          splash.paste(
-              splash_logo,
-              (516, 516),
-              splash_logo
-          )
-
-          splash.save(
-              "mobile-app/assets/splash.png"
-          )
+          splash.paste(mark, (516, 516), mark)
+          splash.save("mobile-app/assets/splash.png")
           PY
 
-      - name: Generate native app icons
+      - name: Generate native icons
         working-directory: mobile-app
-        run: npx capacitor-assets generate --android
+        run: npx @capacitor/assets generate --android
 
       - name: Synchronize Android
         working-directory: mobile-app
         run: npx cap sync android
 
-      - name: Build Android test APK
+      - name: Build test APK
         working-directory: mobile-app/android
         run: ./gradlew assembleDebug
 
