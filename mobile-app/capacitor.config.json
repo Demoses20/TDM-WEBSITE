@@ -1,0 +1,13 @@
+{
+  "appId": "com.tdmmanufacturing.store",
+  "appName": "TDM STORE",
+  "webDir": "www",
+  "backgroundColor": "#FFF7ED",
+  "ios": {
+    "contentInset": "automatic",
+    "scrollEnabled": true
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}
