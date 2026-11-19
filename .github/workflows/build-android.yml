@@ -51,6 +51,13 @@ jobs:
           npm install
           npm install --save-dev @capacitor/assets
 
+      - name: Bundle native Firebase messaging
+        working-directory: mobile-app
+        run: |
+          mkdir -p www
+          npx esbuild native-push.js --bundle --platform=browser --format=iife --outfile=www/native-push.bundle.js
+          test -s www/native-push.bundle.js
+
       - name: Generate Android project
         working-directory: mobile-app
         run: npx cap add android
