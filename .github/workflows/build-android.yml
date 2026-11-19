@@ -6,7 +6,13 @@ on:
       - tdm-store-mobile-app
     paths:
       - 'mobile-app/**'
-      - 'icon-512x512.png'
+      - '*.html'
+      - '*.js'
+      - '*.css'
+      - '*.json'
+      - '*.png'
+      - '*.xml'
+      - '*.txt'
       - '.github/workflows/build-android.yml'
   workflow_dispatch:
 
