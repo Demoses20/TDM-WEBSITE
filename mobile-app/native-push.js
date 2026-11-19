@@ -4,26 +4,25 @@ import { FirebaseMessaging } from '@capacitor-firebase/messaging';
 let tokenListenerRegistered = false;
 
 async function saveNativeToken(token, client) {
-  if (!token || !client) return;
+  if (!token || !client) return false;
 
   const { data, error } = await client.auth.getSession();
 
   if (error) throw error;
-  if (!data.session) return;
+  if (!data.session) return false;
 
   const platform = Capacitor.getPlatform();
 
   const { error: saveError } = await client.functions.invoke(
     'register-native-push-token',
     {
-      body: {
-        token,
-        platform
-      }
+      body: { token, platform }
     }
   );
 
   if (saveError) throw saveError;
+
+  return true;
 }
 
 async function registerAfterLogin(client) {
@@ -32,19 +31,15 @@ async function registerAfterLogin(client) {
   }
 
   try {
-    let permission = await FirebaseMessaging.checkPermissions();
+    const permission = await FirebaseMessaging.checkPermissions();
 
-    if (permission.receive === 'prompt') {
-      permission = await FirebaseMessaging.requestPermissions();
-    }
-
+    // Never request permission automatically during login.
     if (permission.receive !== 'granted') {
       return { permission: permission.receive };
     }
 
     const result = await FirebaseMessaging.getToken();
-
-    await saveNativeToken(result.token, client);
+    const registered = await saveNativeToken(result.token, client);
 
     if (!tokenListenerRegistered) {
       tokenListenerRegistered = true;
@@ -61,13 +56,48 @@ async function registerAfterLogin(client) {
       );
     }
 
-    return { registered: true };
+    return { registered };
   } catch (error) {
     console.warn('TDM native push registration failed:', error);
     return { registered: false, error: error.message };
   }
 }
 
+async function enableFromPopup() {
+  if (!Capacitor.isNativePlatform()) {
+    throw new Error('This is not a native TDM app.');
+  }
+
+  try {
+    let permission = await FirebaseMessaging.checkPermissions();
+
+    if (permission.receive !== 'granted') {
+      permission = await FirebaseMessaging.requestPermissions();
+    }
+
+    if (permission.receive !== 'granted') {
+      return { permission: permission.receive };
+    }
+
+    const result = await FirebaseMessaging.getToken();
+
+    // Save immediately if the customer is already signed in.
+    const client = window.tdmGetSupabaseClient();
+    const registered = await saveNativeToken(result.token, client);
+
+    return {
+      permission: 'granted',
+      registered,
+      pendingLogin: !registered
+    };
+  } catch (error) {
+    console.warn('TDM notification permission failed:', error);
+    throw error;
+  }
+}
+
 window.TDMNativePush = {
+  isNative: Capacitor.isNativePlatform(),
+  enableFromPopup,
   registerAfterLogin
 };
