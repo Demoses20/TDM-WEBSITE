@@ -985,11 +985,35 @@
         href="app.css"
     >
 
-    <script src="app-common.js"></script>
+    
+<script src="app-common.js"></script>
 
-    <script src="push-notifications.js"></script>
+<script src="push-notifications.js"></script>
 
-  <script src="pwa-install.js"></script>
+<script>
+(function () {
+  function loadPopup() {
+    const script = document.createElement('script');
+    script.src = 'notification-popup.js';
+    document.head.appendChild(script);
+  }
+
+  if (window.Capacitor?.isNativePlatform?.()) {
+    const nativeScript = document.createElement('script');
+    nativeScript.src = 'native-push.bundle.js';
+    nativeScript.onload = loadPopup;
+    nativeScript.onerror = function () {
+      console.error('TDM native messaging could not load.');
+    };
+    document.head.appendChild(nativeScript);
+  } else {
+    loadPopup();
+  }
+})();
+</script>
+
+<script src="pwa-install.js"></script>
+
 </head>
 
 
