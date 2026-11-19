@@ -17,13 +17,12 @@ async function login(){
     if(error) throw error;
     if(!data.user) throw new Error('No customer account was returned.');
 
-// Register native push independently of the login redirect.
+// Register native push without delaying customer login.
 if (window.TDMNativePush?.registerAfterLogin) {
-  try {
-    await window.TDMNativePush.registerAfterLogin(client);
-  } catch (pushError) {
-    console.warn('Native push registration skipped:', pushError);
-  }
+  window.TDMNativePush.registerAfterLogin(client)
+    .catch(pushError => {
+      console.warn('Native push registration skipped:', pushError);
+    });
 }
 
 tdmFinishLogin();
