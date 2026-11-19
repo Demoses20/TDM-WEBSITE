@@ -9,7 +9,9 @@
     "ios": "cap open ios"
   },
   "dependencies": {
-    "@capacitor/core": "^8.0.0"
+    "@capacitor/core": "^8.0.0",
+    "@capacitor-firebase/messaging": "^8.6.0",
+    "firebase": "^12.6.0"
   },
   "devDependencies": {
     "@capacitor/cli": "^8.0.0",
