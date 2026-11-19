@@ -58,6 +58,11 @@ jobs:
       - name: Add Firebase Android configuration
         run: |
           test -f mobile-app/google-services.json
+          cp mobile-app/google-services.json mobile-app/android/app/google-services.json
+
+      - name: Add Firebase Android configuration
+        run: |
+          test -f mobile-app/google-services.json
           mkdir -p mobile-app/android/app
           cp mobile-app/google-services.json \
             mobile-app/android/app/google-services.json
