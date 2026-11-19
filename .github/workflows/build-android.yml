@@ -55,6 +55,13 @@ jobs:
         working-directory: mobile-app
         run: npx cap add android
 
+      - name: Add Firebase Android configuration
+        run: |
+          test -f mobile-app/google-services.json
+          mkdir -p mobile-app/android/app
+          cp mobile-app/google-services.json \
+            mobile-app/android/app/google-services.json
+
       - name: Prepare TDM official icons
         run: |
           pip install pillow
@@ -67,13 +74,11 @@ jobs:
               "mobile-app/www/icon-512x512.png"
           ).convert("RGBA")
 
-          # Standard app icon
           logo.resize(
               (1024, 1024),
               Image.Resampling.LANCZOS
           ).save("mobile-app/assets/icon-only.png")
 
-          # Android adaptive icon foreground
           foreground = Image.new(
               "RGBA", (1024, 1024), (0, 0, 0, 0)
           )
@@ -83,20 +88,15 @@ jobs:
               Image.Resampling.LANCZOS
           )
 
-          foreground.alpha_composite(
-              mark, (162, 162)
-          )
-
+          foreground.alpha_composite(mark, (162, 162))
           foreground.save(
               "mobile-app/assets/icon-foreground.png"
           )
 
-          # Android adaptive icon background
           Image.new(
               "RGB", (1024, 1024), "#080808"
           ).save("mobile-app/assets/icon-background.png")
 
-          # Splash screen
           splash = Image.new(
               "RGB", (2732, 2732), "#080808"
           )
