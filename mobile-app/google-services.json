@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "283961143824",
+    "project_id": "tdm-store",
+    "storage_bucket": "tdm-store.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:283961143824:android:ec47515e62e4a4f2ee1095",
+        "android_client_info": {
+          "package_name": "com.tdmmanufacturing.store"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5Q7GYM24Bear1T2k3RA9EcndcN32Ln7Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
