@@ -68,4 +68,6 @@ async function registerAfterLogin(client) {
   }
 }
 
-export { registerAfterLogin };
+window.TDMNativePush = {
+  registerAfterLogin
+};
