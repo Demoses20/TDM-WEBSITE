@@ -16,7 +16,17 @@ async function login(){
     const {data,error}=await client.auth.signInWithPassword(credentials);
     if(error) throw error;
     if(!data.user) throw new Error('No customer account was returned.');
-    tdmFinishLogin();
+
+// Register native push independently of the login redirect.
+if (window.TDMNativePush?.registerAfterLogin) {
+  try {
+    await window.TDMNativePush.registerAfterLogin(client);
+  } catch (pushError) {
+    console.warn('Native push registration skipped:', pushError);
+  }
+}
+
+tdmFinishLogin();
   }catch(e){msg.textContent='Login failed: '+e.message;}
   finally{document.getElementById('loginBtn').disabled=false;}
 }
