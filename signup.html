@@ -79,6 +79,13 @@ async function finish(){
     const {error:customerError}=await client.from('Customers').upsert(row,{onConflict:'id'});
     if(customerError)console.warn('Customer profile save:',customerError.message);
     msg.textContent='Account created successfully. Opening your TDM account...';
+    // Register native notifications without delaying signup.
+if (window.TDMNativePush?.registerAfterLogin) {
+  window.TDMNativePush.registerAfterLogin(client)
+    .catch(error => {
+      console.warn('TDM signup push registration failed:', error);
+    });
+}
     // If the visitor started Add to Cart before creating an account, return to the Store so product.html can restore the pending item.
     const pendingCartItem=localStorage.getItem('tdm_pending_cart_item');
     setTimeout(()=>location.href=(pendingCartItem?'product.html':'account.html'),500);
